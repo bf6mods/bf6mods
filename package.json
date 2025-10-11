@@ -8,8 +8,7 @@
   ],
   "scripts": {
     "build": "npm run build -ws",
-    "lint": "npm run lint -ws",
-    "clean": "rimraf packages/*/dist"
+    "lint": "npm run lint -ws"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",

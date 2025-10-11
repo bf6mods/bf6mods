@@ -1,0 +1,4 @@
+{
+	// Do not touch unless you know what you are doing
+	"extends": "./.aoe4/tsconfig.json",
+}
