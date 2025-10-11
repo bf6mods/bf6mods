@@ -1,0 +1,21 @@
+{
+  "name": "bf6mods",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for BF6 modding tools and type definitions",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -ws",
+    "lint": "npm run lint -ws",
+    "clean": "rimraf packages/*/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.1",
+    "rimraf": "^6.0.0",
+    "rolldown": "^1.0.0-beta.42",
+    "rolldown-plugin-dts": "^0.16.11",
+    "typescript": "^5.9.3"
+  }
+}
