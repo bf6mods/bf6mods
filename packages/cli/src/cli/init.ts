@@ -65,9 +65,9 @@ export async function init() {
         })
         .catch((error) => {
             if (error.isTtyError) {
-                // Prompt couldn't be rendered in the current environment
+                console.error('TTY Error:', error);
             } else {
-                // Something else went wrong
+                console.error('Error occurred:', error);
             }
         });
 

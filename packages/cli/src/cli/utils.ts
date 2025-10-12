@@ -1,8 +1,9 @@
 import stripAnsi from 'strip-ansi';
+import colors from 'colors';
 
 export const printToConsole = (message: string) => {
     const now = new Date();
-    const formattedTime = now.toLocaleTimeString().grey;
+    const formattedTime = colors.grey(now.toLocaleTimeString());
 
     const terminalWidth = process.stdout.columns || 80; // Default to 80 if terminal width is not available
     const timeLength = stripAnsi(formattedTime).length;

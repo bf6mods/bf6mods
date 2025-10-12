@@ -13,7 +13,7 @@ export async function prepare() {
         const workingDir = path.resolve('.');
         const buildDir = path.resolve('.bf6');
 
-        const resources = path.resolve(__dirname, 'prepare');
+        const resources = path.resolve(__dirname, '../../resources/prepare');
 
         fs.cpSync(path.resolve(resources, 'tsconfig.json'), path.resolve(buildDir, 'tsconfig.json'));
         fs.cpSync(path.resolve(resources, 'bf6.d.ts'), path.resolve(buildDir, 'bf6.d.ts'));
