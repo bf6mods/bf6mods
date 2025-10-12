@@ -12,7 +12,7 @@ export default defineConfig({
     clean: true,
     minify: true,
     dts: {
-        banner: fs.readFileSync(modFile, 'utf-8')
+        banner: `declare global {\n${fs.readFileSync(modFile, 'utf-8').replace('declare', '')}\n}`
     },
     format: 'esm',
 })
