@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "build": "npm run build -ws",
-    "lint": "npm run lint -ws"
+    "test": "npm run test -ws --if-present",
+    "lint": "npm run lint -ws --if-present"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
