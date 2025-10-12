@@ -6,15 +6,8 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const distDir = path.resolve(__dirname, 'dist');
-if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, {
-    recursive: true
-});
+const resourcesDir = path.resolve(__dirname, 'dist', 'resources');
 
-fs.cpSync(path.resolve(__dirname, 'resources'), distDir, {
-    recursive: true,
-    force: true
-});
 
 
 export default defineConfig({
@@ -24,4 +17,14 @@ export default defineConfig({
     dts: true,
     bundle: true,
     format: 'esm',
+    onSuccess: async () => {
+        if (!fs.existsSync(resourcesDir)) fs.mkdirSync(resourcesDir, {
+            recursive: true
+        });
+
+        fs.cpSync(path.resolve(__dirname, 'resources'), resourcesDir, {
+            recursive: true,
+            force: true
+        });
+    },
 })

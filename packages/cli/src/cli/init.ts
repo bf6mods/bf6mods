@@ -6,7 +6,7 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const templates = path.resolve(__dirname, '../templates');
+const templates = path.resolve(__dirname, '../resources/templates');
 
 function renameFilesRecursively(dir: string, modName: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -58,8 +58,8 @@ export async function init() {
             const template = path.resolve(templates, answers.template);
             const newProject = path.resolve('.', answers.mod_name);
 
-            fs.cpSync(template, newProject, { recursive: true });
             fs.cpSync(path.resolve(templates, 'All'), newProject, { recursive: true })
+            fs.cpSync(template, newProject, { recursive: true });
 
             renameFilesRecursively(newProject, answers.mod_name);
         })
