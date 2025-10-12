@@ -4,10 +4,12 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "strict": true,
-    "outDir": "dist",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "paths": {
       "modlib": ["./src/modlib"]
     },
     "types": ["./src/mod/index.d.ts", "@types/node"]
-  }
+  },
+  "include": ["./src/**/*"]
 }

@@ -1,1 +1,1 @@
-export * from './modlib/index.js';
+export * from './modlib/index.ts';
