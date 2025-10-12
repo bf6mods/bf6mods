@@ -1,41 +1,41 @@
 {
-  "name": "@bf6mods/cli",
-  "version": "1.0.0",
-  "description": "CLI and library for bundling BF6 mods",
-  "license": "MIT",
-  "type": "module",
-  "bin": {
-    "bf6mods": "./dist/cli/index.js"
-  },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsup",
-    "start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/"
-  ],
-  "dependencies": {
-    "@bf6mods/sdk": "1.0.1",
-    "chokidar": "^4.0.3",
-    "colors": "^1.4.0",
-    "commander": "^14.0.1",
-    "inquirer": "^12.9.6",
-    "jiti": "^2.6.1",
-    "knitwork": "^1.2.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "cross-env": "^10.1.0",
-    "tsx": "^4.20.6"
-  }
+	"name": "@bf6mods/cli",
+	"version": "1.0.0",
+	"description": "CLI and library for bundling BF6 mods",
+	"license": "MIT",
+	"type": "module",
+	"bin": {
+		"bf6mods": "./dist/cli/index.js"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "tsup",
+		"start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist/"
+	],
+	"dependencies": {
+		"@bf6mods/sdk": "1.0.1",
+		"chokidar": "^4.0.3",
+		"colors": "^1.4.0",
+		"commander": "^14.0.1",
+		"inquirer": "^12.9.6",
+		"jiti": "^2.6.1",
+		"knitwork": "^1.2.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"cross-env": "^10.1.0",
+		"tsx": "^4.20.6"
+	}
 }

@@ -6,7 +6,13 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"includes": ["packages/**/*", "!packages/cli/resources/templates"],
+		"includes": [
+			"packages/**/*",
+			"!packages/cli/resources/templates",
+			"!**/dist",
+			"!packages/sdk/src/mod",
+			"!packages/sdk/src/modlib"
+		],
 		"ignoreUnknown": false
 	},
 	"formatter": {

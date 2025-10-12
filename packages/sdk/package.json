@@ -1,29 +1,29 @@
 {
-  "name": "@bf6mods/sdk",
-  "version": "1.0.1",
-  "description": "TypeScript definitions for the BF6 modding API",
-  "type": "module",
-  "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "build": "tsup"
-  },
-  "keywords": [
-    "bf6",
-    "mods",
-    "typescript",
-    "definitions",
-    "api"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@bf6mods/sdk",
+	"version": "1.0.1",
+	"description": "TypeScript definitions for the BF6 modding API",
+	"type": "module",
+	"license": "MIT",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"build": "tsup"
+	},
+	"keywords": [
+		"bf6",
+		"mods",
+		"typescript",
+		"definitions",
+		"api"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }
