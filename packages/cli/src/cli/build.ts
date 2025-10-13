@@ -31,6 +31,15 @@ export async function build() {
 			: (config.minify?.json ?? false);
 
 	const outDir = path.resolve(workingDir, config.outDir);
+	if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
+	else {
+		fs.rmSync(outDir, {
+			recursive: true,
+			force: true,
+		});
+		fs.mkdirSync(outDir);
+	}
+
 	if (config.entrypoint)
 		buildTs(path.resolve(workingDir, config.entrypoint), outDir, minifyJs);
 	if (config.strings)
