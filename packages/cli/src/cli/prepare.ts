@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import colors from 'colors';
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { genExport } from "knitwork";
@@ -12,7 +13,7 @@ export async function prepare() {
 		const _workingDir = path.resolve(".");
 		const buildDir = path.resolve(".bf6");
 
-		const resources = path.resolve(__dirname, "../../resources/prepare");
+		const resources = path.resolve(__dirname, "../resources/prepare");
 
 		fs.cpSync(
 			path.resolve(resources, "tsconfig.json"),
@@ -33,9 +34,9 @@ export async function prepare() {
 			`${ConfigFileExports}\n`,
 		);
 
-		printToConsole(`${"✔".green} Types generated in .bf6`);
+		printToConsole(`${colors.green("✔")} Types generated in .bf6`);
 	} catch (error) {
 		console.error(error);
-		printToConsole(`${"✗".red} Types failed to generate in .bf6`);
+		printToConsole(`${colors.red("✗")} Types failed to generate in .bf6`);
 	}
 }

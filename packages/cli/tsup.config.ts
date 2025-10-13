@@ -15,15 +15,23 @@ export default defineConfig({
 	dts: true,
 	bundle: true,
 	format: "esm",
-	onSuccess: async () => {
-		if (!fs.existsSync(resourcesDir))
-			fs.mkdirSync(resourcesDir, {
-				recursive: true,
-			});
-
-		fs.cpSync(path.resolve(__dirname, "resources"), resourcesDir, {
-			recursive: true,
-			force: true,
-		});
-	},
+	// can't use this instead of process.on, because of https://github.com/egoist/tsup/issues/700
+	// onSuccess: async () => {
+	// },
 });
+
+
+process.on('beforeExit', (code) => {
+  if (code === 0) {
+    if (!fs.existsSync(resourcesDir))
+		fs.mkdirSync(resourcesDir, {
+			recursive: true,
+		});
+
+	fs.cpSync(path.resolve(__dirname, "src", "resources"), resourcesDir, {
+		recursive: true,
+		force: true,
+		verbatimSymlinks: true,
+	});
+  }
+})
