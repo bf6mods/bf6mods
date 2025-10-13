@@ -8,7 +8,7 @@
 	"files": {
 		"includes": [
 			"packages/**/*",
-			"!packages/cli/resources/templates",
+			"!packages/cli/src/resources/templates",
 			"!**/dist",
 			"!packages/sdk/src/mod",
 			"!packages/sdk/src/modlib"
