@@ -1,6 +1,6 @@
 {
 	"name": "@bf6mods/cli",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "CLI and library for bundling BF6 mods",
 	"license": "MIT",
 	"type": "module",
@@ -29,7 +29,8 @@
 		"commander": "^14.0.1",
 		"inquirer": "^12.9.6",
 		"jiti": "^2.6.1",
-		"knitwork": "^1.2.0"
+		"knitwork": "^1.2.0",
+		"rolldown": "^1.0.0-beta.43"
 	},
 	"publishConfig": {
 		"access": "public"
