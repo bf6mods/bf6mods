@@ -20,18 +20,17 @@ export default defineConfig({
 	// },
 });
 
+process.on("beforeExit", (code) => {
+	if (code === 0) {
+		if (!fs.existsSync(resourcesDir))
+			fs.mkdirSync(resourcesDir, {
+				recursive: true,
+			});
 
-process.on('beforeExit', (code) => {
-  if (code === 0) {
-    if (!fs.existsSync(resourcesDir))
-		fs.mkdirSync(resourcesDir, {
+		fs.cpSync(path.resolve(__dirname, "src", "resources"), resourcesDir, {
 			recursive: true,
+			force: true,
+			verbatimSymlinks: true,
 		});
-
-	fs.cpSync(path.resolve(__dirname, "src", "resources"), resourcesDir, {
-		recursive: true,
-		force: true,
-		verbatimSymlinks: true,
-	});
-  }
-})
+	}
+});

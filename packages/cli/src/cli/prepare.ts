@@ -1,8 +1,8 @@
 import fs from "node:fs";
-import colors from 'colors';
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { genExport, genInlineTypeImport, genTypeObject } from "knitwork";
+import colors from "colors";
+import { genExport, genInlineTypeImport } from "knitwork";
 import { printToConsole } from "./utils.js";
 
 export async function prepare() {
@@ -28,16 +28,24 @@ export async function prepare() {
 			path.resolve(buildDir, "types", "config.ts"),
 		);
 
-		const ConfigFileExports = genExport("./types/config.ts", ["defineBf6Config"]);
+		const ConfigFileExports = genExport("./types/config.ts", [
+			"defineBf6Config",
+		]);
 		fs.writeFileSync(
 			path.resolve(buildDir, "imports.d.ts"),
 			`${ConfigFileExports}\n`,
 		);
 
-		const augmentations: any = {};
-		augmentations['defineBf6Config	'] = genInlineTypeImport('./types/config.ts', `defineBf6Config`)
-		const args = genNamespaceAugmentation('global', augmentations);
-		fs.writeFileSync(path.resolve(buildDir, 'globals.d.ts'), `export {}\n\n${args}\n`);
+		const augmentations: Record<string, string> = {};
+		augmentations["defineBf6Config	"] = genInlineTypeImport(
+			"./types/config.ts",
+			`defineBf6Config`,
+		);
+		const args = genNamespaceAugmentation("global", augmentations);
+		fs.writeFileSync(
+			path.resolve(buildDir, "globals.d.ts"),
+			`export {}\n\n${args}\n`,
+		);
 
 		printToConsole(`${colors.green("✔")} Types generated in .bf6`);
 	} catch (error) {
@@ -46,8 +54,12 @@ export async function prepare() {
 	}
 }
 
-const genNamespaceAugmentation = (name: string, contents: Record<string, string>) => {
-	if (!contents || Object.keys(contents).length === 0) return `declare ${name} {}`;
+const genNamespaceAugmentation = (
+	name: string,
+	contents: Record<string, string>,
+) => {
+	if (!contents || Object.keys(contents).length === 0)
+		return `declare ${name} {}`;
 	const decls = Object.entries(contents)
 		.map(([k, v]) => `\tconst ${k}: ${v};`)
 		.join("\n");
