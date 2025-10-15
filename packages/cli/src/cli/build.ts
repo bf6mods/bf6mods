@@ -12,6 +12,7 @@ import {
 	type Bf6Config,
 	MapId as MapIdEnum,
 } from "../resources/prepare/types/config.ts";
+import { fileURLToPath } from "node:url";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -91,6 +92,9 @@ export async function buildEntrypoint(
 	return code;
 }
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const spatialsDir = path.resolve(__dirname, "../resources/maps/spatial");
 /**
  * Collects all attachments (TS, scenes, strings) and returns them + mapRotation.
  */
@@ -115,7 +119,16 @@ export async function collectAttachments(
 	// Scenes
 	if (config.scenes) {
 		let mapIdx = 0;
-		for (const [mapId, scene] of config.scenes) {
+		for (const map of config.scenes) {
+			let mapId: MapIdEnum;
+			let scene: string;
+			if (Array.isArray(map)) {
+				[mapId, scene] = map;
+			} else {
+				mapId = map;
+				scene = path.resolve(spatialsDir, `${mapId}.spatial.json`);
+			}
+
 			const scenePath = path.resolve(workingDir, scene);
 			if (!fs.existsSync(scenePath))
 				throw new Error(`Cannot find spatial data file: ${scene}`);

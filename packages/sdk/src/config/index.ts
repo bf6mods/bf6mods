@@ -12,8 +12,8 @@ export enum ManDownExperienceType {
  */
 export enum AiSpawnType {
 	NoBots = 0,
-	Backfill = 1,
-	Static = 2,
+	Backfill = 2,
+	Static = 1,
 }
 
 /**
@@ -1651,7 +1651,7 @@ export type TeamComposition = [
 		/**
 		 * Maximum number of AI bots allowed on this team.
 		 */
-		aiCapacity: number;
+		aiCapacity?: number;
 
 		/**
 		 * Type of AI assigned to this team.

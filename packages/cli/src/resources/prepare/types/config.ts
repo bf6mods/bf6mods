@@ -57,10 +57,9 @@ export type Bf6Config = {
 
 	/**
 	 * One or more scene file paths (.json) that the mod includes.
-	 * Can be a single string or an array of paths.
-	 * Can be a directory if single string provided
+	 * If no file path is provided, it loads in the default spatial data.
 	 */
-	scenes?: [MapId, string][];
+	scenes?: ([MapId, string] | MapId)[];
 
 	/**
 	 * Path to a JSON file or other source that defines localized strings
