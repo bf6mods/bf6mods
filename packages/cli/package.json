@@ -23,7 +23,7 @@
 		"dist/"
 	],
 	"dependencies": {
-		"@bf6mods/sdk": "1.0.1",
+		"@bf6mods/sdk": "1.0.2",
 		"@clack/prompts": "^0.11.0",
 		"chokidar": "^4.0.3",
 		"colors": "^1.4.0",
