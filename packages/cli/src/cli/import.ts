@@ -36,7 +36,7 @@ export async function importFile(input: string, output: string) {
 	let typescriptFile: string | undefined;
 	let stringsFile: string | undefined;
 	const scenes: [string, string][] = [];
-	const promises: Promise<any>[] = [];
+	const promises: Promise<unknown>[] = [];
 
 	if (config.attachments) {
 		for (const attachment of config.attachments) {

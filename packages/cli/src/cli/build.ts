@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { AttachmentType, type ConfigType, type Map } from "@bf6mods/sdk";
+import { AttachmentType, type ConfigType, type MapType } from "@bf6mods/sdk";
 import { createJiti } from "jiti";
 import { rolldown } from "rolldown";
 import {
@@ -39,7 +39,7 @@ export async function build() {
 
 	// --- Collect attachments ---
 	const attachments: ConfigType["attachments"] = [];
-	const mapRotation: Map[] = [];
+	const mapRotation: MapType[] = [];
 
 	// --- Compile TypeScript ---
 	if (config.entrypoint) {
@@ -168,38 +168,38 @@ function toBase64(input: string | Buffer) {
 /**
  * This is taken directly from the portal.battlefield.com website. It searches a typescript file for all strings, then outputs them into json.
  */
-function _generateStringFile(V: string) {
-	const X: Record<string | number, string> = {},
-		J = V.split(`
-`),
-		ne = V.replaceAll(
-			`
-`,
-			"",
-		),
-		ue =
-			/(?:const|let|var)\s+godotStrings\s+=\s\{(\s*(["']([\w ]*)["'])\s*:\s*(["']([\w ]*)["'])\s*,?\s*)*\}/g,
-		ce = ne.match(ue);
-	if (ce && ce.length > 0) {
-		const _e = ce[0].indexOf("=") + 1,
-			Se = JSON.parse(ce[0].slice(_e));
-		Object.keys(Se).forEach((ye) => {
-			X[ye] = Se[ye];
-		});
-	}
-	const me = /'([^'"]*)'|"([^'"]*)"/g,
-		ge = new Set();
-	return (
-		J.forEach((_e) => {
-			for (const Se of _e.matchAll(me)) {
-				const Ie = Se[1] ? Se[1] : Se[2];
-				ge.add(Ie);
-			}
-		}),
-		Array.from(ge).forEach((_e, Se: number) => {
-			// @ts-expect-error
-			X[Se] = _e;
-		}),
-		JSON.stringify(X, null, 2)
-	);
-}
+// function _generateStringFile(V: string) {
+// 	const X: Record<string | number, string> = {},
+// 		J = V.split(`
+// `),
+// 		ne = V.replaceAll(
+// 			`
+// `,
+// 			"",
+// 		),
+// 		ue =
+// 			/(?:const|let|var)\s+godotStrings\s+=\s\{(\s*(["']([\w ]*)["'])\s*:\s*(["']([\w ]*)["'])\s*,?\s*)*\}/g,
+// 		ce = ne.match(ue);
+// 	if (ce && ce.length > 0) {
+// 		const _e = ce[0].indexOf("=") + 1,
+// 			Se = JSON.parse(ce[0].slice(_e));
+// 		Object.keys(Se).forEach((ye) => {
+// 			X[ye] = Se[ye];
+// 		});
+// 	}
+// 	const me = /'([^'"]*)'|"([^'"]*)"/g,
+// 		ge = new Set();
+// 	return (
+// 		J.forEach((_e) => {
+// 			for (const Se of _e.matchAll(me)) {
+// 				const Ie = Se[1] ? Se[1] : Se[2];
+// 				ge.add(Ie);
+// 			}
+// 		}),
+// 		Array.from(ge).forEach((_e, Se: number) => {
+// 			// @ts-expect-error
+// 			X[Se] = _e;
+// 		}),
+// 		JSON.stringify(X, null, 2)
+// 	);
+// }

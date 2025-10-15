@@ -1522,7 +1522,7 @@ export enum AttachmentType {
 /**
  * Represents a map resource within the game or editor.
  */
-export type Map = {
+export type MapType = {
 	/**
 	 * Unique identifier for the map.
 	 */
@@ -1757,7 +1757,7 @@ export type ConfigType = {
 	 * Optional list of maps included in this configuration’s rotation.
 	 * Each entry defines a playable map and its associated parameters.
 	 */
-	mapRotation?: Map[];
+	mapRotation?: MapType[];
 
 	/**
 	 * Optional workspace configuration defining project metadata,
