@@ -4,6 +4,7 @@ import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build.js";
 import { init } from "./init.js";
 import { prepare } from "./prepare.js";
+import { decompile } from "./decompile.ts";
 
 const program = new Command();
 
@@ -31,6 +32,15 @@ program
 	.description("prepare the types for bf6 mod")
 	.action(async () => {
 		await prepare();
+	});
+
+program
+	.command("decompile")
+	.argument('<input>')
+	.argument('<output>')
+	.description("decompiles the json config of a mod into a directory")
+	.action(async (input, output) => {
+		await decompile(input as string, output as string);
 	});
 
 program.exitOverride((_err) => {
