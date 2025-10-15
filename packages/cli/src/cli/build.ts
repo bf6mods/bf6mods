@@ -1,19 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
-import { AttachmentType, type ConfigType, type MapType } from "@bf6mods/sdk";
 import { createJiti } from "jiti";
 import { rolldown } from "rolldown";
-import {
-	type Bf6Config,
-	MapId as MapIdEnum,
-} from "../resources/prepare/types/config.ts";
+import { AttachmentType, type ConfigType, type MapType, Attachment } from "@bf6mods/sdk";
+import { MapId as MapIdEnum, type Bf6Config } from "../resources/prepare/types/config.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
 	var MapId: typeof MapIdEnum | undefined;
 }
 
-export const getBf6Config = async (rootDir: string) => {
+/**
+ * Dynamically imports and validates bf6.config.ts
+ */
+export async function getBf6Config(rootDir: string): Promise<Bf6Config> {
 	globalThis.defineBf6Config = (c) => c;
 	globalThis.MapId = MapIdEnum;
 	const jiti = createJiti(rootDir, { interopDefault: true });
@@ -21,8 +21,11 @@ export const getBf6Config = async (rootDir: string) => {
 	delete globalThis.defineBf6Config;
 	delete globalThis.MapId;
 	return result as Bf6Config;
-};
+}
 
+/**
+ * Builds the entire mod project once (for production or single run).
+ */
 export async function build() {
 	const workingDir = path.resolve(".");
 	const config = await getBf6Config(workingDir);
@@ -37,90 +40,86 @@ export async function build() {
 			? config.minify
 			: (config.minify?.json ?? false);
 
-	// --- Collect attachments ---
-	const attachments: ConfigType["attachments"] = [];
-	const mapRotation: MapType[] = [];
-
-	// --- Compile TypeScript ---
+	let tsAttachment;
 	if (config.entrypoint) {
 		const entryAbs = path.resolve(workingDir, config.entrypoint);
-		const compiled = await buildTs(entryAbs, outDir, !!config.outputArtifacts);
-
-		attachments.push({
-			id: crypto.randomUUID(),
-			version: "1.0",
-			filename: `${path.parse(entryAbs).name}.js`,
-			isProcessable: true,
-			processingStatus: 2,
-			attachmentType: AttachmentType.TypeScript,
-			attachmentData: {
-				original: toBase64(compiled),
-				compiled: "",
-			},
-			errors: [],
-		});
+		const compiled = await buildEntrypoint(entryAbs, outDir, !!config.outputArtifacts);
+		tsAttachment = createTsAttachment(entryAbs, compiled);
 	}
 
-	// --- Strings attachment ---
+	const { attachments, mapRotation } = await collectAttachments(config, workingDir, tsAttachment);
+
+	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
+	console.log(`✔ Built mod: ${config.name}`);
+}
+
+/**
+ * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.
+ */
+export async function buildEntrypoint(entry: string, outDir: string, emit: boolean): Promise<string> {
+	const bundle = await rolldown({
+		input: entry,
+	});
+	const result = await bundle.generate({
+		format: "esm",
+		inlineDynamicImports: true,
+	});
+	const code = result.output[0].code;
+	if (emit) {
+		await fs.promises.writeFile(path.resolve(outDir, "index.js"), code);
+	}
+	return code;
+}
+
+/**
+ * Collects all attachments (TS, scenes, strings) and returns them + mapRotation.
+ */
+export async function collectAttachments(
+	config: Bf6Config,
+	workingDir: string,
+	tsAttachment?: Attachment,
+) {
+	const attachments: Attachment[] = [];
+	const mapRotation: MapType[] = [];
+
+	if (tsAttachment) attachments.push(tsAttachment);
+
+	// Strings
 	if (config.strings) {
 		const strPath = path.resolve(workingDir, config.strings);
 		if (!fs.existsSync(strPath)) throw new Error("Cannot find strings file");
 		const raw = await fs.promises.readFile(strPath, "utf8");
-
-		attachments.push({
-			id: crypto.randomUUID(),
-			version: "1.0",
-			filename: path.basename(strPath),
-			isProcessable: true,
-			processingStatus: 2,
-			attachmentType: AttachmentType.Strings,
-			attachmentData: {
-				original: toBase64(raw),
-				compiled: "",
-			},
-			errors: [],
-		});
+		attachments.push(createStringsAttachment(strPath, raw));
 	}
 
-	// --- Spatial (map) attachments ---
+	// Scenes
 	if (config.scenes) {
 		let mapIdx = 0;
 		for (const [mapId, scene] of config.scenes) {
 			const scenePath = path.resolve(workingDir, scene);
 			if (!fs.existsSync(scenePath))
 				throw new Error(`Cannot find spatial data file: ${scene}`);
-
 			const raw = await fs.promises.readFile(scenePath, "utf8");
-			const id = crypto.randomUUID();
-
-			const spatialAttachment = {
-				id,
-				version: "1.0",
-				filename: path.basename(scenePath),
-				isProcessable: true,
-				processingStatus: 2,
-				attachmentType: AttachmentType.SpatialData,
-				attachmentData: {
-					original: toBase64(raw),
-					compiled: "",
-				},
-				metadata: `mapIdx=${mapIdx++}`,
-				errors: [],
-			};
-
-			attachments.push(spatialAttachment);
-
-			mapRotation.push({
-				id: mapId,
-				spatialAttachment,
-			});
+			const spatial = createSpatialAttachment(scenePath, raw, mapIdx++);
+			attachments.push(spatial);
+			mapRotation.push({ id: mapId, spatialAttachment: spatial });
 		}
 	}
 
-	// --- Base config (game-level) ---
-	const baseGame = config.game;
+	return { attachments, mapRotation };
+}
 
-	// --- Final JSON object ---
+/**
+ * Writes the mod.json output to disk.
+ */
+export async function writeModJson(
+	config: Bf6Config,
+	outDir: string,
+	attachments: ConfigType["attachments"],
+	mapRotation: MapType[],
+	minify: boolean,
+) {
+	const baseGame = config.game;
 	const finalJson: ConfigType = {
 		name: config.name,
 		description: config.description,
@@ -132,74 +131,50 @@ export async function build() {
 		attachments,
 	};
 
-	const jsonOutput = minifyJson
-		? JSON.stringify(finalJson)
-		: JSON.stringify(finalJson, null, 2);
-
+	const jsonOutput = minify ? JSON.stringify(finalJson) : JSON.stringify(finalJson, null, 2);
 	await fs.promises.writeFile(path.resolve(outDir, "mod.json"), jsonOutput);
 }
 
-/**
- * Compiles TypeScript entrypoint using rolldown.
- * Returns the compiled code as a string.
- */
-async function buildTs(entrypoint: string, outDir: string, emitFiles: boolean) {
-	const bundle = await rolldown({
-		input: entrypoint,
-	});
-	const result = await bundle.generate({
-		format: "esm",
-		inlineDynamicImports: true,
-	});
-	const code = result.output[0].code;
-	if (emitFiles) {
-		await fs.promises.writeFile(path.resolve(outDir, "index.ts"), code);
-	}
-	return code;
+export function createTsAttachment(filePath: string, compiled: string): Attachment {
+	return {
+		id: crypto.randomUUID(),
+		version: "1.0",
+		filename: `${path.parse(filePath).name}.js`,
+		isProcessable: true,
+		processingStatus: 2,
+		attachmentType: AttachmentType.TypeScript,
+		attachmentData: { original: toBase64(compiled), compiled: "" },
+		errors: [],
+	};
 }
 
-/** Encodes text or buffer to base64 */
-function toBase64(input: string | Buffer) {
-	return Buffer.isBuffer(input)
-		? input.toString("base64")
-		: Buffer.from(input, "utf8").toString("base64");
+export function createStringsAttachment(filePath: string, raw: string): Attachment {
+	return {
+		id: crypto.randomUUID(),
+		version: "1.0",
+		filename: path.basename(filePath),
+		isProcessable: true,
+		processingStatus: 2,
+		attachmentType: AttachmentType.Strings,
+		attachmentData: { original: toBase64(raw), compiled: "" },
+		errors: [],
+	};
 }
 
-/**
- * This is taken directly from the portal.battlefield.com website. It searches a typescript file for all strings, then outputs them into json.
- */
-// function _generateStringFile(V: string) {
-// 	const X: Record<string | number, string> = {},
-// 		J = V.split(`
-// `),
-// 		ne = V.replaceAll(
-// 			`
-// `,
-// 			"",
-// 		),
-// 		ue =
-// 			/(?:const|let|var)\s+godotStrings\s+=\s\{(\s*(["']([\w ]*)["'])\s*:\s*(["']([\w ]*)["'])\s*,?\s*)*\}/g,
-// 		ce = ne.match(ue);
-// 	if (ce && ce.length > 0) {
-// 		const _e = ce[0].indexOf("=") + 1,
-// 			Se = JSON.parse(ce[0].slice(_e));
-// 		Object.keys(Se).forEach((ye) => {
-// 			X[ye] = Se[ye];
-// 		});
-// 	}
-// 	const me = /'([^'"]*)'|"([^'"]*)"/g,
-// 		ge = new Set();
-// 	return (
-// 		J.forEach((_e) => {
-// 			for (const Se of _e.matchAll(me)) {
-// 				const Ie = Se[1] ? Se[1] : Se[2];
-// 				ge.add(Ie);
-// 			}
-// 		}),
-// 		Array.from(ge).forEach((_e, Se: number) => {
-// 			// @ts-expect-error
-// 			X[Se] = _e;
-// 		}),
-// 		JSON.stringify(X, null, 2)
-// 	);
-// }
+export function createSpatialAttachment(filePath: string, raw: string, mapIdx: number): MapType['spatialAttachment'] {
+	return {
+		id: crypto.randomUUID(),
+		version: "1.0",
+		filename: path.basename(filePath),
+		isProcessable: true,
+		processingStatus: 2,
+		attachmentType: AttachmentType.SpatialData,
+		attachmentData: { original: toBase64(raw), compiled: "" },
+		metadata: `mapIdx=${mapIdx}`,
+		errors: [],
+	};
+}
+
+export function toBase64(input: string | Buffer): string {
+	return Buffer.isBuffer(input) ? input.toString("base64") : Buffer.from(input, "utf8").toString("base64");
+}

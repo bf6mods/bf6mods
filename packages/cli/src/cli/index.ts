@@ -5,6 +5,7 @@ import { build } from "./build.js";
 import { importFile } from "./import.ts";
 import { init, installDependencies } from "./init.js";
 import { prepare } from "./prepare.js";
+import { dev } from "./dev.ts";
 
 const program = new Command();
 
@@ -33,6 +34,13 @@ program
 	.description("prepare the types for bf6 mod")
 	.action(async () => {
 		await prepare();
+	});
+
+program
+	.command("dev")
+	.description("watch the changes in src, and recompile as needed")
+	.action(async () => {
+		await dev();
 	});
 
 program
