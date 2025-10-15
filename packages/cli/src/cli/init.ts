@@ -23,6 +23,13 @@ function renameFilesRecursively(dir: string, modName: string) {
 			fs.renameSync(oldPath, newPath);
 		}
 
+		// If it's a bf6.config.ts, replace the {bf6ConfigName} placeholder
+		if (entry.name === "bf6.config.ts") {
+			let content = fs.readFileSync(newPath, "utf-8");
+			content = content.replace(/{bf6ConfigName}/g, modName);
+			fs.writeFileSync(newPath, content, "utf-8");
+		}
+
 		// If it's a package.json, rewrite the "name" field
 		if (entry.name === "package.json") {
 			const pkg = JSON.parse(fs.readFileSync(newPath, "utf-8"));
@@ -47,13 +54,12 @@ export const templates = [
 
 export async function startProject(
 	destination: string,
-	name: string,
 	template: (typeof templates)[number] | "None",
-	_logging = false,
+	name?: string,
 ) {
 	if (["AcePursuit", "BombSquad", "Exfil", "Vertigo"].includes(template)) {
 		const importPath = path.resolve(templatesDir, `${template}.json`);
-		await importFile(importPath, destination);
+		await importFile(importPath, destination, name);
 	} else if (template === "None") {
 		// Do nothing if none
 	} else {
@@ -66,7 +72,7 @@ export async function startProject(
 		recursive: true,
 	});
 
-	renameFilesRecursively(destination, name);
+	if (name) renameFilesRecursively(destination, name);
 }
 
 export function installDependencies(projectDir: string) {
@@ -171,7 +177,7 @@ export async function init(argTargetDir?: string) {
 	});
 	if (prompts.isCancel(template)) return cancel();
 
-	await startProject(path, name, template, true);
+	await startProject(path, template, name);
 
 	const s = prompts.spinner();
 	s.start("Installing via npm");

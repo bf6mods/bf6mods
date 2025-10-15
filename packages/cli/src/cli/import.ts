@@ -17,7 +17,7 @@ function getMapKeyByValue(value: string): keyof typeof MapIdEnum | undefined {
 	) as keyof typeof MapIdEnum | undefined;
 }
 
-export async function importFile(input: string, output: string) {
+export async function importFile(input: string, output: string, name?: string) {
 	const workingDir = path.resolve(".");
 	const entrypoint = path.resolve(workingDir, input);
 	const outDir = path.resolve(workingDir, output);
@@ -31,7 +31,7 @@ export async function importFile(input: string, output: string) {
 	if (!fs.existsSync(outDir))
 		await fs.promises.mkdir(outDir, { recursive: true });
 
-	await startProject(outDir, config.name, "None");
+	await startProject(outDir, "None", name ?? config.name);
 
 	let typescriptFile: string | undefined;
 	let stringsFile: string | undefined;
@@ -74,7 +74,7 @@ export async function importFile(input: string, output: string) {
 
 	// build the new bf6.config.ts structure
 	const bf6Config = {
-		name: config.name,
+		name: name ?? config.name,
 		description: config.description,
 		outDir: "dist",
 		entrypoint: typescriptFile ? `src/${typescriptFile}` : undefined,
