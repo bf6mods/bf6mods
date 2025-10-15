@@ -24,18 +24,20 @@
 	],
 	"dependencies": {
 		"@bf6mods/sdk": "1.0.1",
+		"@clack/prompts": "^0.11.0",
 		"chokidar": "^4.0.3",
 		"colors": "^1.4.0",
 		"commander": "^14.0.1",
-		"inquirer": "^12.9.6",
 		"jiti": "^2.6.1",
 		"knitwork": "^1.2.0",
-		"rolldown": "^1.0.0-beta.43"
+		"rolldown": "^1.0.0-beta.43",
+		"stringify-object": "^6.0.0"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"devDependencies": {
+		"@types/stringify-object": "^4.0.5",
 		"cross-env": "^10.1.0",
 		"tsx": "^4.20.6"
 	}

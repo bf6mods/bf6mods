@@ -16,7 +16,6 @@ export enum AiSpawnType {
 	Static = 2,
 }
 
-
 /**
  * Controls the rules for Squad Spawning, for squad members and squad leaders.
  */
@@ -47,7 +46,7 @@ export enum PingBehavior {
 }
 
 export enum ModBuilderGameMode {
-	Custom = 2
+	Custom = 2,
 }
 
 /**
@@ -66,12 +65,11 @@ export enum FactionID {
  */
 export type PerTeam<T> = T | [number, T][];
 
-
 /**
  * Describes all configurable mutators for the game.
  */
 export type Mutators = {
-	/** 
+	/**
 	 * Whether AI is allowed to go prone per team or globally.
 	 * If global: `true | false`
 	 * If per team: `[[teamIndex, isProneAllowed], ...]`
@@ -597,7 +595,6 @@ export type Mutators = {
 	 */
 	VehicleSpawnDelayMultiplier_PerTeam: PerTeam<number>;
 };
-
 
 /**
  * Describes all configurable asset restrictions for the game.
@@ -1519,7 +1516,7 @@ export type AssetRestrictions = {
 export enum AttachmentType {
 	SpatialData = 1,
 	TypeScript = 2,
-	Strings = 4
+	Strings = 4,
 }
 
 /**
@@ -1585,7 +1582,7 @@ export type Map = {
 		/**
 		 * Type of attachment
 		 */
-		attachmentType: AttachmentType
+		attachmentType: AttachmentType;
 
 		/**
 		 * Any errors encountered during processing or validation.
@@ -1636,17 +1633,15 @@ export type Workspace = {
 	};
 };
 
-
 /**
  * Describes the configuration of a single team in the game.
  * Each entry represents a team index and its composition limits.
  */
 export type TeamComposition = [
-	/** 
+	/**
 	 * The team index (e.g., 0–3 depending on the number of teams).
 	 */
 	number,
-
 	{
 		/**
 		 * Maximum number of human players allowed on this team.
@@ -1663,7 +1658,7 @@ export type TeamComposition = [
 		 * Unknown what any other value than 1 means. If you are aware, please create an issue
 		 */
 		aiType: 1;
-	}
+	},
 ];
 
 /**
@@ -1730,7 +1725,6 @@ export type Attachment = {
 	errors: unknown[];
 };
 
-
 /**
  * Represents the configuration structure for a BF6 mod project.
  * This defines all high-level metadata, gameplay modifiers, asset restrictions,
@@ -1789,5 +1783,3 @@ export type ConfigType = {
 	 */
 	attachments?: Attachment[];
 };
-
-

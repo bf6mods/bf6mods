@@ -41,10 +41,7 @@ export async function prepare() {
 				"./types/config.ts",
 				`defineBf6Config`,
 			),
-			MapId: genInlineTypeImport(
-				"./types/config.ts",
-				`MapId`,
-			),
+			MapId: genInlineTypeImport("./types/config.ts", `MapId`),
 		};
 
 		const args = genNamespaceAugmentation("global", augmentations);

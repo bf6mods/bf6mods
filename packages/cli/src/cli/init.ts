@@ -2,9 +2,8 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import colors from "colors";
-import inquirer from "inquirer";
-import { printToConsole } from "./utils.ts";
+import * as prompts from "@clack/prompts";
+import { importFile } from "./import.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,11 +37,28 @@ function renameFilesRecursively(dir: string, modName: string) {
 	}
 }
 
-export const templates = ["Basic", "AcePursuit", "BombSquad", "Exfil", "Vertigo"] as const;
+export const templates = [
+	"Basic",
+	"AcePursuit",
+	"BombSquad",
+	"Exfil",
+	"Vertigo",
+] as const;
 
-export function startProject(destination: string, name: string, template: (typeof templates)[number] | "None") {
-	if (template !== 'None') {
-		const templateDir = path.resolve(templatesDir, template);		
+export async function startProject(
+	destination: string,
+	name: string,
+	template: (typeof templates)[number] | "None",
+	_logging = false,
+) {
+	if (["AcePursuit", "BombSquad", "Exfil", "Vertigo"].includes(template)) {
+		const importPath = path.resolve(templatesDir, `${template}.json`);
+		await importFile(importPath, destination);
+	} else if (template === "None") {
+		// Do nothing if none
+	} else {
+		// Handles the Basic and any other template provided
+		const templateDir = path.resolve(templatesDir, template);
 		fs.cpSync(templateDir, destination, { recursive: true });
 	}
 
@@ -54,43 +70,116 @@ export function startProject(destination: string, name: string, template: (typeo
 }
 
 export function installDependencies(projectDir: string) {
-	printToConsole(`${colors.magenta("◐")} Installing dependencies...`);
-	child_process.execSync(`npm install`, {
-		stdio: "inherit",
-		cwd: projectDir,
-	});
+	try {
+		child_process.execSync(`npm install`, {
+			stdio: "inherit",
+			cwd: projectDir,
+		});
+		return true;
+	} catch (_err) {
+		return false;
+	}
 }
 
-export async function init() {
-	inquirer
-		.prompt([
-			{
-				type: "input",
-				name: "mod_name",
-				message: "What's your mod's name",
-				validate: (value: string) => {
-					if (value.trim() === "") return "Please provide a value";
-					return true;
-				},
-			},
-			{
-				type: "list",
-				name: "template",
-				message: "Which template should be used",
-				choices: templates,
-			},
-		])
-		.then((answers) => {
-			const newProject = path.resolve(".", answers.mod_name);
+const _defaultTargetDir = "bf6-mod";
+const cancel = () => prompts.cancel("Operation cancelled");
 
-			startProject(newProject, answers.mod_name, answers.template);
-			installDependencies(newProject);
-		})
-		.catch((error) => {
-			if (error.isTtyError) {
-				console.error("TTY Error:", error);
-			} else {
-				console.error("Error occurred:", error);
-			}
+function isEmpty(path: string) {
+	const files = fs.readdirSync(path);
+	return files.length === 0 || (files.length === 1 && files[0] === ".git");
+}
+
+function emptyDir(dir: string) {
+	if (!fs.existsSync(dir)) {
+		return;
+	}
+	for (const file of fs.readdirSync(dir)) {
+		if (file === ".git") {
+			continue;
+		}
+		fs.rmSync(path.resolve(dir, file), { recursive: true, force: true });
+	}
+}
+
+export async function init(argTargetDir?: string) {
+	prompts.intro("Initialize Bf6 Mod");
+
+	const path = argTargetDir
+		? argTargetDir
+		: await prompts.text({
+				message: "Where should we create your project?",
+				placeholder: "./ace-pursuit",
+				validate: (value) => {
+					if (!value) return "Please enter a path.";
+					if (value[0] !== ".") return "Please enter a relative path.";
+				},
+			});
+	if (prompts.isCancel(path)) return cancel();
+
+	let name = await prompts.text({
+		message: "What is the name of your mod?",
+		placeholder: "Ace Pursuit",
+		validate: (value) => {
+			if (!value.trim()) return "Please enter a name.";
+		},
+	});
+	if (prompts.isCancel(name)) return cancel();
+	name = name.trim();
+
+	if (fs.existsSync(path) && !isEmpty(path)) {
+		let overwrite: "yes" | "no" | "ignore" | undefined;
+		const res = await prompts.select({
+			message:
+				(path === "." ? "Current directory" : `Target directory "${path}"`) +
+				` is not empty. Please choose how to proceed:`,
+			options: [
+				{
+					label: "Cancel operation",
+					value: "no",
+				},
+				{
+					label: "Remove existing files and continue",
+					value: "yes",
+				},
+				{
+					label: "Ignore files and continue",
+					value: "ignore",
+				},
+			],
 		});
+		if (prompts.isCancel(res)) return cancel();
+		overwrite = res;
+
+		switch (overwrite) {
+			case "yes":
+				emptyDir(path);
+				break;
+			case "no":
+				cancel();
+				return;
+		}
+	}
+
+	const template = await prompts.select({
+		message: "Select a template:",
+		options: templates.map((template) => {
+			return {
+				label: template,
+				value: template,
+			};
+		}),
+	});
+	if (prompts.isCancel(template)) return cancel();
+
+	await startProject(path, name, template, true);
+
+	const s = prompts.spinner();
+	s.start("Installing via npm");
+	const installed = installDependencies(path);
+	if (installed) s.stop("Installed via npm");
+	else s.stop("Failed to install via npm", 1);
+
+	const nextSteps = `cd ${path}\nnpm run build`;
+
+	prompts.note(nextSteps, "Next steps.");
 }

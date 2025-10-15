@@ -1,10 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-
-import { ConfigType, AttachmentType } from "@bf6mods/sdk";
-import { installDependencies, startProject } from "./init.ts";
-
+import { AttachmentType, type ConfigType } from "@bf6mods/sdk";
+import stringifyObject from "stringify-object";
 import { MapId as MapIdEnum } from "../resources/prepare/types/config.ts";
+import { startProject } from "./init.ts";
 
 async function writeFileSafe(filePath: string, data: string | Buffer) {
 	const dir = path.dirname(filePath);
@@ -14,7 +13,7 @@ async function writeFileSafe(filePath: string, data: string | Buffer) {
 
 function getMapKeyByValue(value: string): keyof typeof MapIdEnum | undefined {
 	return Object.keys(MapIdEnum).find(
-		k => MapIdEnum[k as keyof typeof MapIdEnum] === value
+		(k) => MapIdEnum[k as keyof typeof MapIdEnum] === value,
 	) as keyof typeof MapIdEnum | undefined;
 }
 
@@ -23,18 +22,16 @@ export async function importFile(input: string, output: string) {
 	const entrypoint = path.resolve(workingDir, input);
 	const outDir = path.resolve(workingDir, output);
 
-	if (!fs.existsSync(entrypoint))
-		throw new Error("Cannot find strings file");
+	if (!fs.existsSync(entrypoint)) throw new Error("Cannot find strings file");
 
 	const config = JSON.parse(
 		await fs.promises.readFile(entrypoint, { encoding: "utf8" }),
 	) as ConfigType;
-	console.log("config:", config);
 
 	if (!fs.existsSync(outDir))
 		await fs.promises.mkdir(outDir, { recursive: true });
 
-	startProject(outDir, config.name, "None");
+	await startProject(outDir, config.name, "None");
 
 	let typescriptFile: string | undefined;
 	let stringsFile: string | undefined;
@@ -51,13 +48,19 @@ export async function importFile(input: string, output: string) {
 
 			if (attachment.attachmentType === AttachmentType.SpatialData) {
 				promises.push(
-					writeFileSafe(path.resolve(outDir, "src", "scenes", attachment.filename), atob(attachment.attachmentData.original)),
+					writeFileSafe(
+						path.resolve(outDir, "src", "scenes", attachment.filename),
+						atob(attachment.attachmentData.original),
+					),
 				);
 				continue;
 			}
 
 			promises.push(
-				writeFileSafe(path.resolve(outDir, "src", attachment.filename), atob(attachment.attachmentData.original)),
+				writeFileSafe(
+					path.resolve(outDir, "src", attachment.filename),
+					atob(attachment.attachmentData.original),
+				),
 			);
 		}
 	}
@@ -75,7 +78,12 @@ export async function importFile(input: string, output: string) {
 		description: config.description,
 		outDir: "dist",
 		entrypoint: typescriptFile ? `src/${typescriptFile}` : undefined,
-		scenes: scenes ? scenes.map(([id, path]) => [`MapId.${getMapKeyByValue(id) ?? id}`, path]) : undefined,
+		scenes: scenes
+			? scenes.map(([id, path]) => [
+					`MapId.${getMapKeyByValue(id) ?? id}`,
+					path,
+				])
+			: undefined,
 		strings: stringsFile ? `src/${stringsFile}` : undefined,
 		game: {
 			mutators: config.mutators,
@@ -94,12 +102,19 @@ export async function importFile(input: string, output: string) {
 	);
 
 	await Promise.all(promises);
-
-	installDependencies(outDir);
 }
 
-function stringifyWithRaw(value: any, replacer?: any, space = 4) {
-	return JSON.stringify(value, replacer, space)
-		// remove quotes around MapId references like "MapId.LiberationPeak"
-		.replace(/"MapId\.([A-Za-z0-9_]+)"/g, "MapId.$1");
+function stringifyWithRaw(value: unknown, options = {}) {
+	return stringifyObject(value, {
+		indent: "    ", // 4 spaces
+		singleQuotes: true,
+		transform: (_obj, _prop, originalResult) => {
+			// Remove quotes from MapId.* expressions
+			if (/^['"]MapId\.[A-Za-z0-9_]+['"]$/.test(originalResult)) {
+				return originalResult.slice(1, -1); // remove surrounding quotes
+			}
+			return originalResult;
+		},
+		...options,
+	});
 }

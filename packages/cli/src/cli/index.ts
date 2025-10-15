@@ -2,9 +2,9 @@
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build.js";
-import { init } from "./init.js";
-import { prepare } from "./prepare.js";
 import { importFile } from "./import.ts";
+import { init, installDependencies } from "./init.js";
+import { prepare } from "./prepare.js";
 
 const program = new Command();
 
@@ -15,9 +15,10 @@ program
 
 program
 	.command("init")
+	.argument("[directory]")
 	.description("Create a new bf6 mod")
-	.action(async () => {
-		await init();
+	.action(async (directory) => {
+		await init(directory);
 	});
 
 program
@@ -36,11 +37,12 @@ program
 
 program
 	.command("import")
-	.argument('<input>')
-	.argument('<output>')
+	.argument("<input>")
+	.argument("<output>")
 	.description("decompiles the json config of a mod into a new project")
 	.action(async (input, output) => {
 		await importFile(input as string, output as string);
+		installDependencies(output);
 	});
 
 program.exitOverride((_err) => {

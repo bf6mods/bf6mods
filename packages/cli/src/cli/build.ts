@@ -1,9 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { AttachmentType, type ConfigType, type Map } from "@bf6mods/sdk";
 import { createJiti } from "jiti";
 import { rolldown } from "rolldown";
-import { MapId as MapIdEnum, type Bf6Config } from "../resources/prepare/types/config.ts";
-import { AttachmentType, type ConfigType, type Map } from "@bf6mods/sdk";
+import {
+	type Bf6Config,
+	MapId as MapIdEnum,
+} from "../resources/prepare/types/config.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -25,7 +28,8 @@ export async function build() {
 	const config = await getBf6Config(workingDir);
 
 	const outDir = path.resolve(workingDir, config.outDir);
-	if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
+	if (fs.existsSync(outDir))
+		fs.rmSync(outDir, { recursive: true, force: true });
 	fs.mkdirSync(outDir, { recursive: true });
 
 	const minifyJson =
@@ -81,7 +85,7 @@ export async function build() {
 	// --- Spatial (map) attachments ---
 	if (config.scenes) {
 		let mapIdx = 0;
-		for (const [mapId,scene] of config.scenes) {
+		for (const [mapId, scene] of config.scenes) {
 			const scenePath = path.resolve(workingDir, scene);
 			if (!fs.existsSync(scenePath))
 				throw new Error(`Cannot find spatial data file: ${scene}`);
@@ -114,7 +118,7 @@ export async function build() {
 	}
 
 	// --- Base config (game-level) ---
-	let baseGame = config.game;
+	const baseGame = config.game;
 
 	// --- Final JSON object ---
 	const finalJson: ConfigType = {
@@ -161,39 +165,41 @@ function toBase64(input: string | Buffer) {
 		: Buffer.from(input, "utf8").toString("base64");
 }
 
-
 /**
  * This is taken directly from the portal.battlefield.com website. It searches a typescript file for all strings, then outputs them into json.
  */
-function generateStringFile(V: string) {
-    const X: Record<string | number, string> = {}
-      , J = V.split(`
-`)
-      , ne = V.replaceAll(`
-`, "")
-      , ue = /(?:const|let|var)\s+godotStrings\s+\=\s\{(\s*([\"\']([\w ]*)[\"\'])\s*:\s*([\"\']([\w ]*)[\"\'])\s*,?\s*)*\}/g
-      , ce = ne.match(ue);
-    if (ce && ce.length > 0) {
-        const _e = ce[0].indexOf("=") + 1
-          , Se = JSON.parse(ce[0].slice(_e));
-        Object.keys(Se).forEach(ye => {
-            X[ye] = Se[ye]
-        }
-        )
-    }
-    const me = /'([^'"]*)'|"([^'"]*)"/g
-      , ge = new Set;
-    return J.forEach(_e => {
-        for (const Se of _e.matchAll(me)) {
-            const Ie = Se[1] ? Se[1] : Se[2];
-            ge.add(Ie)
-        }
-    }
-    ),
-    Array.from(ge).forEach( (_e, Se: number) => {
-    	// @ts-expect-error
-        X[Se] = _e
-    }
-    ),
-    JSON.stringify(X, null, 2)
+function _generateStringFile(V: string) {
+	const X: Record<string | number, string> = {},
+		J = V.split(`
+`),
+		ne = V.replaceAll(
+			`
+`,
+			"",
+		),
+		ue =
+			/(?:const|let|var)\s+godotStrings\s+=\s\{(\s*(["']([\w ]*)["'])\s*:\s*(["']([\w ]*)["'])\s*,?\s*)*\}/g,
+		ce = ne.match(ue);
+	if (ce && ce.length > 0) {
+		const _e = ce[0].indexOf("=") + 1,
+			Se = JSON.parse(ce[0].slice(_e));
+		Object.keys(Se).forEach((ye) => {
+			X[ye] = Se[ye];
+		});
+	}
+	const me = /'([^'"]*)'|"([^'"]*)"/g,
+		ge = new Set();
+	return (
+		J.forEach((_e) => {
+			for (const Se of _e.matchAll(me)) {
+				const Ie = Se[1] ? Se[1] : Se[2];
+				ge.add(Ie);
+			}
+		}),
+		Array.from(ge).forEach((_e, Se: number) => {
+			// @ts-expect-error
+			X[Se] = _e;
+		}),
+		JSON.stringify(X, null, 2)
+	);
 }
