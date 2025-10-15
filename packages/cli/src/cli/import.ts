@@ -47,12 +47,7 @@ export async function importFile(input: string, output: string, name?: string) {
 				stringsFile = attachment.filename;
 
 			if (attachment.attachmentType === AttachmentType.SpatialData) {
-				promises.push(
-					writeFileSafe(
-						path.resolve(outDir, "src", "scenes", attachment.filename),
-						atob(attachment.attachmentData.original),
-					),
-				);
+				// We'll just use the data attached to mapRotation instead
 				continue;
 			}
 
@@ -68,6 +63,13 @@ export async function importFile(input: string, output: string, name?: string) {
 	// Extract spatial scenes from mapRotation instead of guessing
 	if (config.mapRotation?.length) {
 		for (const map of config.mapRotation) {
+			promises.push(
+				writeFileSafe(
+					path.resolve(outDir, "src", "scenes", map.spatialAttachment.filename),
+					atob(map.spatialAttachment.attachmentData.original),
+				),
+			);
+
 			scenes.push([map.id, `src/scenes/${map.spatialAttachment.filename}`]);
 		}
 	}
