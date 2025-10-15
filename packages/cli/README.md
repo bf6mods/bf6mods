@@ -7,15 +7,17 @@ Create Battlefield 6 mods quickly with a vite like development experience.
 To create a new project, simply run the following command and answer the questions
 
 ```
-npx bf6mods init
+npx @bf6mods/cli init
 ```
+
+![Initializing a repo](https://raw.githubusercontent.com/bf6mods/bf6mods/refs/heads/main/media/terminal.gif "Initializing a repo")
 
 ## Import from JSON
 
 Already have a project? Just export your currently existing project in [portal.battlefield.com](https://portal.battlefield.com), and run...
 
 ```
-npx bf6mods import <input> <output>
+npx @bf6mods/cli import <input> <output>
 ```
 
 ## Deploying Project to Portal
