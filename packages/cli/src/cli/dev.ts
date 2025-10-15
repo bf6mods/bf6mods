@@ -1,9 +1,9 @@
 import fs from "node:fs";
+import { glob } from "node:fs/promises";
 import path from "node:path";
+import chokidar, { type FSWatcher } from "chokidar";
 import colors from "colors";
-import chokidar, { FSWatcher } from "chokidar";
-import { getBf6Config, build } from "./build.ts";
-import { glob } from 'node:fs/promises';
+import { build, getBf6Config } from "./build.ts";
 
 export async function dev() {
 	const workingDir = path.resolve(".");
@@ -16,7 +16,11 @@ export async function dev() {
 	let watcher: FSWatcher | undefined;
 
 	async function rebuild(trigger: string) {
-		console.log(colors.yellow(`↻ Change detected in ${path.basename(trigger)}, rebuilding...`));
+		console.log(
+			colors.yellow(
+				`↻ Change detected in ${path.basename(trigger)}, rebuilding...`,
+			),
+		);
 		const start = performance.now();
 		try {
 			await build();
@@ -31,7 +35,8 @@ export async function dev() {
 	async function collectWatchTargets(): Promise<string[]> {
 		const targets: string[] = [];
 
-		if (config.entrypoint) targets.push(path.resolve(workingDir, config.entrypoint));
+		if (config.entrypoint)
+			targets.push(path.resolve(workingDir, config.entrypoint));
 		if (config.scenes) {
 			for (const [, scene] of config.scenes) {
 				targets.push(path.resolve(workingDir, scene));
@@ -42,7 +47,7 @@ export async function dev() {
 		const srcDir = path.resolve(workingDir, "src");
 		for await (const entry of glob(`${srcDir}/**/*`)) targets.push(entry);
 
-		for await (const entry of glob('bf6.config.*')) targets.push(entry);
+		for await (const entry of glob("bf6.config.*")) targets.push(entry);
 
 		return targets;
 	}
@@ -59,20 +64,23 @@ export async function dev() {
 			persistent: true,
 			ignoreInitial: true,
 			awaitWriteFinish: true,
-			ignored: [
-				path.resolve(outDir),
-				`${path.resolve(outDir)}/**`,
-			],
+			ignored: [path.resolve(outDir), `${path.resolve(outDir)}/**`],
 		});
 
 		watcher.on("change", async (file) => {
 			if (file.includes("bf6.config.")) {
-				console.log(colors.magenta("⚙ Config changed — reloading and rebuilding watcher..."));
+				console.log(
+					colors.magenta(
+						"⚙ Config changed — reloading and rebuilding watcher...",
+					),
+				);
 				try {
 					config = await getBf6Config(workingDir);
 					await setupWatcher();
 				} catch (err) {
-					console.error(colors.red(`✖ Failed to reload config: ${(err as Error).message}`));
+					console.error(
+						colors.red(`✖ Failed to reload config: ${(err as Error).message}`),
+					);
 				}
 				return;
 			}

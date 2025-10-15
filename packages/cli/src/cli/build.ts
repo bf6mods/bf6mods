@@ -1,9 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
+import {
+	type Attachment,
+	AttachmentType,
+	type ConfigType,
+	type MapType,
+} from "@bf6mods/sdk";
 import { createJiti } from "jiti";
 import { rolldown } from "rolldown";
-import { AttachmentType, type ConfigType, type MapType, Attachment } from "@bf6mods/sdk";
-import { MapId as MapIdEnum, type Bf6Config } from "../resources/prepare/types/config.ts";
+import {
+	type Bf6Config,
+	MapId as MapIdEnum,
+} from "../resources/prepare/types/config.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -40,14 +48,22 @@ export async function build() {
 			? config.minify
 			: (config.minify?.json ?? false);
 
-	let tsAttachment;
+	let tsAttachment: Attachment | undefined;
 	if (config.entrypoint) {
 		const entryAbs = path.resolve(workingDir, config.entrypoint);
-		const compiled = await buildEntrypoint(entryAbs, outDir, !!config.outputArtifacts);
+		const compiled = await buildEntrypoint(
+			entryAbs,
+			outDir,
+			!!config.outputArtifacts,
+		);
 		tsAttachment = createTsAttachment(entryAbs, compiled);
 	}
 
-	const { attachments, mapRotation } = await collectAttachments(config, workingDir, tsAttachment);
+	const { attachments, mapRotation } = await collectAttachments(
+		config,
+		workingDir,
+		tsAttachment,
+	);
 
 	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
 	console.log(`✔ Built mod: ${config.name}`);
@@ -56,7 +72,11 @@ export async function build() {
 /**
  * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.
  */
-export async function buildEntrypoint(entry: string, outDir: string, emit: boolean): Promise<string> {
+export async function buildEntrypoint(
+	entry: string,
+	outDir: string,
+	emit: boolean,
+): Promise<string> {
 	const bundle = await rolldown({
 		input: entry,
 	});
@@ -131,11 +151,16 @@ export async function writeModJson(
 		attachments,
 	};
 
-	const jsonOutput = minify ? JSON.stringify(finalJson) : JSON.stringify(finalJson, null, 2);
+	const jsonOutput = minify
+		? JSON.stringify(finalJson)
+		: JSON.stringify(finalJson, null, 2);
 	await fs.promises.writeFile(path.resolve(outDir, "mod.json"), jsonOutput);
 }
 
-export function createTsAttachment(filePath: string, compiled: string): Attachment {
+export function createTsAttachment(
+	filePath: string,
+	compiled: string,
+): Attachment {
 	return {
 		id: crypto.randomUUID(),
 		version: "1.0",
@@ -148,7 +173,10 @@ export function createTsAttachment(filePath: string, compiled: string): Attachme
 	};
 }
 
-export function createStringsAttachment(filePath: string, raw: string): Attachment {
+export function createStringsAttachment(
+	filePath: string,
+	raw: string,
+): Attachment {
 	return {
 		id: crypto.randomUUID(),
 		version: "1.0",
@@ -161,7 +189,11 @@ export function createStringsAttachment(filePath: string, raw: string): Attachme
 	};
 }
 
-export function createSpatialAttachment(filePath: string, raw: string, mapIdx: number): MapType['spatialAttachment'] {
+export function createSpatialAttachment(
+	filePath: string,
+	raw: string,
+	mapIdx: number,
+): MapType["spatialAttachment"] {
 	return {
 		id: crypto.randomUUID(),
 		version: "1.0",
@@ -176,5 +208,7 @@ export function createSpatialAttachment(filePath: string, raw: string, mapIdx: n
 }
 
 export function toBase64(input: string | Buffer): string {
-	return Buffer.isBuffer(input) ? input.toString("base64") : Buffer.from(input, "utf8").toString("base64");
+	return Buffer.isBuffer(input)
+		? input.toString("base64")
+		: Buffer.from(input, "utf8").toString("base64");
 }

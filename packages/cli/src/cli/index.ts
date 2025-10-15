@@ -2,10 +2,10 @@
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build.js";
+import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies } from "./init.js";
 import { prepare } from "./prepare.js";
-import { dev } from "./dev.ts";
 
 const program = new Command();
 
