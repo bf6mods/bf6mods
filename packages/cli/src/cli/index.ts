@@ -4,7 +4,7 @@ import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build.js";
 import { init } from "./init.js";
 import { prepare } from "./prepare.js";
-import { decompile } from "./decompile.ts";
+import { importFile } from "./import.ts";
 
 const program = new Command();
 
@@ -35,12 +35,12 @@ program
 	});
 
 program
-	.command("decompile")
+	.command("import")
 	.argument('<input>')
 	.argument('<output>')
-	.description("decompiles the json config of a mod into a directory")
+	.description("decompiles the json config of a mod into a new project")
 	.action(async (input, output) => {
-		await decompile(input as string, output as string);
+		await importFile(input as string, output as string);
 	});
 
 program.exitOverride((_err) => {

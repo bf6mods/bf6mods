@@ -1,5 +1,17 @@
 import type { ConfigType } from "@bf6mods/sdk";
 
+export enum MapId {
+	FireStorm = "MP_FireStorm-ModBuilderCustom0",
+	SiegeOfCairo = "MP_Abbasid-ModBuilderCustom0",
+	EmpireState = "MP_Aftermath-ModBuilderCustom0",
+	IberianOffensive = "MP_Battery-ModBuilderCustom0",
+	LiberationPeak = "MP_Capstone-ModBuilderCustom0",
+	ManhattanBridge = "MP_Dumbo-ModBuilderCustom0",
+	SaintsQuarter = "MP_Limestone-ModBuilderCustom0",
+	NewSobekCity = "MP_Outskirts-ModBuilderCustom0",
+	MirakValley = "MP_Tungsten-ModBuilderCustom0",
+}
+
 /**
  * Represents the root configuration for a Battlefield 6 mod project.
  *
@@ -32,6 +44,11 @@ export type Bf6Config = {
 	outDir: string;
 
 	/**
+	 * Whether or not to output the built files like the entrypoint typescript file
+	 */
+	outputArtifacts?: boolean;
+
+	/**
 	 * The main entrypoint for your mod’s TypeScript source file.
 	 *
 	 * This is typically something like `"src/index.ts"` or `"src/main.ts"`.
@@ -43,13 +60,18 @@ export type Bf6Config = {
 	 * Can be a single string or an array of paths.
 	 * Can be a directory if single string provided
 	 */
-	scenes?: string[] | string;
+	scenes?: [MapId, string][];
 
 	/**
 	 * Path to a JSON file or other source that defines localized strings
 	 * used by the mod (optional).
 	 */
 	strings?: string;
+
+	/**
+	 * Generate strings automatically
+	 */
+	generateStrings?: boolean;
 
 	/**
 	 * Controls whether build output should be minified.
@@ -110,7 +132,6 @@ export type Bf6Config = {
  *   game: {
  *     mutators: [],
  *     assetRestrictions: {},
- *     gameMode: "ModBuilderCustom",
  *     teamComposition: [],
  *   },
  * });

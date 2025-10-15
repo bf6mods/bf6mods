@@ -36,11 +36,17 @@ export async function prepare() {
 			`${ConfigFileExports}\n`,
 		);
 
-		const augmentations: Record<string, string> = {};
-		augmentations["defineBf6Config	"] = genInlineTypeImport(
-			"./types/config.ts",
-			`defineBf6Config`,
-		);
+		const augmentations: Record<string, string> = {
+			defineBf6Config: genInlineTypeImport(
+				"./types/config.ts",
+				`defineBf6Config`,
+			),
+			MapId: genInlineTypeImport(
+				"./types/config.ts",
+				`MapId`,
+			),
+		};
+
 		const args = genNamespaceAugmentation("global", augmentations);
 		fs.writeFileSync(
 			path.resolve(buildDir, "globals.d.ts"),

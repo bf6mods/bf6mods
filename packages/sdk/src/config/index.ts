@@ -1722,7 +1722,7 @@ export type Attachment = {
 	 * Arbitrary metadata string associated with this attachment.
 	 * May contain additional parameters (e.g., "mapIdx=5").
 	 */
-	metadata: string;
+	metadata?: string;
 
 	/**
 	 * Any errors encountered while processing or validating this attachment.

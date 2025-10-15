@@ -2,17 +2,21 @@ import fs from "node:fs";
 import path from "node:path";
 import { createJiti } from "jiti";
 import { rolldown } from "rolldown";
-import type { Bf6Config } from "../resources/prepare/types/config.ts";
+import { MapId as MapIdEnum, type Bf6Config } from "../resources/prepare/types/config.ts";
+import { AttachmentType, type ConfigType, type Map } from "@bf6mods/sdk";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
+	var MapId: typeof MapIdEnum | undefined;
 }
 
 export const getBf6Config = async (rootDir: string) => {
 	globalThis.defineBf6Config = (c) => c;
+	globalThis.MapId = MapIdEnum;
 	const jiti = createJiti(rootDir, { interopDefault: true });
 	const result = await jiti.import("./bf6.config", { default: true });
 	delete globalThis.defineBf6Config;
+	delete globalThis.MapId;
 	return result as Bf6Config;
 };
 
@@ -20,74 +24,143 @@ export async function build() {
 	const workingDir = path.resolve(".");
 	const config = await getBf6Config(workingDir);
 
-	const minifyJs =
-		typeof config.minify === "boolean"
-			? config.minify
-			: (config.minify?.js ?? false);
+	const outDir = path.resolve(workingDir, config.outDir);
+	if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
+	fs.mkdirSync(outDir, { recursive: true });
 
 	const minifyJson =
 		typeof config.minify === "boolean"
 			? config.minify
 			: (config.minify?.json ?? false);
 
-	const outDir = path.resolve(workingDir, config.outDir);
-	if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
-	else {
-		fs.rmSync(outDir, {
-			recursive: true,
-			force: true,
+	// --- Collect attachments ---
+	const attachments: ConfigType["attachments"] = [];
+	const mapRotation: Map[] = [];
+
+	// --- Compile TypeScript ---
+	if (config.entrypoint) {
+		const entryAbs = path.resolve(workingDir, config.entrypoint);
+		const compiled = await buildTs(entryAbs, outDir, !!config.outputArtifacts);
+
+		attachments.push({
+			id: crypto.randomUUID(),
+			version: "1.0",
+			filename: `${path.parse(entryAbs).name}.js`,
+			isProcessable: true,
+			processingStatus: 2,
+			attachmentType: AttachmentType.TypeScript,
+			attachmentData: {
+				original: toBase64(compiled),
+				compiled: "",
+			},
+			errors: [],
 		});
-		fs.mkdirSync(outDir);
 	}
 
-	if (config.entrypoint)
-		buildTs(path.resolve(workingDir, config.entrypoint), outDir, minifyJs);
-	if (config.strings)
-		buildStrings(path.resolve(workingDir, config.strings), outDir, minifyJson);
-	if (config.config)
-		buildConfig(path.resolve(workingDir, config.config), outDir, minifyJson);
-	if (config.tscn) buildTscn(path.resolve(workingDir, config.tscn), outDir);
+	// --- Strings attachment ---
+	if (config.strings) {
+		const strPath = path.resolve(workingDir, config.strings);
+		if (!fs.existsSync(strPath)) throw new Error("Cannot find strings file");
+		const raw = await fs.promises.readFile(strPath, "utf8");
+
+		attachments.push({
+			id: crypto.randomUUID(),
+			version: "1.0",
+			filename: path.basename(strPath),
+			isProcessable: true,
+			processingStatus: 2,
+			attachmentType: AttachmentType.Strings,
+			attachmentData: {
+				original: toBase64(raw),
+				compiled: "",
+			},
+			errors: [],
+		});
+	}
+
+	// --- Spatial (map) attachments ---
+	if (config.scenes) {
+		let mapIdx = 0;
+		for (const [mapId,scene] of config.scenes) {
+			const scenePath = path.resolve(workingDir, scene);
+			if (!fs.existsSync(scenePath))
+				throw new Error(`Cannot find spatial data file: ${scene}`);
+
+			const raw = await fs.promises.readFile(scenePath, "utf8");
+			const id = crypto.randomUUID();
+
+			const spatialAttachment = {
+				id,
+				version: "1.0",
+				filename: path.basename(scenePath),
+				isProcessable: true,
+				processingStatus: 2,
+				attachmentType: AttachmentType.SpatialData,
+				attachmentData: {
+					original: toBase64(raw),
+					compiled: "",
+				},
+				metadata: `mapIdx=${mapIdx++}`,
+				errors: [],
+			};
+
+			attachments.push(spatialAttachment);
+
+			mapRotation.push({
+				id: mapId,
+				spatialAttachment,
+			});
+		}
+	}
+
+	// --- Base config (game-level) ---
+	let baseGame = config.game;
+
+	// --- Final JSON object ---
+	const finalJson: ConfigType = {
+		name: config.name,
+		description: config.description,
+		gameMode: "ModBuilderCustom",
+		mutators: baseGame.mutators ?? {},
+		assetRestrictions: baseGame.assetRestrictions ?? {},
+		teamComposition: baseGame.teamComposition ?? [],
+		mapRotation,
+		attachments,
+	};
+
+	const jsonOutput = minifyJson
+		? JSON.stringify(finalJson)
+		: JSON.stringify(finalJson, null, 2);
+
+	await fs.promises.writeFile(path.resolve(outDir, "mod.json"), jsonOutput);
 }
 
-async function buildTs(entrypoint: string, outDir: string, minify: boolean) {
+/**
+ * Compiles TypeScript entrypoint using rolldown.
+ * Returns the compiled code as a string.
+ */
+async function buildTs(entrypoint: string, outDir: string, emitFiles: boolean) {
 	const bundle = await rolldown({
 		input: entrypoint,
 	});
-
-	await bundle.write({
+	const result = await bundle.generate({
 		format: "esm",
-		file: `${outDir}/index.ts`,
 		inlineDynamicImports: true,
-		minify,
 	});
+	const code = result.output[0].code;
+	if (emitFiles) {
+		await fs.promises.writeFile(path.resolve(outDir, "index.ts"), code);
+	}
+	return code;
 }
 
-async function buildStrings(
-	entrypoint: string,
-	outDir: string,
-	minify: boolean,
-) {
-	if (!fs.existsSync(entrypoint)) throw new Error("Cannot find strings file");
-	let output = await fs.promises.readFile(entrypoint, { encoding: "utf8" });
-	if (minify) output = JSON.stringify(JSON.parse(output));
-	await fs.promises.writeFile(path.resolve(outDir, "strings.json"), output);
+/** Encodes text or buffer to base64 */
+function toBase64(input: string | Buffer) {
+	return Buffer.isBuffer(input)
+		? input.toString("base64")
+		: Buffer.from(input, "utf8").toString("base64");
 }
 
-async function buildConfig(
-	entrypoint: string,
-	outDir: string,
-	minify: boolean,
-) {
-	if (!fs.existsSync(entrypoint)) throw new Error("Cannot find config file");
-	let output = await fs.promises.readFile(entrypoint, { encoding: "utf8" });
-	if (minify) output = JSON.stringify(JSON.parse(output));
-	await fs.promises.writeFile(path.resolve(outDir, "config.json"), output);
-}
-
-async function buildTscn(entrypoint: string, outDir: string) {
-	if (!fs.existsSync(entrypoint)) throw new Error("Cannot find tscn file");
-	await fs.promises.copyFile(entrypoint, path.resolve(outDir, "levels.tscn"));
-}
 
 /**
  * This is taken directly from the portal.battlefield.com website. It searches a typescript file for all strings, then outputs them into json.
