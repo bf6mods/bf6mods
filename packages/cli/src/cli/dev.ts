@@ -3,7 +3,7 @@ import { glob } from "node:fs/promises";
 import path from "node:path";
 import chokidar, { type FSWatcher } from "chokidar";
 import colors from "colors";
-import { build, getBf6Config } from "./build.ts";
+import { build, getBf6Config } from "./build/index.ts";
 
 export async function dev() {
 	const workingDir = path.resolve(".");

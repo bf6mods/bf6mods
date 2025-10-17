@@ -68,7 +68,7 @@ export type Bf6Config = {
 	strings?: string;
 
 	/**
-	 * Generate strings automatically
+	 * Generate strings automatically, by default this is enabled
 	 */
 	generateStrings?: boolean;
 

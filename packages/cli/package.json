@@ -41,6 +41,7 @@
 		"access": "public"
 	},
 	"devDependencies": {
+		"@oxc-project/types": "^0.95.0",
 		"@types/stringify-object": "^4.0.5",
 		"cross-env": "^10.1.0",
 		"tsx": "^4.20.6"

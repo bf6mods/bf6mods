@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
-import { build } from "./build.js";
+import { build } from "./build/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies } from "./init.js";

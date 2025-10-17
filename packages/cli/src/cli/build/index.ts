@@ -7,12 +7,13 @@ import {
 	type MapType,
 } from "@bf6mods/sdk";
 import { createJiti } from "jiti";
-import { rolldown } from "rolldown";
+import { rolldown, type Plugin } from "rolldown";
 import {
 	type Bf6Config,
 	MapId as MapIdEnum,
-} from "../resources/prepare/types/config.ts";
+} from "../../resources/prepare/types/config.ts";
 import { fileURLToPath } from "node:url";
+import { extractBf6Strings } from "./generatedStrings.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -49,13 +50,14 @@ export async function build() {
 			? config.minify
 			: (config.minify?.json ?? false);
 
+	let generatedStrings = {};
 	let tsAttachment: Attachment | undefined;
 	if (config.entrypoint) {
 		const entryAbs = path.resolve(workingDir, config.entrypoint);
 		const compiled = await buildEntrypoint(
 			entryAbs,
-			outDir,
-			!!config.outputArtifacts,
+			generatedStrings,
+			config.generateStrings ?? true
 		);
 		tsAttachment = createTsAttachment(entryAbs, compiled);
 	}
@@ -64,31 +66,62 @@ export async function build() {
 		config,
 		workingDir,
 		tsAttachment,
+		generatedStrings,
 	);
 
 	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
 	console.log(`✔ Built mod: ${config.name}`);
 }
 
+export function helloPlugin(message = "hello-plugin ran ✅"): Plugin {
+	return {
+		name: "hello-plugin",
+
+		// Fires once when the build starts
+		buildStart() {
+			// Prefer the bundler's logger so it shows up in Rolldown's output
+			// (Rolldown forwards plugin warnings to the console.)
+			try {
+				// Rollup-style API: this.warn(...) is widely supported
+				this.warn({ code: "HELLO_PLUGIN", message });
+			} catch {
+				// Fallback if the context logger isn't available
+				// (e.g., if API changes or running programmatically)
+				console.log(`[hello-plugin] ${message}`);
+			}
+		},
+
+		// Also log at bundle time to show multiple hook points
+		generateBundle() {
+			try {
+				this.warn({ code: "HELLO_PLUGIN", message: `${message} (generateBundle)` });
+			} catch {
+				console.log(`[hello-plugin] ${message} (generateBundle)`);
+			}
+		},
+	};
+}
+
+
 /**
  * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.
  */
 export async function buildEntrypoint(
 	entry: string,
-	outDir: string,
-	emit: boolean,
+	bf6Strings: Record<string, string>,
+	generateStringsFromLiterals: boolean
 ): Promise<string> {
 	const bundle = await rolldown({
 		input: entry,
+		plugins: [extractBf6Strings(bf6Strings, generateStringsFromLiterals)],
+		logLevel: 'debug',
 	});
 	const result = await bundle.generate({
 		format: "esm",
 		inlineDynamicImports: true,
 	});
+
 	const code = result.output[0].code;
-	if (emit) {
-		await fs.promises.writeFile(path.resolve(outDir, "index.js"), code);
-	}
 	return code;
 }
 
@@ -101,7 +134,8 @@ const spatialsDir = path.resolve(__dirname, "../resources/maps/spatial");
 export async function collectAttachments(
 	config: Bf6Config,
 	workingDir: string,
-	tsAttachment?: Attachment,
+	tsAttachment: Attachment | undefined,
+	generatedStrings: Record<string, number | string> | undefined,
 ) {
 	const attachments: Attachment[] = [];
 	const mapRotation: MapType[] = [];
@@ -113,7 +147,8 @@ export async function collectAttachments(
 		const strPath = path.resolve(workingDir, config.strings);
 		if (!fs.existsSync(strPath)) throw new Error("Cannot find strings file");
 		const raw = await fs.promises.readFile(strPath, "utf8");
-		attachments.push(createStringsAttachment(strPath, raw));
+		const attachment = createStringsAttachment(strPath, raw, generatedStrings);
+		attachments.push(attachment);
 	}
 
 	// Scenes
@@ -168,6 +203,16 @@ export async function writeModJson(
 		? JSON.stringify(finalJson)
 		: JSON.stringify(finalJson, null, 2);
 	await fs.promises.writeFile(path.resolve(outDir, "mod.json"), jsonOutput);
+
+	if (config.outputArtifacts && finalJson?.attachments) {
+		for (const attachment of finalJson.attachments) {
+			const attachmentsDir = path.resolve(outDir, "attachments");
+			if (!fs.existsSync(attachmentsDir)) fs.mkdirSync(attachmentsDir, {
+				recursive: true
+			})
+			await fs.promises.writeFile(path.resolve(outDir, "attachments", attachment.filename), atob(attachment.attachmentData.original));
+		}
+	}
 }
 
 export function createTsAttachment(
@@ -189,7 +234,16 @@ export function createTsAttachment(
 export function createStringsAttachment(
 	filePath: string,
 	raw: string,
+	generatedStrings?: Record<string, number | string> | undefined
 ): Attachment {
+	let result = raw;
+	if (generatedStrings) {
+		result = JSON.stringify({
+			...generatedStrings,
+			...JSON.parse(raw)
+		}, null, 4)
+	}
+
 	return {
 		id: crypto.randomUUID(),
 		version: "1.0",
@@ -197,7 +251,7 @@ export function createStringsAttachment(
 		isProcessable: true,
 		processingStatus: 2,
 		attachmentType: AttachmentType.Strings,
-		attachmentData: { original: toBase64(raw), compiled: "" },
+		attachmentData: { original: toBase64(result), compiled: "" },
 		errors: [],
 	};
 }
