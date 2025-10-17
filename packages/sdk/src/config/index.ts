@@ -1657,7 +1657,7 @@ export type TeamComposition = [
 		 * Type of AI assigned to this team.
 		 * Unknown what any other value than 1 means. If you are aware, please create an issue
 		 */
-		aiType: 1;
+		aiType: 0 | 1;
 	},
 ];
 
@@ -1766,8 +1766,8 @@ export type ConfigType = {
 	workspace?: Workspace;
 
 	/**
-	 * Defines team composition or class distribution for this configuration.
-	 * Each element specifies per-team roles, limits, or balance parameters.
+	 * Defines team composition for this configuration.
+	 * IMPORTANT! Note that each teamComposition MUST be 1 greater than the team ID.
 	 */
 	teamComposition?: TeamComposition[];
 

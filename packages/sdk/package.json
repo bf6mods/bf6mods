@@ -1,6 +1,6 @@
 {
 	"name": "@bf6mods/sdk",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "TypeScript definitions for the BF6 modding API",
 	"type": "module",
 	"license": "MIT",
@@ -8,6 +8,10 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
+		},
+		"./std": {
+			"types": "./dist/std/index.d.ts",
+			"import": "./dist/std/index.js"
 		}
 	},
 	"repository": {
