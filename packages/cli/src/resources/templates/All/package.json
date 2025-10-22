@@ -7,7 +7,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@bf6mods/cli": "^1.1.1",
+    "@bf6mods/cli": "^1.1.2",
     "@bf6mods/sdk": "^1.1.0"
   }
 }
