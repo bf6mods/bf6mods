@@ -71,3 +71,7 @@ export default defineBf6Config({
 ## @bf6mods/sdk
 
 This is a seperate library that exports the `PortalSdk`'s `mod` and `modlib`. Additionally it exports some stdlib helper functions and classes to help accelerate development.
+
+## Join the discord with fellow modders!
+
+You can join the discord by clicking this [link](https://discord.gg/2gJ9fheYYK)!

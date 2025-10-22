@@ -29,8 +29,9 @@ Just run `npm run build` in your project dir, open [portal.battlefield.com](http
 - Use multiple different files, instead of just one large TypeScript file!
 - Use a programatic interface for defining your gamemode.
 - Extensive documentation
-- Extended standard library
+- Extended standard library (still in progress)
 - Hot reload
+- Automatic string injection
 
 ## Structure
 
@@ -70,3 +71,7 @@ export default defineBf6Config({
 ## @bf6mods/sdk
 
 This is a seperate library that exports the `PortalSdk`'s `mod` and `modlib`. Additionally it exports some stdlib helper functions and classes to help accelerate development.
+
+## Join the discord with fellow modders!
+
+You can join the discord by clicking this [link](https://discord.gg/2gJ9fheYYK)!

@@ -1,6 +1,6 @@
 {
 	"name": "@bf6mods/cli",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "CLI and library for bundling BF6 mods",
 	"license": "MIT",
 	"type": "module",
