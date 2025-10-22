@@ -32,6 +32,7 @@ Just run `npm run build` in your project dir, open [portal.battlefield.com](http
 - Extended standard library (still in progress)
 - Hot reload
 - Automatic string injection
+- Logging from BF6! (Only when in hosting locally)
 
 ## Structure
 

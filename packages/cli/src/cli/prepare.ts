@@ -50,10 +50,9 @@ export async function prepare() {
 			`export {}\n\n${args}\n`,
 		);
 
-		printToConsole(`${colors.green("✔")} Types generated in .bf6`);
+		printToConsole(`${colors.green.bold('✓')} Types generated in .bf6`);
 	} catch (error) {
-		console.error(error);
-		printToConsole(`${colors.red("✗")} Types failed to generate in .bf6`);
+		printToConsole(`${colors.red.bold("✗")} Types failed to generate in .bf6`, true);
 	}
 }
 

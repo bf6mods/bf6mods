@@ -14,6 +14,8 @@ import {
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
 import { extractBf6Strings } from "./generated-strings.ts";
+import colors from 'colors';
+import { printToConsole } from "../utils.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -70,40 +72,9 @@ export async function build() {
 	);
 
 	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
-	console.log(`✔ Built mod: ${config.name}`);
+	printToConsole(`${colors.green.bold('✓')} Built mod: ${config.name}`);
 }
 
-export function helloPlugin(message = "hello-plugin ran ✅"): Plugin {
-	return {
-		name: "hello-plugin",
-
-		// Fires once when the build starts
-		buildStart() {
-			// Prefer the bundler's logger so it shows up in Rolldown's output
-			// (Rolldown forwards plugin warnings to the console.)
-			try {
-				// Rollup-style API: this.warn(...) is widely supported
-				this.warn({ code: "HELLO_PLUGIN", message });
-			} catch {
-				// Fallback if the context logger isn't available
-				// (e.g., if API changes or running programmatically)
-				console.log(`[hello-plugin] ${message}`);
-			}
-		},
-
-		// Also log at bundle time to show multiple hook points
-		generateBundle() {
-			try {
-				this.warn({
-					code: "HELLO_PLUGIN",
-					message: `${message} (generateBundle)`,
-				});
-			} catch {
-				console.log(`[hello-plugin] ${message} (generateBundle)`);
-			}
-		},
-	};
-}
 
 /**
  * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.

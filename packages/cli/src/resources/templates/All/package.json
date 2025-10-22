@@ -3,11 +3,12 @@
   "scripts": {
     "build": "bf6mods build",
     "dev": "bf6mods dev",
+    "log": "bf6mods log",
     "postinstall": "bf6mods prepare"
   },
   "type": "module",
   "devDependencies": {
-    "@bf6mods/cli": "^1.1.2",
+    "@bf6mods/cli": "^1.2.0",
     "@bf6mods/sdk": "^1.1.0"
   }
 }

@@ -1,5 +1,6 @@
 import type { Node, VariableDeclarator } from "@oxc-project/types";
 import type { Plugin } from "rolldown";
+import colors from 'colors';
 
 export function extractBf6Strings(
 	bf6Strings: Record<string, string>,
@@ -96,7 +97,7 @@ export function extractBf6Strings(
 					if (declaration.init?.type !== "ObjectExpression") {
 						const snippet = getSnippet(...(declaration.range ?? [0, 0]));
 						this.error(
-							`❌ Invalid bf6Strings export: expected an object literal.\n\n${snippet}`,
+							`${colors.red.bold("✗")} Invalid bf6Strings export: expected an object literal.\n\n${snippet}`,
 						);
 					}
 
@@ -104,7 +105,7 @@ export function extractBf6Strings(
 						if (property.type !== "Property") {
 							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ Invalid bf6Strings property: expected a key/value pair.\nFound type: ${property.type}\n\n${snippet}`,
+								`${colors.red.bold("✗")} Invalid bf6Strings property: expected a key/value pair.\nFound type: ${property.type}\n\n${snippet}`,
 							);
 						}
 
@@ -123,7 +124,7 @@ export function extractBf6Strings(
 						} else {
 							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ Invalid bf6Strings key: expected a string literal or identifier.\nFound type: ${property.key.type}\n\n${snippet}`,
+								`${colors.red.bold("✗")} Invalid bf6Strings key: expected a string literal or identifier.\nFound type: ${property.key.type}\n\n${snippet}`,
 							);
 							continue;
 						}
@@ -131,7 +132,7 @@ export function extractBf6Strings(
 						if (property.value.type !== "Literal") {
 							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ Invalid bf6Strings value: expected a string literal.\nFound type: ${property.value.type}\n\n${snippet}`,
+								`${colors.red.bold("✗")} Invalid bf6Strings value: expected a string literal.\nFound type: ${property.value.type}\n\n${snippet}`,
 							);
 						}
 
@@ -144,7 +145,7 @@ export function extractBf6Strings(
 						) {
 							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ bf6Strings key must be a string, found: ${typeof key}\n\n${snippet}`,
+								`${colors.red.bold("✗")} bf6Strings key must be a string, found: ${typeof key}\n\n${snippet}`,
 							);
 						}
 
@@ -156,7 +157,7 @@ export function extractBf6Strings(
 						) {
 							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ bf6Strings value must be a string, found: ${typeof value}\n\n${snippet}`,
+								`${colors.red.bold("✗")} bf6Strings value must be a string, found: ${typeof value}\n\n${snippet}`,
 							);
 						}
 
