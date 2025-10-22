@@ -1,4 +1,4 @@
-import type { Node, ObjectProperty, VariableDeclarator } from "@oxc-project/types";
+import type { Node, VariableDeclarator } from "@oxc-project/types";
 import type { Plugin } from "rolldown";
 
 export function extractBf6Strings(
@@ -94,69 +94,75 @@ export function extractBf6Strings(
 
 				const extractObjectLiteral = (declaration: VariableDeclarator) => {
 					if (declaration.init?.type !== "ObjectExpression") {
-							const snippet = getSnippet(...(declaration.range ?? [0, 0]));
+						const snippet = getSnippet(...(declaration.range ?? [0, 0]));
+						this.error(
+							`❌ Invalid bf6Strings export: expected an object literal.\n\n${snippet}`,
+						);
+					}
+
+					for (const property of declaration.init.properties) {
+						if (property.type !== "Property") {
+							const snippet = getSnippet(...(property.range ?? [0, 0]));
 							this.error(
-								`❌ Invalid bf6Strings export: expected an object literal.\n\n${snippet}`,
+								`❌ Invalid bf6Strings property: expected a key/value pair.\nFound type: ${property.type}\n\n${snippet}`,
 							);
 						}
 
-						for (const property of declaration.init.properties) {
-							if (property.type !== "Property") {
-								const snippet = getSnippet(...(property.range ?? [0, 0]));
-								this.error(
-									`❌ Invalid bf6Strings property: expected a key/value pair.\nFound type: ${property.type}\n\n${snippet}`,
-								);
-							}
-
-							let key: string | number | bigint | boolean | RegExp | null | undefined = undefined;
-							if (property.key.type === "Literal") {
-								key = property.key.value;
-							} else if (property.key.type === "Identifier") {
-								key = property.key.name;
-							} else {
-								const snippet = getSnippet(...(property.range ?? [0, 0]));
-								this.error(
-									`❌ Invalid bf6Strings key: expected a string literal or identifier.\nFound type: ${property.key.type}\n\n${snippet}`,
-								);
-								continue;
-							}
-
-							if (property.value.type !== "Literal") {
-								const snippet = getSnippet(...(property.range ?? [0, 0]));
-								this.error(
-									`❌ Invalid bf6Strings value: expected a string literal.\nFound type: ${property.value.type}\n\n${snippet}`,
-								);
-							}
-
-							const value = property.value.value;
-							if (
-								typeof key !== "string" &&
-								typeof key !== "number" &&
-								typeof key !== "bigint" &&
-								typeof key !== "boolean"
-							) {
-								const snippet = getSnippet(...(property.range ?? [0, 0]));
-								this.error(
-									`❌ bf6Strings key must be a string, found: ${typeof key}\n\n${snippet}`,
-								);
-							}
-
-							if (
-								typeof value !== "string" &&
-								typeof value !== "number" &&
-								typeof value !== "bigint" &&
-								typeof value !== "boolean"
-							) {
-								const snippet = getSnippet(...(property.range ?? [0, 0]));
-								this.error(
-									`❌ bf6Strings value must be a string, found: ${typeof value}\n\n${snippet}`,
-								);
-							}
-
-							bf6Strings[`${key}`] = `${value}`;
+						let key:
+							| string
+							| number
+							| bigint
+							| boolean
+							| RegExp
+							| null
+							| undefined;
+						if (property.key.type === "Literal") {
+							key = property.key.value;
+						} else if (property.key.type === "Identifier") {
+							key = property.key.name;
+						} else {
+							const snippet = getSnippet(...(property.range ?? [0, 0]));
+							this.error(
+								`❌ Invalid bf6Strings key: expected a string literal or identifier.\nFound type: ${property.key.type}\n\n${snippet}`,
+							);
+							continue;
 						}
-				}
 
+						if (property.value.type !== "Literal") {
+							const snippet = getSnippet(...(property.range ?? [0, 0]));
+							this.error(
+								`❌ Invalid bf6Strings value: expected a string literal.\nFound type: ${property.value.type}\n\n${snippet}`,
+							);
+						}
+
+						const value = property.value.value;
+						if (
+							typeof key !== "string" &&
+							typeof key !== "number" &&
+							typeof key !== "bigint" &&
+							typeof key !== "boolean"
+						) {
+							const snippet = getSnippet(...(property.range ?? [0, 0]));
+							this.error(
+								`❌ bf6Strings key must be a string, found: ${typeof key}\n\n${snippet}`,
+							);
+						}
+
+						if (
+							typeof value !== "string" &&
+							typeof value !== "number" &&
+							typeof value !== "bigint" &&
+							typeof value !== "boolean"
+						) {
+							const snippet = getSnippet(...(property.range ?? [0, 0]));
+							this.error(
+								`❌ bf6Strings value must be a string, found: ${typeof value}\n\n${snippet}`,
+							);
+						}
+
+						bf6Strings[`${key}`] = `${value}`;
+					}
+				};
 
 				for (const item of program.body) {
 					// Case 1: plain variable `var bf6Strings = {...}`
@@ -173,7 +179,10 @@ export function extractBf6Strings(
 					}
 
 					// Case 2: exported variable `export const bf6Strings = {...}`
-					if (item.type === "ExportNamedDeclaration" && item.declaration?.type === "VariableDeclaration") {
+					if (
+						item.type === "ExportNamedDeclaration" &&
+						item.declaration?.type === "VariableDeclaration"
+					) {
 						for (const declaration of item.declaration.declarations) {
 							if (
 								declaration.type === "VariableDeclarator" &&
