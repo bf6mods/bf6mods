@@ -5,8 +5,8 @@ import { build } from "./build/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies } from "./init.js";
-import { prepare } from "./prepare.js";
 import { Bf6Logger } from "./log.ts";
+import { prepare } from "./prepare.js";
 
 const program = new Command();
 
@@ -58,9 +58,9 @@ program
 	.command("log")
 	.argument("[input]")
 	.description("logs the output from a locally running server")
-	.action(async (input, output) => {
-		const logger = new Bf6Logger()
-		logger.start()
+	.action(async (input) => {
+		const logger = new Bf6Logger(input);
+		logger.start();
 	});
 
 program.exitOverride((_err) => {

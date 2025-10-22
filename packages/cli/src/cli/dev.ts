@@ -17,6 +17,7 @@ export async function dev() {
 
 	let watcher: FSWatcher | undefined;
 
+	// biome-ignore lint/suspicious/noExplicitAny: doesn't really matter in this case
 	function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
 		let timer: NodeJS.Timeout | undefined;
 		return (...args: Parameters<T>) => {
@@ -26,14 +27,25 @@ export async function dev() {
 	}
 
 	const rebuild = async (trigger: string) => {
-		printToConsole(colors.yellow(`↻ Change detected in ${path.basename(trigger)}, rebuilding...`));
+		printToConsole(
+			colors.yellow(
+				`↻ Change detected in ${path.basename(trigger)}, rebuilding...`,
+			),
+		);
 		const start = performance.now();
 		try {
 			await build();
 			const duration = ((performance.now() - start) / 1000).toFixed(2);
-			printToConsole(`${colors.green.bold('✓')} Updated mod.json (${duration}s)`);
+			printToConsole(
+				`${colors.green.bold("✓")} Updated mod.json (${duration}s)`,
+			);
 		} catch (err) {
-			printToConsole(colors.red(`${colors.red.bold("✗")} Rebuild failed: ${(err as Error).message}`), true);
+			printToConsole(
+				colors.red(
+					`${colors.red.bold("✗")} Rebuild failed: ${(err as Error).message}`,
+				),
+				true,
+			);
 		}
 	};
 
@@ -42,8 +54,11 @@ export async function dev() {
 	async function collectWatchTargets(): Promise<string[]> {
 		const targets: string[] = [];
 
-		if (config.entrypoint) targets.push(path.resolve(workingDir, config.entrypoint));
-		if (config.scenes) for (const [, scene] of config.scenes) targets.push(path.resolve(workingDir, scene));
+		if (config.entrypoint)
+			targets.push(path.resolve(workingDir, config.entrypoint));
+		if (config.scenes)
+			for (const [, scene] of config.scenes)
+				targets.push(path.resolve(workingDir, scene));
 		if (config.strings) targets.push(path.resolve(workingDir, config.strings));
 		for await (const entry of glob("bf6.config.*")) targets.push(entry);
 		for await (const entry of glob("src/**/*")) targets.push(entry);
@@ -54,7 +69,9 @@ export async function dev() {
 	async function setupWatcher() {
 		if (watcher) {
 			await watcher.close();
-			printToConsole(colors.grey("♻ Reloading watcher due to config change..."));
+			printToConsole(
+				colors.grey("♻ Reloading watcher due to config change..."),
+			);
 			await new Promise((r) => setTimeout(r, 10));
 		}
 
@@ -69,13 +86,18 @@ export async function dev() {
 		});
 
 		watcher.on("error", (err) => {
-			printToConsole(colors.red(`⚠ Watcher error: ${(err as Error).message}`), true);
+			printToConsole(
+				colors.red(`⚠ Watcher error: ${(err as Error).message}`),
+				true,
+			);
 			setTimeout(setupWatcher, 1000);
 		});
 
 		watcher.on("change", async (file) => {
 			if (file.includes("bf6.config.")) {
-				printToConsole(colors.magenta("⚙ Config changed — reloading watcher..."));
+				printToConsole(
+					colors.magenta("⚙ Config changed — reloading watcher..."),
+				);
 				config = await getBf6Config(workingDir);
 				await setupWatcher();
 				return;
@@ -97,10 +119,15 @@ export async function dev() {
 
 	let logger: Bf6Logger | undefined;
 	try {
-		logger = new Bf6Logger()
-		logger.start()
+		logger = new Bf6Logger();
+		logger.start();
 	} catch (error) {
-		printToConsole(colors.grey("Failed to start logging for the following reason (building will still work)"), true);
+		printToConsole(
+			colors.grey(
+				"Failed to start logging for the following reason (building will still work)",
+			),
+			true,
+		);
 		printToConsole((error as Error).message, true);
 	}
 }

@@ -7,15 +7,15 @@ import {
 	type ConfigType,
 	type MapType,
 } from "@bf6mods/sdk";
+import colors from "colors";
 import { createJiti } from "jiti";
-import { type Plugin, rolldown } from "rolldown";
+import { rolldown } from "rolldown";
 import {
 	type Bf6Config,
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
-import { extractBf6Strings } from "./generated-strings.ts";
-import colors from 'colors';
 import { printToConsole } from "../utils.ts";
+import { extractBf6Strings } from "./generated-strings.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -72,9 +72,8 @@ export async function build() {
 	);
 
 	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
-	printToConsole(`${colors.green.bold('✓')} Built mod: ${config.name}`);
+	printToConsole(`${colors.green.bold("✓")} Built mod: ${config.name}`);
 }
-
 
 /**
  * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.

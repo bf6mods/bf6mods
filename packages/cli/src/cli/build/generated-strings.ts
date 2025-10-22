@@ -1,6 +1,6 @@
 import type { Node, VariableDeclarator } from "@oxc-project/types";
+import colors from "colors";
 import type { Plugin } from "rolldown";
-import colors from 'colors';
 
 export function extractBf6Strings(
 	bf6Strings: Record<string, string>,
