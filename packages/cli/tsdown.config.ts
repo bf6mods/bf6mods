@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsdown";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,7 +13,6 @@ export default defineConfig({
 	sourcemap: true,
 	clean: true,
 	dts: true,
-	bundle: true,
 	format: "esm",
 	// can't use this instead of process.on, because of https://github.com/egoist/tsup/issues/700
 	// onSuccess: async () => {

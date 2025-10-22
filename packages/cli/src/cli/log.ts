@@ -108,7 +108,6 @@ export class Bf6Logger {
 				else if (content.type === "exception")
 					printToConsole(colors.red(content.text), true);
 				else printToConsole(colors.bold(content.text));
-				console.log("");
 			}
 		}
 		this.lastSize = stats.size;

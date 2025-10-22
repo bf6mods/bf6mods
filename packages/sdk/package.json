@@ -22,7 +22,7 @@
 		"dist/"
 	],
 	"scripts": {
-		"build": "tsup"
+		"build": "tsdown"
 	},
 	"keywords": [
 		"bf6",
