@@ -56,7 +56,7 @@ export class CountdownUI {
 					bgFill: mod.UIBgFill.None,
 					textColor: bfBlueColor,
 					textAnchor: mod.UIAnchor.Center,
-					textLabel: MakeMessage(mod.stringkeys.__CountdownUI),
+					textLabel: MakeMessage(mod.stringkeys.__sdk__CountdownUI),
 					textSize: 85,
 				},
 			],
@@ -89,5 +89,5 @@ export class CountdownUI {
 }
 
 export const bf6Strings = {
-	__CountdownUI: "{}",
+	__sdk__CountdownUI: "{}",
 };

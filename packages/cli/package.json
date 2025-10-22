@@ -27,7 +27,7 @@
 		"url": "git+https://github.com/bf6mods/bf6mods.git"
 	},
 	"dependencies": {
-		"@bf6mods/sdk": "1.0.2",
+		"@bf6mods/sdk": "1.0.3",
 		"@clack/prompts": "^0.11.0",
 		"chokidar": "^4.0.3",
 		"colors": "^1.4.0",

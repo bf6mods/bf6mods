@@ -29,8 +29,9 @@ Just run `npm run build` in your project dir, open [portal.battlefield.com](http
 - Use multiple different files, instead of just one large TypeScript file!
 - Use a programatic interface for defining your gamemode.
 - Extensive documentation
-- Extended standard library
+- Extended standard library (still in progress)
 - Hot reload
+- Automatic string injection
 
 ## Structure
 
