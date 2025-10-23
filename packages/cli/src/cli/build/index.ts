@@ -115,12 +115,18 @@ export async function collectAttachments(
 	if (tsAttachment) attachments.push(tsAttachment);
 
 	// Strings
-	if (config.strings) {
-		const strPath = path.resolve(workingDir, config.strings);
-		if (!fs.existsSync(strPath)) throw new Error("Cannot find strings file");
-		const raw = await fs.promises.readFile(strPath, "utf8");
-		const attachment = createStringsAttachment(strPath, raw, generatedStrings);
-		attachments.push(attachment);
+	if (config.strings || Object.keys(generatedStrings ?? {}).length > 0) {
+    	const strPath = path.resolve(workingDir, config.strings ?? "strings.json");
+	    let raw = "{}";
+	    if (fs.existsSync(strPath)) {
+	        raw = await fs.promises.readFile(strPath, "utf8");
+	    } else {
+	        // Create a placeholder for clarity (optional)
+	        printToConsole(colors.yellow(`⚠️  No strings.json found, generating from literals only.`));
+	    }
+
+	    const attachment = createStringsAttachment(strPath, raw, generatedStrings);
+	    attachments.push(attachment);
 	}
 
 	// Scenes

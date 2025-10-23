@@ -562,6 +562,30 @@ export type Mutators = {
 	SpawnBalancing_GamemodePlayerCountRatio: number;
 
 	/**
+	 * Specifies the lobby player count threshold used to start a match in Conquest (CQ) game modes.
+	 * The timer will begin counting down once this player count is reached.
+	 * Note: This is a best guess and is undocumented currently; if you notice it behaves differently,
+	 * please create an issue.
+	 */
+	CQ_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * Specifies the lobby player count threshold used to start a match in Breakthrough (BT) game modes.
+	 * The timer will begin counting down once this player count is reached.
+	 * Note: This is a best guess and is undocumented currently; if you notice it behaves differently,
+	 * please create an issue.
+	 */
+	BT_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * Specifies the lobby player count threshold used to start a match in Rush game modes.
+	 * The timer will begin counting down once this player count is reached.
+	 * Note: This is a best guess and is undocumented currently; if you notice it behaves differently,
+	 * please create an issue.
+	 */
+	Rush_iLobbyPlayerCountStartTimer: number;
+
+	/**
 	 * Defines the faction ID per team or globally.
 	 * If global: `FactionID`
 	 * If per team: `[[teamIndex, FactionID], ...]`

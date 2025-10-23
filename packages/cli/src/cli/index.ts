@@ -50,7 +50,7 @@ program
 	.argument("<output>")
 	.description("decompiles the json config of a mod into a new project")
 	.action(async (input, output) => {
-		await importFile(input as string, output as string);
+		await importFile(input as string, output as string, undefined, true);
 		installDependencies(output);
 	});
 

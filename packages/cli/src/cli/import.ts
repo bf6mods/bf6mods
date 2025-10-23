@@ -17,7 +17,7 @@ function getMapKeyByValue(value: string): keyof typeof MapIdEnum | undefined {
 	) as keyof typeof MapIdEnum | undefined;
 }
 
-export async function importFile(input: string, output: string, name?: string) {
+export async function importFile(input: string, output: string, name?: string, logging = false) {
 	const workingDir = path.resolve(".");
 	const entrypoint = path.resolve(workingDir, input);
 	const outDir = path.resolve(workingDir, output);
@@ -39,12 +39,26 @@ export async function importFile(input: string, output: string, name?: string) {
 	const promises: Promise<unknown>[] = [];
 
 	if (config.attachments) {
+		let unamedAttachmentIndex = 0;
 		for (const attachment of config.attachments) {
+			let filename = attachment.filename?.trim();
+			if (!filename) {
+				unamedAttachmentIndex++;
+
+				let ext;
+				if (attachment.attachmentType === AttachmentType.TypeScript) ext = ".ts";
+				else if (attachment.attachmentType === AttachmentType.Strings) ext = ".strings.json";
+				else if (attachment.attachmentType === AttachmentType.SpatialData) ext = ".spatial.json";
+
+				if (unamedAttachmentIndex > 1) filename = `attachment_${unamedAttachmentIndex}${ext}`;
+				else filename = `attachment${ext}`;
+			}
+
 			if (attachment.attachmentType === AttachmentType.TypeScript)
-				typescriptFile = attachment.filename;
+				typescriptFile = filename;
 
 			if (attachment.attachmentType === AttachmentType.Strings)
-				stringsFile = attachment.filename;
+				stringsFile = filename;
 
 			if (attachment.attachmentType === AttachmentType.SpatialData) {
 				// We'll just use the data attached to mapRotation instead
@@ -53,7 +67,7 @@ export async function importFile(input: string, output: string, name?: string) {
 
 			promises.push(
 				writeFileSafe(
-					path.resolve(outDir, "src", attachment.filename),
+					path.resolve(outDir, "src", filename),
 					atob(attachment.attachmentData.original),
 				),
 			);

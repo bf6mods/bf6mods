@@ -4,7 +4,7 @@ Create Battlefield 6 mods quickly with a vite like development experience.
 
 ## Getting Started
 
-To create a new project, simply run the following command and answer the questions
+To create a new project, simply run the following command and answer the questions, ensure that you are using Node v22 and above.
 
 ```
 npx @bf6mods/cli init
