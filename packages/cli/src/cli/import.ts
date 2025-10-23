@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { AttachmentType, type ConfigType } from "@bf6mods/sdk";
+import colors from "colors";
 import stringifyObject from "stringify-object";
 import { MapId as MapIdEnum } from "../resources/prepare/types/config.ts";
 import { startProject } from "./init.ts";
+import { printToConsole } from "./utils.ts";
 
 async function writeFileSafe(filePath: string, data: string | Buffer) {
 	const dir = path.dirname(filePath);
@@ -17,19 +19,31 @@ function getMapKeyByValue(value: string): keyof typeof MapIdEnum | undefined {
 	) as keyof typeof MapIdEnum | undefined;
 }
 
-export async function importFile(input: string, output: string, name?: string, logging = false) {
+export async function importFile(
+	input: string,
+	output: string,
+	name?: string,
+	logging = false,
+) {
+	const start = performance.now();
 	const workingDir = path.resolve(".");
 	const entrypoint = path.resolve(workingDir, input);
 	const outDir = path.resolve(workingDir, output);
 
 	if (!fs.existsSync(entrypoint)) throw new Error("Cannot find strings file");
 
+	if (logging)
+		printToConsole(colors.cyan(`📦 Importing config from: ${entrypoint}`));
+
 	const config = JSON.parse(
 		await fs.promises.readFile(entrypoint, { encoding: "utf8" }),
 	) as ConfigType;
 
-	if (!fs.existsSync(outDir))
+	if (!fs.existsSync(outDir)) {
 		await fs.promises.mkdir(outDir, { recursive: true });
+		if (logging)
+			printToConsole(colors.cyan(`📁 Created output directory: ${outDir}`));
+	}
 
 	await startProject(outDir, "None", name ?? config.name);
 
@@ -45,12 +59,16 @@ export async function importFile(input: string, output: string, name?: string, l
 			if (!filename) {
 				unamedAttachmentIndex++;
 
-				let ext;
-				if (attachment.attachmentType === AttachmentType.TypeScript) ext = ".ts";
-				else if (attachment.attachmentType === AttachmentType.Strings) ext = ".strings.json";
-				else if (attachment.attachmentType === AttachmentType.SpatialData) ext = ".spatial.json";
+				let ext: string = "";
+				if (attachment.attachmentType === AttachmentType.TypeScript)
+					ext = ".ts";
+				else if (attachment.attachmentType === AttachmentType.Strings)
+					ext = ".strings.json";
+				else if (attachment.attachmentType === AttachmentType.SpatialData)
+					ext = ".spatial.json";
 
-				if (unamedAttachmentIndex > 1) filename = `attachment_${unamedAttachmentIndex}${ext}`;
+				if (unamedAttachmentIndex > 1)
+					filename = `attachment_${unamedAttachmentIndex}${ext}`;
 				else filename = `attachment${ext}`;
 			}
 
@@ -71,6 +89,11 @@ export async function importFile(input: string, output: string, name?: string, l
 					atob(attachment.attachmentData.original),
 				),
 			);
+
+			if (logging)
+				printToConsole(
+					`${colors.green("✓")} Wrote attachment: ${colors.yellow(filename)}`,
+				);
 		}
 	}
 
@@ -85,6 +108,11 @@ export async function importFile(input: string, output: string, name?: string, l
 			);
 
 			scenes.push([map.id, `src/scenes/${map.spatialAttachment.filename}`]);
+
+			if (logging)
+				printToConsole(
+					`${colors.green("✓")} Added scene: ${colors.yellow(map.id)}`,
+				);
 		}
 	}
 
@@ -118,6 +146,12 @@ export async function importFile(input: string, output: string, name?: string, l
 	);
 
 	await Promise.all(promises);
+
+	const duration = ((performance.now() - start) / 1000).toFixed(2);
+	if (logging)
+		printToConsole(
+			`${colors.green.bold("✓")} Import complete (${duration}s) → ${colors.yellow(outDir)}`,
+		);
 }
 
 function stringifyWithRaw(value: unknown, options = {}) {
