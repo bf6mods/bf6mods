@@ -14,10 +14,10 @@ npx @bf6mods/cli init
 
 ## Import from JSON
 
-Already have a project? Just export your currently existing project in [portal.battlefield.com](https://portal.battlefield.com), and run...
+Already have a project? Just export your currently existing project in [portal.battlefield.com](https://portal.battlefield.com), by editing your mod, clicking the three dots on the top right, click export. Finally just run...
 
 ```
-npx @bf6mods/cli import <input> <output>
+npx @bf6mods/cli import <export file> <output directory>
 ```
 
 ## Deploying Project to Portal
