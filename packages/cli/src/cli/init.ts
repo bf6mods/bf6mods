@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as prompts from "@clack/prompts";
+import bf6SdkPackageJson from "../../../sdk/package.json" with { type: "json" };
+import bf6CliPackageJson from "../../package.json" with { type: "json" };
 import { importFile } from "./import.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,6 +36,9 @@ function renameFilesRecursively(dir: string, modName: string) {
 		if (entry.name === "package.json") {
 			const pkg = JSON.parse(fs.readFileSync(newPath, "utf-8"));
 			pkg.name = modName;
+			if (!pkg.devDependencies) pkg.devDependencies = {};
+			pkg.devDependencies["@bf6mods/cli"] = `^${bf6CliPackageJson.version}`;
+			pkg.devDependencies["@bf6mods/sdk"] = `^${bf6SdkPackageJson.version}`;
 			fs.writeFileSync(newPath, JSON.stringify(pkg, null, 2));
 		}
 
