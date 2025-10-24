@@ -1,7 +1,10 @@
 {
 	"compilerOptions": {
 		"baseUrl": "..",
-		"paths": { "#imports": ["./.bf6/imports"] },
+		"paths": {
+			"#imports": ["./.bf6/imports"],
+			"modlib": ["../node_modules/@bf6mods/sdk"]
+		},
 		"target": "ES2021",
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",

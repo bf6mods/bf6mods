@@ -87,6 +87,11 @@ export async function buildEntrypoint(
 		input: entry,
 		plugins: [extractBf6Strings(bf6Strings, generateStringsFromLiterals)],
 		logLevel: "debug",
+		resolve: {
+			alias: {
+				modlib: "@bf6mods/sdk"
+			}
+		}
 	});
 	const result = await bundle.generate({
 		format: "esm",
