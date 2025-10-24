@@ -112,7 +112,12 @@ function emptyDir(dir: string) {
 	}
 }
 
-export async function init(argTargetDir?: string) {
+export async function init(argTargetDir?: string, options?: {
+	name?: string,
+	template?: (typeof templates)[number],
+	onExists?: "overwrite" | "cancel" | "ignore",
+	installDependencies?: boolean
+}) {
 	prompts.intro("Initialize Bf6 Mod");
 
 	const path = argTargetDir
@@ -127,7 +132,7 @@ export async function init(argTargetDir?: string) {
 			});
 	if (prompts.isCancel(path)) return cancel();
 
-	let name = await prompts.text({
+	let name = options?.name ? options.name : await prompts.text({
 		message: "What is the name of your mod?",
 		placeholder: "Ace Pursuit",
 		validate: (value) => {
@@ -139,7 +144,20 @@ export async function init(argTargetDir?: string) {
 
 	if (fs.existsSync(path) && !isEmpty(path)) {
 		let overwrite: "yes" | "no" | "ignore" | undefined;
-		const res = await prompts.select({
+		if (options?.onExists) {
+			switch (options.onExists) {
+				case "overwrite":
+					overwrite = "yes"
+					break;
+				case "cancel":
+					overwrite = "no"
+					break;
+				case "ignore":
+					overwrite = "ignore"
+					break;
+			}
+		}
+		const res = overwrite ? overwrite : await prompts.select({
 			message:
 				(path === "." ? "Current directory" : `Target directory "${path}"`) +
 				` is not empty. Please choose how to proceed:`,
@@ -171,7 +189,7 @@ export async function init(argTargetDir?: string) {
 		}
 	}
 
-	const template = await prompts.select({
+	const template = options?.template ? options.template : await prompts.select({
 		message: "Select a template:",
 		options: templates.map((template) => {
 			return {
@@ -184,13 +202,19 @@ export async function init(argTargetDir?: string) {
 
 	await startProject(path, template, name);
 
-	const s = prompts.spinner();
-	s.start("Installing via npm");
-	const installed = installDependencies(path);
-	if (installed) s.stop("Installed via npm");
-	else s.stop("Failed to install via npm", 1);
+	if (options?.installDependencies) {
+		const s = prompts.spinner();
+		s.start("Installing via npm");
+		const installed = installDependencies(path);
+		if (installed) s.stop("Installed via npm");
+		else s.stop("Failed to install via npm", 1);
 
-	const nextSteps = `cd ${path}\nnpm run build`;
+		const nextSteps = `cd ${path}\nnpm run build`;
 
-	prompts.note(nextSteps, "Next steps.");
+		prompts.note(nextSteps, "Next steps.");
+	} else {
+		const nextSteps = `cd ${path}\nnpm i\nnpm run build`;
+
+		prompts.note(nextSteps, "Next steps.");
+	}
 }

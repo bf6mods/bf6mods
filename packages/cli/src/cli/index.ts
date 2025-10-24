@@ -4,9 +4,11 @@ import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
-import { init, installDependencies } from "./init.js";
+import { init, installDependencies, templates } from "./init.js";
 import { Bf6Logger } from "./log.ts";
 import { prepare } from "./prepare.js";
+import { printToConsole, readableList } from "./utils.ts";
+import colors from "colors";
 
 const program = new Command();
 
@@ -18,9 +20,34 @@ program
 program
 	.command("init")
 	.argument("[directory]")
+	.option("--name <name>", "The name of your mod")
+	.option("--template <template>", "The template to use")
+	.option("--on-exists <action>", `Either "overwrite", "cancel", or "ignore" as to what to do if files exist in the directory`)
+	.option("--no-install-dependencies", `Prevents install of dependencies`)
 	.description("Create a new bf6 mod")
-	.action(async (directory) => {
-		await init(directory);
+	.action(async (directory, options ) => {
+		const { name, template, onExists, installDependencies } = options;
+		if (onExists !== undefined && !["overwrite", "cancel", "ignore"].includes(onExists)) {
+			printToConsole(
+				`${colors.red.bold("✗")} Invalid value for --on-exists: "${onExists}". Expected one of "overwrite", "cancel", or "ignore".`,
+				true
+			);
+			process.exit(1);
+		}
+		if (template !== undefined && !templates.includes(template)) {
+			printToConsole(
+				`${colors.red.bold("✗")} Invalid value for --template: "${template}". Expected one of ${readableList(templates)}.`,
+				true
+			);
+			process.exit(1);
+		}
+
+		await init(directory, {
+			name,
+			template,
+			onExists,
+			installDependencies
+		});
 	});
 
 program
@@ -66,5 +93,10 @@ program
 program.exitOverride((_err) => {
 	if (process.env.EXIT_CODE === "none") process.exit(0);
 });
+
+if (!process.argv.slice(2).length) {
+	program.outputHelp();
+	process.exit(0);
+}
 
 program.parse();

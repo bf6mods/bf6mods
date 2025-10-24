@@ -18,3 +18,9 @@ export const printToConsole = (message: string, error: boolean = false) => {
 	if (error) console.error(`${message}${spacing}${formattedTime}`);
 	else console.log(`${message}${spacing}${formattedTime}`);
 };
+
+export const readableList = (initialValues: readonly string[]) => {
+	const values = initialValues.map((v) => `"${v}"`);
+	if (values.length > 1) return `${values.slice(0, -1).join(", ")} or ${values.slice(-1)}`;
+	return values[0];
+}
