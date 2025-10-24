@@ -3,7 +3,7 @@
 		"baseUrl": "..",
 		"paths": {
 			"#imports": ["./.bf6/imports"],
-			"modlib": ["../node_modules/@bf6mods/sdk"]
+			"modlib": ["./node_modules/@bf6mods/sdk/dist/index.d.ts"]
 		},
 		"target": "ES2021",
 		"module": "NodeNext",
