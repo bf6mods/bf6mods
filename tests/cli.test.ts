@@ -152,4 +152,43 @@ describe.concurrent("@bf6mods/cli", async () => {
 			expect(typeExit, "TypeScript type check failed!").toBe(0);
 		},
 	);
+
+	createModTest(cliTarPath, sdkTarPath, {
+		template: "Basic",
+		installDependencies: true,
+	}).concurrent(
+		"build & verify Basic template",
+		{
+			timeout: 100_000,
+		},
+		async ({ mod }) => {
+			const { exitCode } = await build(mod.fullPath);
+			expect(exitCode, "Exit code is not 0!").toBe(0);
+
+			const { exitCode: typeExit } = await checkTypes(mod.fullPath);
+			expect(typeExit, "TypeScript type check failed!").toBe(0);
+		},
+	);
+
+	createModTest(cliTarPath, sdkTarPath, {
+		template: "Basic",
+		installDependencies: true,
+	}).concurrent(
+		"verify sdk",
+		{
+			timeout: 100_000,
+		},
+		async ({ mod }) => {
+			console.log('mod.fullPath:', mod.fullPath);
+			const index = path.resolve(mod.fullPath, 'src', 'index.ts');
+			const sdkVerification = fs.readFileSync(path.resolve(__dirname, "resources", "starting", "sdk-verification", "index.ts"), { encoding: 'utf-8' });
+			fs.writeFileSync(index, sdkVerification);
+
+			const { exitCode } = await build(mod.fullPath);
+			expect(exitCode, "Exit code is not 0!").toBe(0);
+
+			const { exitCode: typeExit } = await checkTypes(mod.fullPath);
+			expect(typeExit, "TypeScript type check failed!").toBe(0);
+		},
+	);
 });

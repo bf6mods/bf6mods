@@ -5,6 +5,10 @@ import { defineConfig } from "tsdown";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const modFile = path.resolve(__dirname, "./src/mod/index.d.ts");
+const additionalModFile = path.resolve(__dirname, "./src/mod/additional.d.ts");
+
+const modFileWithoutDeclare = fs.readFileSync(modFile, "utf-8").replace("declare", "");
+const additionalModFileWithoutDeclare = fs.readFileSync(additionalModFile, "utf-8").replace("declare", "");
 
 export default defineConfig([
 	{
@@ -12,7 +16,7 @@ export default defineConfig([
 		sourcemap: true,
 		clean: true,
 		dts: {
-			banner: `declare global {\n${fs.readFileSync(modFile, "utf-8").replace("declare", "")}\n}`,
+			banner: `declare global {\n${modFileWithoutDeclare}\n${additionalModFileWithoutDeclare}\n}`,
 		},
 		format: "esm",
 	},
