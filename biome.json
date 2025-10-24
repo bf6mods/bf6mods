@@ -11,7 +11,8 @@
 			"!packages/cli/src/resources/templates",
 			"!**/dist",
 			"!packages/sdk/src/mod",
-			"!packages/sdk/src/modlib"
+			"!packages/sdk/src/modlib",
+			"!packages/*/tests/resources"
 		],
 		"ignoreUnknown": false
 	},

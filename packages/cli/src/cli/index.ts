@@ -75,10 +75,12 @@ program
 	.command("import")
 	.argument("<input>")
 	.argument("<output>")
+	.option("--no-install-dependencies", `Prevents install of dependencies`)
 	.description("decompiles the json config of a mod into a new project")
-	.action(async (input, output) => {
+	.action(async (input, output, options) => {
+		const { installDependencies } = options;
 		await importFile(input as string, output as string, undefined, true);
-		installDependencies(output);
+		if (installDependencies) installDependencies(output);
 	});
 
 program

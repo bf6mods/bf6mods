@@ -1,0 +1,17 @@
+{
+  "name": "TestMod",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bf6mods build",
+    "dev": "bf6mods dev",
+    "log": "bf6mods log",
+    "postinstall": "bf6mods prepare",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@bf6mods/cli": "^1.2.1",
+    "@bf6mods/sdk": "^1.1.1"
+  }
+}

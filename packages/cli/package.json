@@ -11,7 +11,8 @@
 	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "tsdown",
-		"start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts"
+		"start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts",
+		"test": "vitest"
 	},
 	"exports": {
 		".": {
@@ -45,6 +46,7 @@
 		"@oxc-project/types": "^0.95.0",
 		"@types/stringify-object": "^4.0.5",
 		"cross-env": "^10.1.0",
+		"execa": "^9.6.0",
 		"tsx": "^4.20.6"
 	}
 }
