@@ -11,8 +11,7 @@
 	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "tsdown",
-		"start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts",
-		"test": "vitest"
+		"start": "cross-env EXIT_CODE=none tsx ./src/cli/index.ts"
 	},
 	"exports": {
 		".": {

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "vitest";
-import type { templates } from "../src/cli/init";
+import type { templates } from "../packages/cli/src/cli/init";
 import { installDependenciesForMod, runCli } from "./utils";
 
 interface TmpDirFixture {

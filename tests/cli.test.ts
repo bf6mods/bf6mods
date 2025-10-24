@@ -127,8 +127,6 @@ describe.concurrent("@bf6mods/cli", async () => {
 			timeout: 100_000,
 		},
 		async ({ mod, tmpdir }) => {
-			console.log("tmpdir:", tmpdir);
-
 			const { exitCode } = await build(mod.fullPath);
 			expect(exitCode, "Exit code is not 0!").toBe(0);
 

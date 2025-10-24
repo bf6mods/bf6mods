@@ -3,7 +3,12 @@ import path from "node:path";
 import { execa } from "execa";
 import { expect } from "vitest";
 
-const CLI_PATH = path.resolve("dist/cli/index.js");
+export const ROOT = path.resolve(__dirname, "..");
+export const PACKAGE_DIR = path.resolve(ROOT, "packages");
+export const CLI_PACKAGE = path.resolve(PACKAGE_DIR, "cli");
+export const SDK_PACKAGE = path.resolve(PACKAGE_DIR, "sdk");
+
+export const CLI_PATH = path.resolve(CLI_PACKAGE, "dist/cli/index.js");
 export async function runCli(args: string[], cwd: string) {
 	return await execa("node", [CLI_PATH, ...args], {
 		cwd,
@@ -90,7 +95,6 @@ export async function checkTypes(projectDir: string) {
 	});
 }
 
-const ROOT = path.resolve(__dirname, "..", "..");
 export async function buildPackages() {
 	console.log("🏗️ Building packages before tests...");
 	const { stdout, stderr, exitCode } = await execa("npm", ["run", "build"], {
@@ -102,13 +106,10 @@ export async function buildPackages() {
 
 	expect(exitCode, "building packages failed!").toBe(0);
 
-	const cli = path.resolve(__dirname, "..");
-	const sdk = path.resolve(__dirname, "..", "..", "sdk");
+	const cliTarPath = await packageDep(CLI_PACKAGE);
+	const sdkTarPath = await packageDep(SDK_PACKAGE);
 
-	const cliTarPath = await packageDep(cli);
-	const sdkTarPath = await packageDep(sdk);
-
-	return [path.resolve(cli, cliTarPath), path.resolve(sdk, sdkTarPath)];
+	return [path.resolve(CLI_PACKAGE, cliTarPath), path.resolve(SDK_PACKAGE, sdkTarPath)];
 }
 
 export async function installDependenciesForMod(
