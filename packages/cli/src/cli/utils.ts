@@ -21,6 +21,7 @@ export const printToConsole = (message: string, error: boolean = false) => {
 
 export const readableList = (initialValues: readonly string[]) => {
 	const values = initialValues.map((v) => `"${v}"`);
-	if (values.length > 1) return `${values.slice(0, -1).join(", ")} or ${values.slice(-1)}`;
+	if (values.length > 1)
+		return `${values.slice(0, -1).join(", ")} or ${values.slice(-1)}`;
 	return values[0];
-}
+};

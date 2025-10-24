@@ -1,4 +1,4 @@
-import { PerTeam } from "../index.ts";
+import type { PerTeam } from "../index.ts";
 
 export type PortalRestrictions = {
 	/**
@@ -133,4 +133,4 @@ export type PortalRestrictions = {
 	 * If per team: `[[teamIndex, isAllowed], ...]`
 	 */
 	Portal_WebApp_Throwable: PerTeam<boolean>;
-}
+};

@@ -1,8 +1,8 @@
-import { AssetRestrictions } from "./asset-restrictions/index.ts";
-import { Mutators } from "./mutators/index.ts";
+import type { AssetRestrictions } from "./asset-restrictions/index.ts";
+import type { Mutators } from "./mutators/index.ts";
 
-export * from './mutators/index.ts';
-export * from './asset-restrictions/index.ts';
+export * from "./asset-restrictions/index.ts";
+export * from "./mutators/index.ts";
 
 /**
  * Represents a value that can either apply globally or per team.
@@ -10,7 +10,6 @@ export * from './asset-restrictions/index.ts';
  * - Per team: an array of `[teamIndex, value]` tuples
  */
 export type PerTeam<T> = T | [number, T][];
-
 
 export enum AttachmentType {
 	SpatialData = 1,

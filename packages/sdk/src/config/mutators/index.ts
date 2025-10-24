@@ -1,4 +1,4 @@
-import { PerTeam } from "../index.ts";
+import type { PerTeam } from "../index.ts";
 
 /**
  * Determines the Man-Down behavior when a soldier is downed.

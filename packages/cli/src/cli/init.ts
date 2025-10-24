@@ -112,12 +112,15 @@ function emptyDir(dir: string) {
 	}
 }
 
-export async function init(argTargetDir?: string, options?: {
-	name?: string,
-	template?: (typeof templates)[number],
-	onExists?: "overwrite" | "cancel" | "ignore",
-	installDependencies?: boolean
-}) {
+export async function init(
+	argTargetDir?: string,
+	options?: {
+		name?: string;
+		template?: (typeof templates)[number];
+		onExists?: "overwrite" | "cancel" | "ignore";
+		installDependencies?: boolean;
+	},
+) {
 	prompts.intro("Initialize Bf6 Mod");
 
 	const path = argTargetDir
@@ -132,13 +135,15 @@ export async function init(argTargetDir?: string, options?: {
 			});
 	if (prompts.isCancel(path)) return cancel();
 
-	let name = options?.name ? options.name : await prompts.text({
-		message: "What is the name of your mod?",
-		placeholder: "Ace Pursuit",
-		validate: (value) => {
-			if (!value.trim()) return "Please enter a name.";
-		},
-	});
+	let name = options?.name
+		? options.name
+		: await prompts.text({
+				message: "What is the name of your mod?",
+				placeholder: "Ace Pursuit",
+				validate: (value) => {
+					if (!value.trim()) return "Please enter a name.";
+				},
+			});
 	if (prompts.isCancel(name)) return cancel();
 	name = name.trim();
 
@@ -147,35 +152,39 @@ export async function init(argTargetDir?: string, options?: {
 		if (options?.onExists) {
 			switch (options.onExists) {
 				case "overwrite":
-					overwrite = "yes"
+					overwrite = "yes";
 					break;
 				case "cancel":
-					overwrite = "no"
+					overwrite = "no";
 					break;
 				case "ignore":
-					overwrite = "ignore"
+					overwrite = "ignore";
 					break;
 			}
 		}
-		const res = overwrite ? overwrite : await prompts.select({
-			message:
-				(path === "." ? "Current directory" : `Target directory "${path}"`) +
-				` is not empty. Please choose how to proceed:`,
-			options: [
-				{
-					label: "Cancel operation",
-					value: "no",
-				},
-				{
-					label: "Remove existing files and continue",
-					value: "yes",
-				},
-				{
-					label: "Ignore files and continue",
-					value: "ignore",
-				},
-			],
-		});
+		const res = overwrite
+			? overwrite
+			: await prompts.select({
+					message:
+						(path === "."
+							? "Current directory"
+							: `Target directory "${path}"`) +
+						` is not empty. Please choose how to proceed:`,
+					options: [
+						{
+							label: "Cancel operation",
+							value: "no",
+						},
+						{
+							label: "Remove existing files and continue",
+							value: "yes",
+						},
+						{
+							label: "Ignore files and continue",
+							value: "ignore",
+						},
+					],
+				});
 		if (prompts.isCancel(res)) return cancel();
 		overwrite = res;
 
@@ -189,15 +198,17 @@ export async function init(argTargetDir?: string, options?: {
 		}
 	}
 
-	const template = options?.template ? options.template : await prompts.select({
-		message: "Select a template:",
-		options: templates.map((template) => {
-			return {
-				label: template,
-				value: template,
-			};
-		}),
-	});
+	const template = options?.template
+		? options.template
+		: await prompts.select({
+				message: "Select a template:",
+				options: templates.map((template) => {
+					return {
+						label: template,
+						value: template,
+					};
+				}),
+			});
 	if (prompts.isCancel(template)) return cancel();
 
 	await startProject(path, template, name);

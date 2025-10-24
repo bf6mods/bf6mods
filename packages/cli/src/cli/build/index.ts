@@ -89,9 +89,9 @@ export async function buildEntrypoint(
 		logLevel: "debug",
 		resolve: {
 			alias: {
-				modlib: "@bf6mods/sdk"
-			}
-		}
+				modlib: "@bf6mods/sdk",
+			},
+		},
 	});
 	const result = await bundle.generate({
 		format: "esm",

@@ -1,4 +1,4 @@
-import { PerTeam } from "../index.ts";
+import type { PerTeam } from "../index.ts";
 
 export type WeaponRestrictions = {
 	/**
@@ -756,4 +756,4 @@ export type WeaponRestrictions = {
 	 * If per team: `[[teamIndex, isAllowed], ...]`
 	 */
 	U_MiniV40: PerTeam<boolean>;
-}
+};

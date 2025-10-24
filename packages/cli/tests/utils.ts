@@ -1,7 +1,7 @@
-import { expect } from "vitest";
-import path from "path";
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
 import { execa } from "execa";
+import { expect } from "vitest";
 
 const CLI_PATH = path.resolve("dist/cli/index.js");
 export async function runCli(args: string[], cwd: string) {
@@ -10,7 +10,10 @@ export async function runCli(args: string[], cwd: string) {
 	});
 }
 
-export async function compareDirectories(expectedDir: string, outputDir: string) {
+export async function compareDirectories(
+	expectedDir: string,
+	outputDir: string,
+) {
 	const expectedFiles: string[] = [];
 
 	// Collect all files in expectedDir (relative paths)
@@ -19,7 +22,12 @@ export async function compareDirectories(expectedDir: string, outputDir: string)
 		withFileTypes: true,
 	})) {
 		if (dirent.isFile()) {
-			expectedFiles.push(path.relative(expectedDir, path.resolve(dirent.parentPath, dirent.name)));
+			expectedFiles.push(
+				path.relative(
+					expectedDir,
+					path.resolve(dirent.parentPath, dirent.name),
+				),
+			);
 		}
 	}
 
@@ -27,7 +35,10 @@ export async function compareDirectories(expectedDir: string, outputDir: string)
 		const expectedPath = path.join(expectedDir, relPath);
 		const outputPath = path.join(outputDir, relPath);
 
-		expect(fs.existsSync(outputPath), `Missing file: "${relPath}" in output`).toBe(true);
+		expect(
+			fs.existsSync(outputPath),
+			`Missing file: "${relPath}" in output`,
+		).toBe(true);
 
 		if (relPath === "package.json") {
 			const [expectedJson, actualJson] = await Promise.all([
@@ -38,7 +49,10 @@ export async function compareDirectories(expectedDir: string, outputDir: string)
 			delete expectedJson.devDependencies;
 			delete actualJson.devDependencies;
 
-			expect(actualJson, `package.json mismatch (ignoring devDependencies)`).toEqual(expectedJson);
+			expect(
+				actualJson,
+				`package.json mismatch (ignoring devDependencies)`,
+			).toEqual(expectedJson);
 			continue;
 		}
 
@@ -47,12 +61,16 @@ export async function compareDirectories(expectedDir: string, outputDir: string)
 			fs.promises.readFile(outputPath, "utf8"),
 		]);
 
-		expect(actualContent, `Content mismatch for ${relPath}`).toBe(expectedContent);
+		expect(actualContent, `Content mismatch for ${relPath}`).toBe(
+			expectedContent,
+		);
 	}
 }
 
 export async function packageDep(projectDir: string) {
-	const { stdout } = await execa("npm", ["pack"], { cwd: path.resolve(projectDir) });
+	const { stdout } = await execa("npm", ["pack"], {
+		cwd: path.resolve(projectDir),
+	});
 	return stdout.trim();
 }
 
@@ -61,7 +79,9 @@ export async function install(projectDir: string) {
 }
 
 export async function build(projectDir: string) {
-	return await execa("npm", ["run", "build"], { cwd: path.resolve(projectDir) });
+	return await execa("npm", ["run", "build"], {
+		cwd: path.resolve(projectDir),
+	});
 }
 
 export async function checkTypes(projectDir: string) {
@@ -73,12 +93,14 @@ export async function checkTypes(projectDir: string) {
 const ROOT = path.resolve(__dirname, "..", "..");
 export async function buildPackages() {
 	console.log("🏗️ Building packages before tests...");
-	const { stdout, stderr, exitCode } = await execa("npm", ["run", "build"], { cwd: ROOT });
+	const { stdout, stderr, exitCode } = await execa("npm", ["run", "build"], {
+		cwd: ROOT,
+	});
 
 	if (stdout) console.log(stdout);
 	if (stderr) console.error(stderr);
 
-	expect(exitCode, 'building packages failed!').toBe(0);
+	expect(exitCode, "building packages failed!").toBe(0);
 
 	const cli = path.resolve(__dirname, "..");
 	const sdk = path.resolve(__dirname, "..", "..", "sdk");
@@ -89,9 +111,14 @@ export async function buildPackages() {
 	return [path.resolve(cli, cliTarPath), path.resolve(sdk, sdkTarPath)];
 }
 
-export async function installDependenciesForMod(modPath: string, cliTarPath: string, sdkTarPath: string) {
+export async function installDependenciesForMod(
+	modPath: string,
+	cliTarPath: string,
+	sdkTarPath: string,
+) {
 	const pkgJsonPath = path.resolve(modPath, "package.json");
-	if (!fs.existsSync(pkgJsonPath)) throw new Error("Expected package.json to exist");
+	if (!fs.existsSync(pkgJsonPath))
+		throw new Error("Expected package.json to exist");
 	const pkg = JSON.parse(await fs.promises.readFile(pkgJsonPath, "utf8"));
 
 	if (!pkg.devDependencies) pkg.devDependencies = {};
@@ -104,6 +131,7 @@ export async function installDependenciesForMod(modPath: string, cliTarPath: str
 
 	await fs.promises.writeFile(pkgJsonPath, JSON.stringify(pkg, null, 2));
 
-	const { exitCode } = await install(modPath)
-	if (exitCode !== 0) throw new Error(`Failed to install dependencies for path: ${modPath}`);
+	const { exitCode } = await install(modPath);
+	if (exitCode !== 0)
+		throw new Error(`Failed to install dependencies for path: ${modPath}`);
 }

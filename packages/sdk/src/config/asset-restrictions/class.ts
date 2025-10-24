@@ -1,4 +1,4 @@
-import { PerTeam } from "../index.ts";
+import type { PerTeam } from "../index.ts";
 
 export type ClassRestrictions = {
 	/**
@@ -28,4 +28,4 @@ export type ClassRestrictions = {
 	 * If per team: `[[teamIndex, isAllowed], ...]`
 	 */
 	EngineerClass: PerTeam<boolean>;
-}
+};
