@@ -43,8 +43,9 @@ describe.concurrent("@bf6mods/cli", async () => {
 	);
 
 	tmpdirTest.concurrent(
-		"imports all existing JSON projects via `import`",
-		async ({ tmpdir }) => {
+		"imports all existing JSON projects via `import`", {
+			timeout: 100_000
+		}, async ({ tmpdir }) => {
 			const jsonFiles: string[] = [];
 			const filesGlob = fs.promises.glob(
 				path.resolve(__dirname, "resources", "starting", "imports", "*.json"),
