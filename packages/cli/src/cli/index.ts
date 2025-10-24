@@ -5,7 +5,7 @@ import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
-import { init, templates } from "./init.js";
+import { init, installDependencies, templates } from "./init.js";
 import { Bf6Logger } from "./log.ts";
 import { prepare } from "./prepare.js";
 import { printToConsole, readableList } from "./utils.ts";
@@ -84,9 +84,8 @@ program
 	.option("--no-install-dependencies", `Prevents install of dependencies`)
 	.description("decompiles the json config of a mod into a new project")
 	.action(async (input, output, options) => {
-		const { installDependencies } = options;
 		await importFile(input as string, output as string, undefined, true);
-		if (installDependencies) installDependencies(output);
+		if (options?.installDependencies) installDependencies(output);
 	});
 
 program
