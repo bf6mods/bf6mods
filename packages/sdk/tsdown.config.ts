@@ -7,8 +7,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const modFile = path.resolve(__dirname, "./src/mod/index.d.ts");
 const additionalModFile = path.resolve(__dirname, "./src/mod/additional.d.ts");
 
-const modFileWithoutDeclare = fs.readFileSync(modFile, "utf-8").replace("declare", "");
-const additionalModFileWithoutDeclare = fs.readFileSync(additionalModFile, "utf-8").replace("declare", "");
+const modFileWithoutDeclare = fs
+	.readFileSync(modFile, "utf-8")
+	.replace("declare", "");
+const additionalModFileWithoutDeclare = fs
+	.readFileSync(additionalModFile, "utf-8")
+	.replace("declare", "");
 
 export default defineConfig([
 	{
