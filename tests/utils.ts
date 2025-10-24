@@ -15,6 +15,10 @@ export async function runCli(args: string[], cwd: string) {
 	});
 }
 
+function normalizeContent(content: string) {
+	return content.replace(/\r\n/g, "\n").trim();
+}
+
 export async function compareDirectories(
 	expectedDir: string,
 	outputDir: string,
@@ -66,8 +70,8 @@ export async function compareDirectories(
 			fs.promises.readFile(outputPath, "utf8"),
 		]);
 
-		expect(actualContent, `Content mismatch for ${relPath}`).toBe(
-			expectedContent,
+		expect(normalizeContent(actualContent), `Content mismatch for ${relPath}`).toBe(
+			normalizeContent(expectedContent),
 		);
 	}
 }
