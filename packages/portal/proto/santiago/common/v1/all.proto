@@ -1,0 +1,833 @@
+// Generated automatically, do not modify, make changes to generation script instead!
+syntax = "proto3";
+
+package santiago.common.v1;
+
+message AssetCategory {
+	string tag_id = 1;
+	AssetCategoryBoolean boolean = 2;
+}
+
+message AssetCategoryBoolean {
+	bool default_value = 1;
+	AssetCategoryTagBooleanOverride overrides = 2;
+	AssetCategoryTagBooleanTeamOverride team_overrides = 3;
+}
+
+message AssetCategoryTagBooleanOverride {
+	repeated string asset_category_tags = 1;
+	bool value = 2;
+}
+
+message AssetCategoryTagBooleanTeamOverride {
+	repeated string asset_category_tags = 1;
+	bool value = 2;
+	uint32 team_id = 3;
+}
+
+message AssetInfo {
+	map<string, EntityList> entities = 1;
+	map<string, Prefab> prefabs = 2;
+}
+
+message Attachment {
+	string id = 1;
+	string version = 2;
+	StringValue filename = 3;
+	bool is_processable = 4;
+	int32 processing_status = 5;
+	AttachmentData attachment_data = 6;
+	int32 attachment_type = 7;
+	StringValue metadata = 8;
+	repeated string errors = 9;
+}
+
+message AttachmentData {
+	bytes original = 1;
+	BytesValue compiled = 2;
+}
+
+message AuthCodeAuthentication {
+	string auth_code = 1;
+	int32 platform = 2;
+	StringValue redirect_uri = 3;
+	StringValue patch_version = 4;
+	StringValue protocol_version = 5;
+}
+
+message AuthenticationResponse {
+	string session_id = 1;
+	Player player = 2;
+	TimeTravel time_travel = 3;
+	ProtocolVersionOverride protocol_version_override = 4;
+	string patch_version = 5;
+}
+
+message AvailableAssetCategories {
+	AvailableAssetCategoryTag root_tags = 1;
+	AvailableAssetCategoryTag tags = 2;
+}
+
+message AvailableAssetCategoryTag {
+	string tag_id = 1;
+	string name = 2;
+	repeated string children_tags = 3;
+	Metadata metadata = 4;
+}
+
+message AvailableFloatValues {
+	FloatRange range = 1;
+	repeated float sparse_values = 2;
+}
+
+message AvailableGameData {
+	AvailableMutator mutators = 1;
+	AvailableMapEntry maps = 2;
+	ModRulesDefinition mod_rules = 3;
+	AvailableAssetCategories asset_categories = 4;
+	AssetInfo spatial_asset_info = 5;
+}
+
+message AvailableIntValue {
+	int32 default_value = 1;
+	AvailableIntValues available_values = 2;
+}
+
+message AvailableIntValues {
+	IntRange range = 1;
+	repeated int32 sparse_values = 2;
+}
+
+message AvailableMapEntry {
+	string level_name = 1;
+	string level_location = 2;
+	AvailableIntValue game_size = 3;
+	AvailableIntValue rounds = 4;
+	AvailableIntValue allowed_spectators = 5;
+	Metadata metadata = 6;
+	AvailableIntValue allowed_teams_range = 7;
+}
+
+message AvailableMutator {
+	string name = 1;
+	string category = 2;
+	AvailableMutatorKind kind = 3;
+	Metadata metadata = 4;
+	string id = 5;
+}
+
+message AvailableMutatorFloatValues {
+	MutatorFloat mutator = 1;
+	AvailableFloatValues available_values = 2;
+}
+
+message AvailableMutatorIntValues {
+	MutatorInt mutator = 1;
+	AvailableIntValues available_values = 2;
+}
+
+message AvailableMutatorKind {
+	MutatorBoolean mutator_boolean = 1;
+	MutatorString mutator_string = 4;
+	AvailableMutatorFloatValues mutator_float_values = 7;
+	AvailableMutatorIntValues mutator_int_values = 8;
+	MutatorSparseBoolean mutator_sparse_boolean = 9;
+	AvailableMutatorSparseIntValues mutator_sparse_int_values = 10;
+	AvailableMutatorSparseFloatValues mutator_sparse_float_values = 11;
+}
+
+message AvailableMutatorSparseFloatValues {
+	MutatorSparseFloat mutator = 1;
+	AvailableFloatValues available_values = 2;
+}
+
+message AvailableMutatorSparseIntValues {
+	MutatorSparseInt mutator = 1;
+	AvailableIntValues available_values = 2;
+}
+
+message AvailableTag {
+	string id = 1;
+	Metadata metadata = 2;
+	StringValue category = 3;
+}
+
+message AvailableTags {
+	AvailableTag tags = 1;
+}
+
+message BlazeGameSettings {
+	int32 join_in_progress = 1;
+	int32 open_to_join_by_player = 2;
+	int32 open_to_invites = 3;
+}
+
+message BlazePlayElementDesignSettings {
+	int32 open_group_reservations = 1;
+}
+
+message Blueprint {
+	BlueprintId blueprint_id = 1;
+	string name = 2;
+	AvailableGameData available_game_data = 3;
+	AvailableTags available_tags = 4;
+	repeated string available_thumbnail_urls = 5;
+	AvailableTags available_progression_mode_tags = 6;
+}
+
+message BlueprintId {
+	string id = 1;
+	string version = 2;
+}
+
+message BuildStatusError {
+	string error_message = 1;
+}
+
+message BuildStatusSuccess {}
+
+message BytesValue {
+	bytes value = 1;
+}
+
+message CategoryIdList {
+	repeated int32 ids = 1;
+}
+
+message CompatibleModRules {
+	bytes original = 1;
+	int32 rules_version = 2;
+	CompiledRules compiled = 3;
+}
+
+message CompiledRules {
+	Uncompressed uncompressed = 1;
+	Compressed compressed = 2;
+}
+
+message Compressed {
+	bytes compiled_mod_rules = 1;
+	int32 rules_version = 2;
+	int32 inflated_size = 3;
+}
+
+message CreateModDataVersionRequest {
+	string play_element_id = 1;
+}
+
+message CreateModDataVersionResponse {
+	string signed_url = 1;
+	Timestamp valid_until = 2;
+	string mod_level_data_id = 3;
+}
+
+message CreatePetitionError {
+	int32 error_type = 1;
+	string error_message = 2;
+}
+
+message CreatePetitionSuccess {
+	string petition_id = 1;
+}
+
+message CreatePlayElementRequest {
+	string name = 1;
+	StringValue description = 2;
+	DesignMetadata design_metadata = 3;
+	MapRotation map_rotation = 4;
+	Mutator mutators = 5;
+	AssetCategory asset_categories = 6;
+	bytes original_mod_rules = 7;
+	PlayElementSettings play_element_settings = 9;
+	int32 publish_state = 10;
+	StringValue mod_level_data_id = 11;
+	StringValue thumbnail_url = 12;
+	Attachment attachments = 13;
+}
+
+message Creator {
+	InternalCreator internal_creator = 1;
+	PlayerCreator player_creator = 2;
+	ExternalCreator external_creator = 3;
+	PlayerCreator trusted_creator = 4;
+}
+
+message DeleteAttachmentsRequest {
+	string play_element_design_id = 1;
+	repeated string attachment_ids = 2;
+}
+
+message DeleteAttachmentsResponse {}
+
+message DeletePlayElementRequest {
+	string play_element_id = 1;
+}
+
+message DeletePlayElementResponse {}
+
+message DesignMetadata {
+	StringValue progression_mode = 1;
+	FirstPartyMetadata first_party_metadata = 2;
+}
+
+message Duration {
+	int64 seconds = 1;
+	int32 nanos = 2;
+}
+
+message Empty {}
+
+message EnrichedPlayElement {
+	PlayElement play_element = 1;
+	MapRotation map_rotation = 2;
+}
+
+message EntityList {
+	repeated string entity = 1;
+}
+
+message ErrorModRules {
+	bytes original = 1;
+	StringValue error_message = 2;
+}
+
+message ExternalCreator {}
+
+message FirstPartyMetadata {
+	PSNMetadata psn_metadata = 1;
+}
+
+message FloatRange {
+	float min_value = 1;
+	float max_value = 2;
+}
+
+message GameServerJoinabilitySettings {
+	int32 matchmaking_in_progress = 1;
+}
+
+message GameServerMessage {
+	string kind = 1;
+	string text = 2;
+}
+
+message GetAvailableTagsRequest {}
+
+message GetAvailableTagsResponse {
+	AvailableTags available_tags = 1;
+}
+
+message GetBlueprintsByIdRequest {
+	BlueprintId blueprint_ids = 1;
+}
+
+message GetBlueprintsByIdResponse {
+	Blueprint blueprints = 1;
+}
+
+message GetLicenseRequirementsRequest {}
+
+message GetLicenseRequirementsResponse {
+	repeated string owned_licenses = 1;
+	MapEntryRequirement map_entry_requirements = 2;
+}
+
+message GetOwnedPlayElementsRequest {
+	repeated int32 publish_states = 1;
+	bool include_denied = 2;
+}
+
+message GetOwnedPlayElementsResponse {
+	PlayElement play_elements = 1;
+}
+
+message GetOwnedPlayElementsResponseV2 {
+	EnrichedPlayElement play_elements = 1;
+}
+
+message GetPlayElementRequest {
+	string id = 1;
+	bool include_denied = 2;
+}
+
+message GetProgressionTypesRequest {}
+
+message GetProgressionTypesResponse {
+	ProgressionEntry entries = 1;
+}
+
+message GetScheduledBlueprintsRequest {}
+
+message GetScheduledBlueprintsResponse {
+	BlueprintId blueprint_ids = 1;
+}
+
+message GetTranslationsRequest {
+	TranslationsQuery translations_query = 1;
+	string locale = 2;
+	Timestamp fetch_from = 3;
+}
+
+message GetTranslationsResponse {
+	LocalizedText localized_texts = 1;
+	Timestamp fetched_until = 2;
+}
+
+message IncompatibleModRules {
+	bytes original = 1;
+	int32 rules_version = 2;
+	int32 blueprint_rules_version = 3;
+}
+
+message Int32Value {
+	int32 value = 1;
+}
+
+message IntRange {
+	int32 min_value = 1;
+	int32 max_value = 2;
+}
+
+message InternalCreator {}
+
+message InternalTeamStructure {
+	int32 team_id = 1;
+	int32 capacity = 2;
+	int32 capacity_type = 3;
+}
+
+message ListExperiencesRequest {
+	repeated int32 filter = 3;
+	Pagination page = 4;
+}
+
+message ListExperiencesResponse {
+	PlayExperience experiences = 1;
+	Pagination next_page = 2;
+}
+
+message ListModDataVersionsRequest {
+	string play_element_id = 1;
+}
+
+message ListModDataVersionsResponse {
+	ModDataVersion mod_data_versions = 1;
+}
+
+message LocalizedText {
+	string sid = 1;
+	string localized_text = 2;
+	int32 category_id = 3;
+}
+
+message MapEntry {
+	string level_name = 1;
+	string level_location = 2;
+	int32 rounds = 3;
+	int32 allowed_spectators = 4;
+	TeamComposition team_composition = 5;
+	BlazeGameSettings blaze_game_settings = 6;
+	Mutator mutators = 7;
+	GameServerJoinabilitySettings game_server_joinability_settings = 8;
+}
+
+message MapEntryRequirement {
+	string level_name = 1;
+	string level_location = 2;
+	repeated string license_requirements = 3;
+}
+
+message MapRotation {
+	MapEntry maps = 1;
+	MapRotationAttributes attributes = 2;
+}
+
+message MapRotationAttributes {
+	int32 rotation_behavior = 1;
+}
+
+message Metadata {
+	TranslationMetadata translations = 1;
+	Resource resources = 2;
+}
+
+message ModDataVersion {
+	string id = 1;
+	string play_element_id = 2;
+	Timestamp created = 3;
+	ModDataVersionBuildInfo build_info = 4;
+}
+
+message ModDataVersionBuildInfo {
+	string pipeline_version = 1;
+	Empty pending = 3;
+	Empty no_build_available = 4;
+	BuildStatusError error = 5;
+	BuildStatusSuccess success = 6;
+}
+
+message ModRules {
+	CompatibleModRules compatible_rules = 1;
+	IncompatibleModRules incompatible_rules = 2;
+	ErrorModRules error_rules = 3;
+}
+
+message ModRulesDefinition {
+	int32 rules_version = 1;
+	bytes mod_builder = 2;
+}
+
+message Mutator {
+	string name = 1;
+	string category = 2;
+	MutatorKind kind = 3;
+	string id = 4;
+}
+
+message MutatorBoolean {
+	bool value = 1;
+}
+
+message MutatorBooleanAvailable {
+	bool value = 1;
+}
+
+message MutatorFloat {
+	float value = 1;
+}
+
+message MutatorFloatAvailable {
+	float value = 1;
+	int32 behaviour = 2;
+}
+
+message MutatorInt {
+	int32 value = 1;
+}
+
+message MutatorIntAvailable {
+	int32 value = 1;
+	int32 behaviour = 2;
+}
+
+message MutatorKind {
+	MutatorBooleanAvailable mutator_boolean = 1;
+	MutatorStringAvailable mutator_string = 4;
+	MutatorFloatAvailable mutator_float = 5;
+	MutatorIntAvailable mutator_int = 6;
+	MutatorSparseBooleanAvailable mutator_sparse_boolean = 7;
+	MutatorSparseIntAvailable mutator_sparse_int = 8;
+	MutatorSparseFloatAvailable mutator_sparse_float = 9;
+}
+
+message MutatorSparseBoolean {
+	bool default_value = 1;
+	uint32 size = 2;
+	MutatorSparseBooleanEntry sparse_values = 3;
+}
+
+message MutatorSparseBooleanAvailable {
+	bool default_value = 1;
+	uint32 size = 2;
+	MutatorSparseBooleanEntryAvailable sparse_values = 3;
+}
+
+message MutatorSparseBooleanEntry {
+	uint32 index = 1;
+	bool value = 2;
+}
+
+message MutatorSparseBooleanEntryAvailable {
+	uint32 index = 1;
+	bool value = 2;
+}
+
+message MutatorSparseFloat {
+	float default_value = 1;
+	uint32 size = 2;
+	MutatorSparseFloatEntry sparse_values = 3;
+}
+
+message MutatorSparseFloatAvailable {
+	float default_value = 1;
+	uint32 size = 2;
+	MutatorSparseFloatEntryAvailable sparse_values = 3;
+}
+
+message MutatorSparseFloatEntry {
+	uint32 index = 1;
+	float value = 2;
+}
+
+message MutatorSparseFloatEntryAvailable {
+	uint32 index = 1;
+	float value = 2;
+}
+
+message MutatorSparseInt {
+	int32 default_value = 1;
+	uint32 size = 2;
+	MutatorSparseIntEntry sparse_values = 3;
+}
+
+message MutatorSparseIntAvailable {
+	int32 default_value = 1;
+	uint32 size = 2;
+	MutatorSparseIntEntryAvailable sparse_values = 3;
+}
+
+message MutatorSparseIntEntry {
+	uint32 index = 1;
+	int32 value = 2;
+}
+
+message MutatorSparseIntEntryAvailable {
+	uint32 index = 1;
+	int32 value = 2;
+}
+
+message MutatorString {
+	string value = 1;
+}
+
+message MutatorStringAvailable {
+	string value = 1;
+}
+
+message PSNMetadata {
+	string activity_id = 1;
+}
+
+message Pagination {
+	int32 page_number = 1;
+	string token = 2;
+}
+
+message PlayElement {
+	string id = 1;
+	string design_id = 2;
+	Creator creator = 3;
+	string name = 4;
+	StringValue description = 5;
+	Timestamp created = 6;
+	Timestamp updated = 7;
+	PlayElementSettings play_element_settings = 8;
+	int32 publish_state_type = 9;
+	Int32Value likes = 10;
+	Timestamp publish_at = 11;
+	StringValue thumbnail_url = 12;
+	int32 moderation_state = 13;
+	StringValue short_code = 14;
+}
+
+message PlayElementDesign {
+	string design_id = 1;
+	string design_name = 2;
+	Timestamp created = 4;
+	DesignMetadata design_metadata = 5;
+	MapRotation map_rotation = 6;
+	Mutator mutators = 7;
+	AssetCategory asset_categories = 8;
+	repeated string license_requirements = 9;
+	ModRules mod_rules = 10;
+	Tag tags = 12;
+	BlazePlayElementDesignSettings blaze_settings = 13;
+	StringValue mod_level_data_id = 14;
+	Attachment attachments = 15;
+	repeated string group_licenses = 16;
+	int32 attachment_compile_status = 17;
+	repeated string server_host_license_requirements = 18;
+}
+
+message PlayElementResponse {
+	PlayElement play_element = 1;
+	PlayElementDesign play_element_design = 2;
+	StringValue progression_mode = 3;
+}
+
+message PlayElementSettings {
+	StringValue secret = 1;
+	GameServerMessage messages = 2;
+	bool allow_copies = 3;
+}
+
+message PlayExperience {
+	string id = 1;
+	string name = 2;
+	Creator creator = 3;
+	StringValue description = 4;
+	StringValue short_code = 5;
+	StringValue thumbnail_url = 6;
+	Int32Value likes = 7;
+	Int32Value player_count = 8;
+	Timestamp created = 9;
+	Timestamp updated = 10;
+	MapRotation map_rotation = 11;
+	Tag tags = 12;
+	bool is_premium = 13;
+}
+
+message PlayExperienceQuery {
+	repeated string maps_eq = 1;
+	repeated string level_locations_eq = 2;
+	repeated int32 max_player_count_eq = 3;
+	repeated string tags_eq = 4;
+	PlayerCreator player_creator_eq = 7;
+	int32 ordering = 8;
+	int32 page_size = 9;
+	StringValue name_prefix = 10;
+	StringValue short_code = 11;
+}
+
+message Player {
+	uint64 nucleus_id = 1;
+	uint64 persona_id = 2;
+	int32 platform = 3;
+}
+
+message PlayerCreator {
+	Player player = 1;
+}
+
+message Prefab {
+	string prefab_instance = 1;
+	string prefab_partition = 2;
+	string prefab_type = 3;
+	string gem_instance = 4;
+	string gem_partition = 5;
+	string gem_type = 6;
+}
+
+message ProgressionEntry {
+	string progression_mode = 1;
+	Mutator progressibles = 2;
+}
+
+message ProtocolVersionOverride {
+	string original = 1;
+	string overridden = 2;
+	int32 reason = 3;
+}
+
+message ReportExperienceRequest {
+	string experience_id = 1;
+	StringValue subject = 2;
+}
+
+message ReportPlayerRequest {
+	Player offending_player = 1;
+	StringValue subject = 2;
+}
+
+message ReportingResponse {
+	CreatePetitionSuccess success = 1;
+	CreatePetitionError error = 2;
+}
+
+message Resource {
+	ResourceLocation location = 1;
+	string kind = 2;
+}
+
+message ResourceLocation {
+	string ref = 1;
+	string url = 2;
+}
+
+message SidList {
+	repeated string sids = 1;
+}
+
+message SparseFloatValues {
+	repeated float values = 1;
+}
+
+message SparseIntValues {
+	repeated int32 values = 1;
+}
+
+message StringValue {
+	string value = 1;
+}
+
+message SubAssetProfanityStatus {
+	int32 external_data_source_id = 1;
+	string asset_id = 2;
+	string nonce = 3;
+	int32 profanity_status = 4;
+	string profanity_reason = 5;
+}
+
+message SubCategoryIdList {
+	repeated int32 ids = 1;
+}
+
+message Tag {
+	string tag_id = 1;
+	int32 priority = 2;
+	Metadata metadata = 3;
+}
+
+message TeamComposition {
+	TeamStructure teams = 1;
+	InternalTeamStructure internal_teams = 2;
+	int32 balancing_method = 3;
+}
+
+message TeamStructure {
+	int32 team_id = 1;
+	int32 capacity = 2;
+}
+
+message TimeTravel {
+	Duration offset = 1;
+}
+
+message Timestamp {
+	int64 seconds = 1;
+	int32 nanos = 2;
+}
+
+message TranslationMetadata {
+	string kind = 1;
+	string translation_id = 2;
+}
+
+message TranslationsQuery {
+	SidList sid_list = 1;
+	repeated int32 category_id_list = 2;
+	repeated int32 sub_category_id_list = 3;
+}
+
+message Uncompressed {
+	bytes compiled_mod_rules = 1;
+	int32 rules_version = 2;
+}
+
+message UpdatePlayElementRequest {
+	string id = 1;
+	string name = 2;
+	StringValue description = 3;
+	DesignMetadata design_metadata = 4;
+	MapRotation map_rotation = 5;
+	Mutator mutators = 6;
+	AssetCategory asset_categories = 7;
+	bytes original_mod_rules = 8;
+	PlayElementSettings play_element_settings = 10;
+	int32 publish_state = 11;
+	StringValue mod_level_data_id = 12;
+	StringValue thumbnail_url = 13;
+	Attachment attachments = 14;
+}
+
+message UploadExperienceThumbnailRequest {
+	bytes image = 1;
+	string mime_type = 2;
+}
+
+message UploadExperienceThumbnailResponse {
+	string asset_id = 1;
+	string url = 2;
+	string verification_url = 3;
+}
+

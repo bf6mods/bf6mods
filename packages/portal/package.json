@@ -1,0 +1,45 @@
+{
+	"name": "@bf6mods/portal",
+	"version": "1.0.0",
+	"description": "Contains helpful functions to interfacing with the portal api",
+	"type": "module",
+	"license": "MIT",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bf6mods/bf6mods.git"
+	},
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"build": "tsdown",
+		"generate": "buf generate",
+		"start": "tsx src/index.ts"
+	},
+	"keywords": [
+		"bf6",
+		"mods",
+		"typescript",
+		"api"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@bufbuild/buf": "^1.59.0",
+		"@bufbuild/protoc-gen-es": "^2.10.0",
+		"tsx": "^4.20.6"
+	},
+	"dependencies": {
+		"@bufbuild/protobuf": "^2.10.0",
+		"@connectrpc/connect": "^2.1.0",
+		"@connectrpc/connect-node": "^2.1.0",
+		"@connectrpc/validate": "^0.2.0"
+	}
+}
