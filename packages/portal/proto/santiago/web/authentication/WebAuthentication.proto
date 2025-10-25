@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package santiago.web.authentication;
+
+import "google/protobuf/empty.proto";
+import "santiago/common/all.proto";
+
+service WebAuthentication {
+  rpc viaAuthCode(santiago.common.AuthCodeAuthentication)
+      returns (santiago.common.AuthenticationResponse);
+
+  rpc logout(google.protobuf.Empty)
+      returns (google.protobuf.Empty);
+}

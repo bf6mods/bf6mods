@@ -1,7 +1,7 @@
 // Generated automatically, do not modify, make changes to generation script instead!
 syntax = "proto3";
 
-package santiago.common.v1;
+package santiago.common;
 
 message AssetCategory {
 	string tag_id = 1;
