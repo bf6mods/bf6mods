@@ -21,7 +21,6 @@
 		"build": "tsdown",
 		"generate": "buf generate",
 		"start": "tsx src/index.ts",
-		"dev": "tsx src/node-index.ts"
 	},
 	"keywords": [
 		"bf6",

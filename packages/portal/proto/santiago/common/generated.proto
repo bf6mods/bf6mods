@@ -11,7 +11,7 @@ message AssetCategory {
 message AssetCategoryBoolean {
 	bool default_value = 1;
 	AssetCategoryTagBooleanOverride overrides = 2;
-	AssetCategoryTagBooleanTeamOverride team_overrides = 3;
+	repeated AssetCategoryTagBooleanTeamOverride team_overrides = 3;
 }
 
 message AssetCategoryTagBooleanOverride {
@@ -64,8 +64,8 @@ message AuthenticationResponse {
 }
 
 message AvailableAssetCategories {
-	AvailableAssetCategoryTag root_tags = 1;
-	AvailableAssetCategoryTag tags = 2;
+	repeated AvailableAssetCategoryTag root_tags = 1;
+	repeated AvailableAssetCategoryTag tags = 2;
 }
 
 message AvailableAssetCategoryTag {
@@ -77,12 +77,12 @@ message AvailableAssetCategoryTag {
 
 message AvailableFloatValues {
 	FloatRange range = 1;
-	repeated float sparse_values = 2;
+	float sparse_values = 2;
 }
 
 message AvailableGameData {
-	AvailableMutator mutators = 1;
-	AvailableMapEntry maps = 2;
+	repeated AvailableMutator mutators = 1;
+	repeated AvailableMapEntry maps = 2;
 	ModRulesDefinition mod_rules = 3;
 	AvailableAssetCategories asset_categories = 4;
 	AssetInfo spatial_asset_info = 5;
@@ -95,7 +95,7 @@ message AvailableIntValue {
 
 message AvailableIntValues {
 	IntRange range = 1;
-	repeated int32 sparse_values = 2;
+	int32 sparse_values = 2;
 }
 
 message AvailableMapEntry {
@@ -153,7 +153,7 @@ message AvailableTag {
 }
 
 message AvailableTags {
-	AvailableTag tags = 1;
+	repeated AvailableTag tags = 1;
 }
 
 message BlazeGameSettings {
@@ -235,14 +235,14 @@ message CreatePlayElementRequest {
 	StringValue description = 2;
 	DesignMetadata design_metadata = 3;
 	MapRotation map_rotation = 4;
-	Mutator mutators = 5;
-	AssetCategory asset_categories = 6;
+	repeated Mutator mutators = 5;
+	repeated AssetCategory asset_categories = 6;
 	bytes original_mod_rules = 7;
 	PlayElementSettings play_element_settings = 9;
 	int32 publish_state = 10;
 	StringValue mod_level_data_id = 11;
 	StringValue thumbnail_url = 12;
-	Attachment attachments = 13;
+	repeated Attachment attachments = 13;
 }
 
 message Creator {
@@ -267,7 +267,7 @@ message DeletePlayElementResponse {}
 
 message DesignMetadata {
 	StringValue progression_mode = 1;
-	FirstPartyMetadata first_party_metadata = 2;
+	repeated FirstPartyMetadata first_party_metadata = 2;
 }
 
 message Duration {
@@ -318,18 +318,18 @@ message GetAvailableTagsResponse {
 }
 
 message GetBlueprintsByIdRequest {
-	BlueprintId blueprint_ids = 1;
+	repeated BlueprintId blueprint_ids = 1;
 }
 
 message GetBlueprintsByIdResponse {
-	Blueprint blueprints = 1;
+	repeated Blueprint blueprints = 1;
 }
 
 message GetLicenseRequirementsRequest {}
 
 message GetLicenseRequirementsResponse {
 	repeated string owned_licenses = 1;
-	MapEntryRequirement map_entry_requirements = 2;
+	repeated MapEntryRequirement map_entry_requirements = 2;
 }
 
 message GetOwnedPlayElementsRequest {
@@ -338,11 +338,11 @@ message GetOwnedPlayElementsRequest {
 }
 
 message GetOwnedPlayElementsResponse {
-	PlayElement play_elements = 1;
+	repeated PlayElement play_elements = 1;
 }
 
 message GetOwnedPlayElementsResponseV2 {
-	EnrichedPlayElement play_elements = 1;
+	repeated EnrichedPlayElement play_elements = 1;
 }
 
 message GetPlayElementRequest {
@@ -353,13 +353,13 @@ message GetPlayElementRequest {
 message GetProgressionTypesRequest {}
 
 message GetProgressionTypesResponse {
-	ProgressionEntry entries = 1;
+	repeated ProgressionEntry entries = 1;
 }
 
 message GetScheduledBlueprintsRequest {}
 
 message GetScheduledBlueprintsResponse {
-	BlueprintId blueprint_ids = 1;
+	repeated BlueprintId blueprint_ids = 1;
 }
 
 message GetTranslationsRequest {
@@ -369,7 +369,7 @@ message GetTranslationsRequest {
 }
 
 message GetTranslationsResponse {
-	LocalizedText localized_texts = 1;
+	repeated LocalizedText localized_texts = 1;
 	Timestamp fetched_until = 2;
 }
 
@@ -397,12 +397,12 @@ message InternalTeamStructure {
 }
 
 message ListExperiencesRequest {
-	repeated int32 filter = 3;
+	int32 filter = 3;
 	Pagination page = 4;
 }
 
 message ListExperiencesResponse {
-	PlayExperience experiences = 1;
+	repeated PlayExperience experiences = 1;
 	Pagination next_page = 2;
 }
 
@@ -411,7 +411,7 @@ message ListModDataVersionsRequest {
 }
 
 message ListModDataVersionsResponse {
-	ModDataVersion mod_data_versions = 1;
+	repeated ModDataVersion mod_data_versions = 1;
 }
 
 message LocalizedText {
@@ -427,7 +427,7 @@ message MapEntry {
 	int32 allowed_spectators = 4;
 	TeamComposition team_composition = 5;
 	BlazeGameSettings blaze_game_settings = 6;
-	Mutator mutators = 7;
+	repeated Mutator mutators = 7;
 	GameServerJoinabilitySettings game_server_joinability_settings = 8;
 }
 
@@ -438,7 +438,7 @@ message MapEntryRequirement {
 }
 
 message MapRotation {
-	MapEntry maps = 1;
+	repeated MapEntry maps = 1;
 	MapRotationAttributes attributes = 2;
 }
 
@@ -447,8 +447,8 @@ message MapRotationAttributes {
 }
 
 message Metadata {
-	TranslationMetadata translations = 1;
-	Resource resources = 2;
+	repeated TranslationMetadata translations = 1;
+	repeated Resource resources = 2;
 }
 
 message ModDataVersion {
@@ -523,13 +523,13 @@ message MutatorKind {
 message MutatorSparseBoolean {
 	bool default_value = 1;
 	uint32 size = 2;
-	MutatorSparseBooleanEntry sparse_values = 3;
+	repeated MutatorSparseBooleanEntry sparse_values = 3;
 }
 
 message MutatorSparseBooleanAvailable {
 	bool default_value = 1;
 	uint32 size = 2;
-	MutatorSparseBooleanEntryAvailable sparse_values = 3;
+	repeated MutatorSparseBooleanEntryAvailable sparse_values = 3;
 }
 
 message MutatorSparseBooleanEntry {
@@ -545,13 +545,13 @@ message MutatorSparseBooleanEntryAvailable {
 message MutatorSparseFloat {
 	float default_value = 1;
 	uint32 size = 2;
-	MutatorSparseFloatEntry sparse_values = 3;
+	repeated MutatorSparseFloatEntry sparse_values = 3;
 }
 
 message MutatorSparseFloatAvailable {
 	float default_value = 1;
 	uint32 size = 2;
-	MutatorSparseFloatEntryAvailable sparse_values = 3;
+	repeated MutatorSparseFloatEntryAvailable sparse_values = 3;
 }
 
 message MutatorSparseFloatEntry {
@@ -567,13 +567,13 @@ message MutatorSparseFloatEntryAvailable {
 message MutatorSparseInt {
 	int32 default_value = 1;
 	uint32 size = 2;
-	MutatorSparseIntEntry sparse_values = 3;
+	repeated MutatorSparseIntEntry sparse_values = 3;
 }
 
 message MutatorSparseIntAvailable {
 	int32 default_value = 1;
 	uint32 size = 2;
-	MutatorSparseIntEntryAvailable sparse_values = 3;
+	repeated MutatorSparseIntEntryAvailable sparse_values = 3;
 }
 
 message MutatorSparseIntEntry {
@@ -626,14 +626,14 @@ message PlayElementDesign {
 	Timestamp created = 4;
 	DesignMetadata design_metadata = 5;
 	MapRotation map_rotation = 6;
-	Mutator mutators = 7;
-	AssetCategory asset_categories = 8;
+	repeated Mutator mutators = 7;
+	repeated AssetCategory asset_categories = 8;
 	repeated string license_requirements = 9;
 	ModRules mod_rules = 10;
-	Tag tags = 12;
+	repeated Tag tags = 12;
 	BlazePlayElementDesignSettings blaze_settings = 13;
 	StringValue mod_level_data_id = 14;
-	Attachment attachments = 15;
+	repeated Attachment attachments = 15;
 	repeated string group_licenses = 16;
 	int32 attachment_compile_status = 17;
 	repeated string server_host_license_requirements = 18;
@@ -647,7 +647,7 @@ message PlayElementResponse {
 
 message PlayElementSettings {
 	StringValue secret = 1;
-	GameServerMessage messages = 2;
+	repeated GameServerMessage messages = 2;
 	bool allow_copies = 3;
 }
 
@@ -663,7 +663,7 @@ message PlayExperience {
 	Timestamp created = 9;
 	Timestamp updated = 10;
 	MapRotation map_rotation = 11;
-	Tag tags = 12;
+	repeated Tag tags = 12;
 	bool is_premium = 13;
 }
 
@@ -700,7 +700,7 @@ message Prefab {
 
 message ProgressionEntry {
 	string progression_mode = 1;
-	Mutator progressibles = 2;
+	repeated Mutator progressibles = 2;
 }
 
 message ProtocolVersionOverride {
@@ -769,8 +769,8 @@ message Tag {
 }
 
 message TeamComposition {
-	TeamStructure teams = 1;
-	InternalTeamStructure internal_teams = 2;
+	repeated TeamStructure teams = 1;
+	repeated InternalTeamStructure internal_teams = 2;
 	int32 balancing_method = 3;
 }
 
@@ -795,8 +795,8 @@ message TranslationMetadata {
 
 message TranslationsQuery {
 	SidList sid_list = 1;
-	repeated int32 category_id_list = 2;
-	repeated int32 sub_category_id_list = 3;
+	int32 category_id_list = 2;
+	int32 sub_category_id_list = 3;
 }
 
 message Uncompressed {
@@ -810,14 +810,14 @@ message UpdatePlayElementRequest {
 	StringValue description = 3;
 	DesignMetadata design_metadata = 4;
 	MapRotation map_rotation = 5;
-	Mutator mutators = 6;
-	AssetCategory asset_categories = 7;
+	repeated Mutator mutators = 6;
+	repeated AssetCategory asset_categories = 7;
 	bytes original_mod_rules = 8;
 	PlayElementSettings play_element_settings = 10;
 	int32 publish_state = 11;
 	StringValue mod_level_data_id = 12;
 	StringValue thumbnail_url = 13;
-	Attachment attachments = 14;
+	repeated Attachment attachments = 14;
 }
 
 message UploadExperienceThumbnailRequest {
