@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package santiago.web.play;
 
-import "santiago/common/all.proto";
+import "santiago/common/generated.proto";
 
 service WebPlay {
   rpc createPlayElement(santiago.common.CreatePlayElementRequest)

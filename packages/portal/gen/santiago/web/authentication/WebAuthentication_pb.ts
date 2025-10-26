@@ -6,14 +6,14 @@ import type { GenFile, GenService } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { EmptySchema } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_empty } from "@bufbuild/protobuf/wkt";
-import type { AuthCodeAuthenticationSchema, AuthenticationResponseSchema } from "../../common/all_pb";
-import { file_santiago_common_all } from "../../common/all_pb";
+import type { AuthCodeAuthenticationSchema, AuthenticationResponseSchema } from "../../common/generated_pb";
+import { file_santiago_common_generated } from "../../common/generated_pb";
 
 /**
  * Describes the file santiago/web/authentication/WebAuthentication.proto.
  */
 export const file_santiago_web_authentication_WebAuthentication: GenFile = /*@__PURE__*/
-  fileDesc("CjNzYW50aWFnby93ZWIvYXV0aGVudGljYXRpb24vV2ViQXV0aGVudGljYXRpb24ucHJvdG8SG3NhbnRpYWdvLndlYi5hdXRoZW50aWNhdGlvbjKuAQoRV2ViQXV0aGVudGljYXRpb24SXwoLdmlhQXV0aENvZGUSJy5zYW50aWFnby5jb21tb24uQXV0aENvZGVBdXRoZW50aWNhdGlvbhonLnNhbnRpYWdvLmNvbW1vbi5BdXRoZW50aWNhdGlvblJlc3BvbnNlEjgKBmxvZ291dBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eWIGcHJvdG8z", [file_google_protobuf_empty, file_santiago_common_all]);
+  fileDesc("CjNzYW50aWFnby93ZWIvYXV0aGVudGljYXRpb24vV2ViQXV0aGVudGljYXRpb24ucHJvdG8SG3NhbnRpYWdvLndlYi5hdXRoZW50aWNhdGlvbjKuAQoRV2ViQXV0aGVudGljYXRpb24SXwoLdmlhQXV0aENvZGUSJy5zYW50aWFnby5jb21tb24uQXV0aENvZGVBdXRoZW50aWNhdGlvbhonLnNhbnRpYWdvLmNvbW1vbi5BdXRoZW50aWNhdGlvblJlc3BvbnNlEjgKBmxvZ291dBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eWIGcHJvdG8z", [file_google_protobuf_empty, file_santiago_common_generated]);
 
 /**
  * @generated from service santiago.web.authentication.WebAuthentication

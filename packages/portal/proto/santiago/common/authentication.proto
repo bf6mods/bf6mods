@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package santiago.common;
+
+import "santiago/common/generated.proto";
+
+message EmailAuthentication {
+  string email = 1;
+  StringValue password = 2; // could also be a one-time token depending on flow
+  int32 platform = 3;
+  StringValue redirect_uri = 4;
+  StringValue patch_version = 5;
+  StringValue protocol_version = 6;
+}

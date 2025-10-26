@@ -1,11 +1,15 @@
 syntax = "proto3";
 
-package santiago.web.authentication;
+package santiago.client.authentication;
 
 import "google/protobuf/empty.proto";
 import "santiago/common/generated.proto";
+import "santiago/common/authentication.proto";
 
-service WebAuthentication {
+service ClientAuthentication {
+  rpc viaEmail(santiago.common.EmailAuthentication)
+      returns (santiago.common.AuthenticationResponse);
+
   rpc viaAuthCode(santiago.common.AuthCodeAuthentication)
       returns (santiago.common.AuthenticationResponse);
 

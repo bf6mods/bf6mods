@@ -9,6 +9,7 @@ import { init, installDependencies, templates } from "./init.js";
 import { Bf6Logger } from "./log.ts";
 import { prepare } from "./prepare.js";
 import { printToConsole, readableList } from "./utils.ts";
+import { deploy } from "./deploy.ts";
 
 const program = new Command();
 
@@ -83,7 +84,7 @@ program
 	.argument("<output>")
 	.option("--no-install-dependencies", `Prevents install of dependencies`)
 	.description("decompiles the json config of a mod into a new project")
-	.action(async (input, output, options) => {
+	.action(async (input, output, options: { installDependencies: boolean }) => {
 		await importFile(input as string, output as string, undefined, true);
 		if (options?.installDependencies) installDependencies(output);
 	});
@@ -96,6 +97,15 @@ program
 		const logger = new Bf6Logger(input);
 		logger.start();
 	});
+
+program
+	.command("deploy")
+	.argument("<input>")
+	.option("--auth-code", `The auth code to use when deploying`)
+	.description("deploys your mod for you, if unauthenticated, it requests reauthentication")
+	.action(async (input, options) => {
+		await deploy(input, options?.authCode);
+	})
 
 program.exitOverride((_err) => {
 	if (process.env.EXIT_CODE === "none") process.exit(0);

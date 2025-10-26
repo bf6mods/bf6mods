@@ -28,6 +28,7 @@
 	},
 	"dependencies": {
 		"@bf6mods/sdk": "*",
+		"@bf6mods/portal": "*",
 		"@clack/prompts": "^0.11.0",
 		"chokidar": "^4.0.3",
 		"colors": "^1.4.0",
