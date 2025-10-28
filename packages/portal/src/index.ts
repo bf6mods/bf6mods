@@ -1,11 +1,11 @@
 import { createClient } from "@connectrpc/connect";
-import { WebPlay } from "../gen/santiago/web/play/WebPlay_pb";
-import { WebAuthentication } from "../gen/santiago/web/authentication/WebAuthentication_pb";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
+import { WebAuthentication } from "../gen/santiago/web/authentication/WebAuthentication_pb";
+import { WebPlay } from "../gen/santiago/web/play/WebPlay_pb";
 
+export * as Generated_pb from "../gen/santiago/common/generated_pb";
 export * as WebAuthentication_pb from "../gen/santiago/web/authentication/WebAuthentication_pb";
 export * as WebPlay_pb from "../gen/santiago/web/play/WebPlay_pb";
-export * as Generated_pb from '../gen/santiago/common/generated_pb';
 
 /**
  * Here is an example of using this to query for playelements and returning them
@@ -28,17 +28,25 @@ export * as Generated_pb from '../gen/santiago/common/generated_pb';
  * console.log('playElement:', playElement);
  * ```
  */
-export async function createClients(getAuthSession: (() => Promise<string> | string) | string) {
-	const session = typeof getAuthSession === 'string' ? getAuthSession : await getAuthSession();
+export async function createClients(
+	getAuthSession: (() => Promise<string> | string) | string,
+) {
+	const session =
+		typeof getAuthSession === "string"
+			? getAuthSession
+			: await getAuthSession();
 	const transport = createGrpcWebTransport({
 		baseUrl: "https://santiago-prod-wgw-envoy.ops.dice.se",
 		interceptors: [
-			next => async req => {
-				req.header.set("x-dice-tenancy", "prod_default-prod_default-santiago-common");
+			(next) => async (req) => {
+				req.header.set(
+					"x-dice-tenancy",
+					"prod_default-prod_default-santiago-common",
+				);
 				req.header.set("x-gateway-session-id", session);
 				return next(req);
-			}
-		]
+			},
+		],
 	});
 
 	return {

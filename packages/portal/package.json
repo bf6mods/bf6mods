@@ -20,7 +20,7 @@
 	"scripts": {
 		"build": "tsdown",
 		"generate": "buf generate",
-		"start": "tsx src/index.ts",
+		"start": "tsx src/index.ts"
 	},
 	"keywords": [
 		"bf6",

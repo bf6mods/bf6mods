@@ -12,7 +12,8 @@
 			"!**/dist",
 			"!packages/sdk/src/mod",
 			"!packages/sdk/src/modlib",
-			"!packages/*/tests/resources"
+			"!tests/resources",
+			"!packages/portal/gen"
 		],
 		"ignoreUnknown": false
 	},

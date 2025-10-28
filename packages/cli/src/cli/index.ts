@@ -3,13 +3,13 @@ import colors from "colors";
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build/index.ts";
+import { deploy } from "./deploy.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies, templates } from "./init.js";
 import { Bf6Logger } from "./log.ts";
 import { prepare } from "./prepare.js";
 import { printToConsole, readableList } from "./utils.ts";
-import { deploy } from "./deploy.ts";
 
 const program = new Command();
 
@@ -102,10 +102,12 @@ program
 	.command("deploy")
 	.argument("<input>")
 	.option("--auth-code", `The auth code to use when deploying`)
-	.description("deploys your mod for you, if unauthenticated, it requests reauthentication")
+	.description(
+		"deploys your mod for you, if unauthenticated, it requests reauthentication",
+	)
 	.action(async (input, options) => {
 		await deploy(input, options?.authCode);
-	})
+	});
 
 program.exitOverride((_err) => {
 	if (process.env.EXIT_CODE === "none") process.exit(0);
