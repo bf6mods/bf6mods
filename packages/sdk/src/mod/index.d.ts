@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated automatically. Do *NOT* modify the contents of this file.
-// Version: 1.0.1.0
+// Version: 1.1.1.0
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +39,11 @@ declare namespace mod {
     const EmplacementSpawnerSymbol: unique symbol;
     export type EmplacementSpawner = { _opaque: typeof EmplacementSpawnerSymbol };
 
+    // export type Global = never;
+    // export type Global = Any;
+    const GlobalSymbol: unique symbol;
+    export type Global = { _opaque: typeof GlobalSymbol };
+
     // export type HQ = never;
     // export type HQ = Any;
     const HQSymbol: unique symbol;
@@ -48,6 +53,11 @@ declare namespace mod {
     // export type InteractPoint = Any;
     const InteractPointSymbol: unique symbol;
     export type InteractPoint = { _opaque: typeof InteractPointSymbol };
+
+    // export type LootSpawner = never;
+    // export type LootSpawner = Any;
+    const LootSpawnerSymbol: unique symbol;
+    export type LootSpawner = { _opaque: typeof LootSpawnerSymbol };
 
     // export type MCOM = never;
     // export type MCOM = Any;
@@ -68,6 +78,11 @@ declare namespace mod {
     // export type PortalEnum = Any;
     const PortalEnumSymbol: unique symbol;
     export type PortalEnum = { _opaque: typeof PortalEnumSymbol };
+
+    // export type RingOfFire = never;
+    // export type RingOfFire = Any;
+    const RingOfFireSymbol: unique symbol;
+    export type RingOfFire = { _opaque: typeof RingOfFireSymbol };
 
     // export type SFX = never;
     // export type SFX = Any;
@@ -133,7 +148,6 @@ declare namespace mod {
     // export type Variable = Any;
     const VariableSymbol: unique symbol;
     export type Variable = { _opaque: typeof VariableSymbol };
-
     // export type Vector = never;
     // export type Vector = Any;
     const VectorSymbol: unique symbol;
@@ -171,13 +185,16 @@ declare namespace mod {
 
     //------------------------
     export type Object =
+        | Global
         | AreaTrigger
         | CapturePoint
         | EmplacementSpawner
         | HQ
         | InteractPoint
+        | LootSpawner
         | MCOM
         | Player
+        | RingOfFire
         | ScreenEffect
         | Sector
         | SFX
@@ -195,11 +212,16 @@ declare namespace mod {
     export const stringkeys: Any;
     export enum AmmoTypes {
         AR_Carbine_Ammo,
-        Backpack_Ammo,
-        Launcher_Ammo,
+        Armor_Plate,
         LMG_Ammo,
         Pistol_SMG_Ammo,
+        Shotgun_Ammo,
         Sniper_DMR_Ammo,
+    }
+    export enum ArmorTypes {
+        CeramicArmor,
+        NoArmor,
+        SoftArmor,
     }
     export enum Cameras {
         FirstPerson,
@@ -218,6 +240,13 @@ declare namespace mod {
         PaxArmata,
     }
     export enum Gadgets {
+        CallIn_Air_Strike,
+        CallIn_Ammo_Drop,
+        CallIn_Anti_Vehicle_Drop,
+        CallIn_Artillery_Strike,
+        CallIn_Smoke_Screen,
+        CallIn_UAV_Overwatch,
+        CallIn_Weapon_Drop,
         Class_Adrenaline_Injector,
         Class_Motion_Sensor,
         Class_Repair_Tool,
@@ -266,6 +295,7 @@ declare namespace mod {
         Throwable_Throwing_Knife,
     }
     export enum InventorySlots {
+        Callins,
         ClassGadget,
         GadgetOne,
         GadgetTwo,
@@ -278,6 +308,7 @@ declare namespace mod {
     export enum Maps {
         Abbasid,
         Aftermath,
+        Badlands,
         Battery,
         Capstone,
         Dumbo,
@@ -286,6 +317,8 @@ declare namespace mod {
         Outskirts,
         Tungsten,
     }
+    export enum MeleeWeapons {}
+    export enum MiscGadgets {}
     export enum MoveSpeed {
         InvestigateRun,
         InvestigateSlowWalk,
@@ -325,6 +358,7 @@ declare namespace mod {
         Squad,
         TeamId,
     }
+    export enum PrimaryWeapons {}
     export enum RestrictedInputs {
         CameraPitch,
         CameraYaw,
@@ -420,7 +454,6 @@ declare namespace mod {
         BarrelBurned_01,
         BarrelOil_01_B,
         BarrelOil_01_D,
-        BarrelOilFire_01,
         BarricadeboardsWood_01_A,
         BarricadeboardsWood_01_B,
         BarrierConcreteWall_01_192x320,
@@ -494,10 +527,8 @@ declare namespace mod {
         BR_SoukFacade_01_1280x1152_NonGameplay,
         BrickPileLarge_01,
         BrickPileSmall_01,
-        BroadleafUrban_01_L_A,
         BroadleafUrban_01_L_B,
         BroadleafUrban_01_M_A,
-        BroadleafUrban_01_M_B,
         BrokenAsphaltRidge_01,
         BrokenAsphaltRidge_02_B,
         BrokenAsphaltRidge_03_B,
@@ -629,8 +660,6 @@ declare namespace mod {
         CerealBoxShe01,
         ChairFolding_01_A,
         ChairFolding_01_B,
-        ChairPlastic_01_A,
-        ChairPlastic_01_B,
         ChairWooden_01_A,
         ChairWooden_01_B,
         Cinderblock_01,
@@ -652,9 +681,6 @@ declare namespace mod {
         ClothHangingStatic_01,
         ClothHangingStatic_02,
         CoffeeCarafe_01,
-        CommandPost_01_A,
-        CommandPost_01_DoorFront,
-        CommandPost_01_DoorRear,
         CommercialWasher_01,
         ComputerMonitor_01,
         ComputerMouseKeyboard_01,
@@ -1772,19 +1798,17 @@ declare namespace mod {
         AsphaltBroken_01_512x256,
         AsphaltBroken_01_512x512,
         AsphaltBrokenThick_01_512x512,
-        AsphaltChunks_01,
+        AsphaltChunks_01_Snow,
         AsphaltChunks_02,
         AsphaltChunks_03,
         AwningCommercial_02,
         Backpack_01,
         BackroomStorageShe01,
-        BallGo01,
         BannerPole_01,
         BannerWall_01,
         BarCounter_02,
         BarebulbPendant_01,
         BarrelLabratory_01_115,
-        BarrelOil_01_A,
         BarrelOil_01_C,
         BarrelOil_01_D,
         BarrelOil_01_group_04,
@@ -1807,7 +1831,6 @@ declare namespace mod {
         BarrierPlastic_01,
         BarriersPedestrian_01_A,
         BarStool_01,
-        Basketball_01,
         BasketballNet_01,
         BasketWicker_01,
         BeamRefinery_01_B_32x32x256,
@@ -1863,9 +1886,10 @@ declare namespace mod {
         BoxesCardboardStack_01_A,
         BoxesCardboardStack_02_A,
         BoxesCardboardStack_02_C,
-        BoxesCardboardStack_03_A,
+        BoxesCardboardStack_03_A_Snow,
         BoxesCardboardStack_03_B,
         BoxesCardboardStackSmall_01,
+        BoxesCardboardStackSmall_01_A_Snow,
         BoxesPallet_01,
         BoxShoe_01,
         BoxWood_01,
@@ -2023,7 +2047,6 @@ declare namespace mod {
         ChainLinkFence_01_313,
         ChairCamping_01,
         ChairFolding_01_A,
-        ChairPlastic_01_A,
         Cinderblock_01,
         CinderblockStack_01_B_61_01,
         CinderblockWall_01_256x120x192,
@@ -2043,7 +2066,6 @@ declare namespace mod {
         CoffeeShopStool_01_A,
         CoffeeShopStool_01_B,
         CollapsibleTable_01,
-        CommandPost_01_A,
         Commercial_Modern_Building_03_B,
         Commercial_Modern_Building_04_B,
         CommercialStoreDoorsFrame_01_256,
@@ -2058,8 +2080,6 @@ declare namespace mod {
         ConcreteCover_06,
         ConcreteLedge_01_Straight_128x18x32,
         ConcreteParkingBlock_01,
-        ConcretePipe_01_512x160,
-        ConcretePipe_01_512x256,
         ConcreteRubble_512,
         ConcreteRubbleSlab_01,
         ConcreteRubbleSlab_02,
@@ -2078,8 +2098,6 @@ declare namespace mod {
         ConstructionFloorConcrete_01_256x64x256,
         ConstructionFloorConcrete_01_512x64x256,
         ConstructionFloorConcrete_01_512x64x512,
-        ConstructionSetDoorwayConcrete_01_256x512x64,
-        ConstructionSetPillar_01_C_96x512x96,
         ConstructionSiteStair_01,
         ConstructionTarps_01_A_512x512_grey,
         ConstructionWallConcrete_01_256x512x64,
@@ -2117,20 +2135,21 @@ declare namespace mod {
         Crate_04_CineM01,
         CrateMetal_01_C,
         CrateMetal_02,
-        CrateMetal_03,
+        CrateMetal_03_Snow,
         CratePack_05,
+        CratePack_05_Snow,
         CratePack_07,
         CratePallet_01,
         CratePallet_02_B,
-        CratePile_01,
+        CratePile_01_Snow,
         CratePlastic_02,
         CrateWood_01_A,
         CrateWood_01_C,
         CrateWood_01_D,
         CrateWood_01_E,
-        CrateWooden_02,
         CrateWooden_02_B,
-        CrateWoodenPack_01,
+        CrateWooden_02_Snow,
+        CrateWoodenPack_01_Snow,
         Cup_01,
         CurbCurve_01_C90,
         CurbCurve_01_CC11,
@@ -2208,8 +2227,8 @@ declare namespace mod {
         ElevatorShaft_01,
         EmergencyKitBag_01,
         EucalyptusSilverDollar_01_M,
-        EucalyptusSilverDollarPotted_01_M_A,
-        EucalyptusSilverDollarPotted_01_M_B,
+        EucalyptusSilverDollarPotted_01_M_A_Snow,
+        EucalyptusSilverDollarPotted_01_M_B_Snow,
         EuonymusGreen_01_M_B,
         EuonymusGreen_01_S,
         Evacuated_01_Toolbox,
@@ -2600,7 +2619,7 @@ declare namespace mod {
         OilChimney_01_Pipe_S_Valve,
         Oleander_01_M,
         Oleander_01_S,
-        OleanderPotted_01_S,
+        OleanderPotted_01_S_A_Snow,
         OliveRussian_01_L_A_Burnt,
         Olympia_01,
         PaintBucket_01_A,
@@ -2609,10 +2628,11 @@ declare namespace mod {
         PaintBucket_02_A,
         PaintBucket_02_B,
         PalletAirDrop_01,
-        PalletBarrelDiesel_01_A,
+        PalletBarrelDiesel_01_B_Snow,
         PalletBarrelDiesel_01_C,
         PalletCardbox_02,
-        PalletMilitaryCrate_01,
+        PalletCardbox_02_Snow,
+        PalletMilitaryCrate_01_Snow,
         PalletWooden_01,
         PalletWooden_01_128x128,
         PalletWooden_02,
@@ -2621,7 +2641,7 @@ declare namespace mod {
         PalletWoodenPile_01_C,
         PalletWoodenPile_01_D,
         PalmMajesty_01_M,
-        PalmMajestyPotted_01_M_A,
+        PalmMajestyPotted_01_M_A_Snow,
         Panorama_01_LargeScaffolding,
         Panorama_01_RailingGlass_w256_h120,
         Panorama_01_Scaffolding_01,
@@ -2927,11 +2947,11 @@ declare namespace mod {
         Suitcase_02_B,
         Suitcase_02_C,
         Suitcase_02_D,
-        SuppliesPack_01,
-        SuppliesPack_02,
-        SuppliesPack_03,
-        SuppliesPack_04,
-        SuppliesPack_11,
+        SuppliesPack_01_Snow,
+        SuppliesPack_02_Snow,
+        SuppliesPack_03_Snow,
+        SuppliesPack_04_Snow,
+        SuppliesPack_11_Snow,
         SupplyCase_01_B,
         TableCamping_01,
         TableFoldable_01_A,
@@ -3070,7 +3090,6 @@ declare namespace mod {
         VanPassenger_01_Wreck_TireFlat,
         Vase_01,
         VentilationDrum_C90_01,
-        WalkwayLadder_512,
         WallCableVariation_03,
         WallCompoundGate_01,
         WallDecorPrint_01_25_A,
@@ -3125,8 +3144,8 @@ declare namespace mod {
         WaterTower_03,
         WeaponBoxes_01,
         WeaponBoxes_02,
-        WeaponCasesPack_02,
-        WeaponCasesPallet_01,
+        WeaponCasesPack_02_Snow,
+        WeaponCasesPallet_01_Snow,
         WelcomeSign_01_Destroyed_Debris_01,
         WhiteBoard_01,
         WindowAwning_01_6m,
@@ -3162,6 +3181,899 @@ declare namespace mod {
         WreckTruck_01_TruckBed_01,
         WreckTruck_01_WheelFlat_Right_01,
     }
+    export enum RuntimeSpawn_Badlands {
+        Abra01_Chassis,
+        Abra01_Tracks,
+        Abra01_Turret,
+        AbraCoveredTarp,
+        AcaciaUrban_01_S,
+        ACUnit_04,
+        ACUnit_04_Off,
+        ACUnitWindow_01_A,
+        ACUnitWindow_01_C,
+        ACUnitWindow_logo_01,
+        AftermathDebrisPileConcrete_Center_120,
+        AftermathDebrisPileConcrete_Center_120_B,
+        AftermathDebrisPileConcrete_Center_60,
+        AftermathDebrisPileConcrete_Center_60_B,
+        AftermathDebrisPileConcrete_Skew_120,
+        AftermathDebrisPileConcrete_Skew_120_B,
+        AftermathDebrisPileConcrete_Skew_210_C,
+        AftermathDebrisPileConcrete_Skew_210_E,
+        AftermathDebrisPileDrywall_Center_120_01,
+        AftermathDebrisPileDrywall_Center_120_01_B,
+        AftermathDebrisPileDrywall_Center_60_01,
+        AftermathDebrisPileDrywall_Center_60_01_B,
+        AftermathDebrisPileDrywall_Ramp_210_01,
+        AftermathDebrisPileDrywall_Ramp_210_01_B,
+        AirfieldBlastBarrier_01,
+        AlleyTrash_01,
+        AlleyTrash_02,
+        AntennaMast_01,
+        AntennaMastMetal_01,
+        AntennareciverMetal_01,
+        AntennaSmall_01_A,
+        AshTray_01_B,
+        AsphaltChunks_01,
+        AsphaltChunks_02,
+        Backpack_01_B,
+        Backpack_02,
+        Backpack_03,
+        Badlands_Flankbus,
+        BagTarp_01,
+        Barrack_01_A,
+        Barrack_01_A_Props,
+        Barrack_01_A_Props_B,
+        Barrack_01_A_Props_C,
+        Barrack_01_A_Props_D,
+        Barrack_01_A_Props_E,
+        Barrack_02_B_01_MP_Badlands,
+        Barrack_02_B_02_MP_Badlands,
+        Barrack_02_B_03_MP_Badlands,
+        Barrack_02_B_04_MP_Badlands,
+        Barrack_02_B_05_MP_Badlands,
+        Barrack_02_B_06_MP_Badlands,
+        Barrack_02_B_Props,
+        Barrack_02_B_Props_B,
+        Barrack_02_B_Props_C,
+        Barrack_02_B_Props_D,
+        Barrack_02_B_Props_E,
+        Barrack_02_B_Props_F,
+        BarrackCylindrical_AirStrip_01_Props,
+        BarrackCylindrical_AirStrip_01_Props_B_MP,
+        BarrackStair_01,
+        BarrelBurned_01,
+        BarrelOil_01_B,
+        BarrelOil_01_D,
+        BarrelOil_01_group_04,
+        BarrelOil_01_group_05,
+        BarrelOil_03,
+        BarrelOilExplosive_01_DDPF_B,
+        BarrierBlockConcrete_01_256x120,
+        BarrierBlockConcrete_01_256x60,
+        BarrierBlockConcrete_02_128_60,
+        BarrierBlockConcrete_03_128_120,
+        BarrierBlockConcreteRound_01,
+        BarrierConcreteWall_01_192x320,
+        BarrierConcreteWall_01_192x320_A_DDPF,
+        BarrierConstruction_01_256_120_B,
+        BarrierConstruction_01_256_120_DDPF,
+        BarrierJersey_01_256x124,
+        BarrierJersey_01_256x124_B,
+        BeachTrailStairs_01,
+        BenchWood_01,
+        Bin_01,
+        Bollard_01_A,
+        Bollard_02_A,
+        Boots_01,
+        BorderFence_01_2048,
+        BorderFence_01_512,
+        BorderFence_01_512_Angled,
+        BorderFenceDoorFrame_01,
+        BorderFencePole_02,
+        BorderFenceTarp_01_512,
+        BorderFenceVehicleGate_01,
+        Bottle_02,
+        BottleCrate_01_B,
+        BoxCardboard_01_C,
+        BoxCardboard_01_D,
+        BoxCardboard_01_E,
+        BoxCardboardStackSmall_01,
+        BoxesCardboardStack_01_B,
+        BoxesCardboardStack_01_D,
+        BoxesCardboardStack_02_A,
+        BoxesCardboardStack_02_C,
+        BoxesCardboardStack_03_B,
+        BoxesCardboardStackSmall_01,
+        BoxShoe_01,
+        Brick_01,
+        BroadleafUrban_01_L_B,
+        BroadleafUrban_01_M_A,
+        Broom_01,
+        Bucket_01,
+        Buckets_01_B,
+        BunkBedFrame_01_Bed,
+        BunkBedFrame_01_Frame,
+        BunkBedFrame_01_Pillow,
+        C17CrashPlane_CargoBaySeats_01,
+        C17CrashPlane_Engine_01,
+        C17CrashPlane_LandingGear_01,
+        CableElectric_01_128x128_Corner,
+        CableElectric_01_Straight_384,
+        CableFloor_01,
+        CableFloor_02,
+        CableFloor_03,
+        CableMess_01_A,
+        CableReel_01,
+        CableRoll_01,
+        CableTray_1024_04,
+        CableTray_256,
+        CableTray_256_End,
+        CableTray_512,
+        CableTray_Bend_90,
+        CameraSurveillance_01_A,
+        CanopyMetal_01_A,
+        CanopyMetal_01_B,
+        CanopyMetalFrame_01,
+        Car4x4_01,
+        Car4x4_01_Door_FrontLeft,
+        Car4x4_01_Door_FrontRight,
+        Car4x4_01_Door_RearLeft,
+        Car4x4_01_Door_RearRight,
+        Car4x4_01_Hood,
+        CarAmericanaTarped_01,
+        CarAmericanaTarped_01_B,
+        CarAmericanaTarped_01_C,
+        CarAmericanaTarped_02,
+        CarAmericanaTarped_02_B,
+        CarAmericanaTarped_02_C,
+        CarAmericanaTarped_03,
+        CarAmericanaTarped_03_B,
+        CarAmericanaTarped_03_C,
+        CarCompact_01_Wreck,
+        CarCompact_01_Wreck_B,
+        CarCompact_01_Wreck_Door_FrontLeft,
+        CarCompact_01_Wreck_Door_FrontRight,
+        CarCompact_01_Wreck_Door_RearLeft,
+        CarCompact_01_Wreck_Door_RearRight,
+        CarCompact_01_Wreck_Hood,
+        CarCompact_01_Wreck_Rim,
+        CarCompact_01_Wreck_Rimwire,
+        CarCompact_01_Wreck_Trunk,
+        CardboardBox_02_A,
+        CardboardBox_02_B,
+        CardboardBox_02_C,
+        CardboardBox_02_D,
+        CardboardBox_02_E,
+        CardboardBox_02_F,
+        CardboardBoxes_01_B,
+        CardboardTrashPile_01_A,
+        CardboardTrashPile_01_B,
+        CardboxPalletPile_01,
+        CargoTrailerCovered_01_Wheel,
+        CargoTrailerCovered_01_Wheel_DDPF,
+        CarLift_01,
+        CarRamp_01_NBRK,
+        CarSedan_01_Wreck,
+        CarSedan_01_Wreck_B,
+        CarSedan_01_Wreck_Door_FrontLeft,
+        CarSedan_01_Wreck_Door_FrontRight,
+        CarSedan_01_Wreck_Door_RearLeft,
+        CarSedan_01_Wreck_Hood,
+        CarSedan_01_Wreck_Rim,
+        CarSedan_01_Wreck_TireCable,
+        CarSedan_01_Wreck_Trunk,
+        CarSedan_03_Wreck,
+        CarSedan_03_Wreck_B,
+        CarSedan_03_Wreck_Door_FrontLeft,
+        CarSedan_03_Wreck_Door_FrontRight,
+        CarSedan_03_Wreck_Door_RearLeft,
+        CarSedan_03_Wreck_Door_RearRight,
+        CarSedan_03_Wreck_Hood,
+        CarSedan_03_Wreck_Rim,
+        CarSedan_03_Wreck_Tire,
+        CarSedan_03_Wreck_Trunk,
+        CarSUV_01,
+        CarSUV_01_Door_FrontLeft,
+        CarSUV_01_Door_FrontRight,
+        CarSUV_01_Door_RearLeft,
+        CarSUV_01_Door_RearRight,
+        CarSUV_01_Hood,
+        CarSUV_01_Wreck,
+        CarSUV_01_Wreck_B,
+        CarSUV_01_Wreck_Door_FrontLeft,
+        CarSUV_01_Wreck_Door_FrontRight,
+        CarSUV_01_Wreck_Door_Hood,
+        CarSUV_01_Wreck_Door_RearLeft,
+        CarSUV_01_Wreck_Door_RearRight,
+        CarSUV_01_Wreck_Door_Trunk,
+        CarSUV_01_Wreck_Rim,
+        CarSUV_01_Wreck_Tire_A,
+        Cart_01,
+        CeilingFan_01_animatedSlow,
+        ChainLinkFence_01_313,
+        ChainLinkFence_01_512,
+        ChainLinkFenceTarp_01_512,
+        ChairCamping_01,
+        ChairFolding_01_A,
+        ChairFolding_01_B,
+        Cinderblock_01,
+        Cliff_M_02,
+        ClothesPile_01_B,
+        CoffeeCarafe_01,
+        CoffeeCup_01_B,
+        CollapsibleTable_01,
+        ComputerMonitor_01,
+        ComputerMouseKeyboard_01,
+        ConcreteDebrisPileBase_512x128_01,
+        ConcreteFoundation_01_192x384,
+        ConcreteFoundation_01_192x384_CCW90,
+        ConcreteFoundation_01_192x384_CCW90_B,
+        ConcreteFoundation_01_384x384,
+        ConcreteFoundation_01_384x384_B,
+        ConcreteFoundation_01_768x384_B,
+        ConcreteFoundationMetalRailing_01_192_384,
+        ConcreteFoundationMetalRailing_01_192x384_CCW90,
+        ConcreteFoundationMetalRailing_01_384x384,
+        ConcreteFoundationMetalRailing_01_768x384,
+        ConcreteRubblePile_01,
+        Construction_CableRolls_02,
+        Construction_WoodStack_02,
+        ConstructionBarrierSet_01_C,
+        ConstructionHangingTarps_01_A,
+        ConstructionHangingTarps_01_B,
+        ConstructionHangingTarps_01_E,
+        Container_02_Open_D,
+        ContainerBox_02,
+        ContainerBox_02_DDPF,
+        ContainerStandard_01_640,
+        ContainerStandard_01_640_Occluder,
+        ContainerStandard_Damaged_01_1280,
+        ContainerStandard_Damaged_01_1304,
+        ContainerStandard_Damaged_02_1304,
+        ContainerStandardDoor_Left_01,
+        ContainerStandardDoor_Right_01,
+        ContainerStandardOpen_01_640_A,
+        ContainerStandardOpen_01_640_C,
+        ContainerStandardOpen_01_640_D,
+        ContainerTrash_01,
+        Cooler_01,
+        CopperSpool_01,
+        CoveredFurniture_01_A,
+        CoveredFurniture_01_C,
+        CoverMedium_01,
+        CoverMedium_02,
+        CoverMedium_05,
+        CoverMedium_06,
+        CraneJibBillboardDebrisPile_01,
+        Crate_01_B,
+        Crate_02,
+        Crate_03_A,
+        Crate_04_B,
+        Crate_04_C,
+        CrateAmmo_02_B,
+        CrateAmmoPack_03,
+        CrateMetal_01_C,
+        CrateMetal_01_D,
+        CrateMetal_02,
+        CrateMetalWide_01_A,
+        CrateMetalWide_01_B,
+        CratePack_03,
+        CratePile_01,
+        CratePlastic_02,
+        Crater_AutopaintExample,
+        CraterMaker_Large_Hard,
+        CraterMaker_Medium_Hard,
+        CraterMaker_Medium_Soft,
+        CraterMaker_Small_Dynamic,
+        CraterMaker_Small_Hard,
+        CraterMaker_Small_Soft,
+        CrateWood_01_A,
+        CrateWooden_02,
+        CrateWooden_02_B,
+        CrateWoodenPack_01,
+        Cup_01,
+        CupCoffee_01,
+        DE_Dirt_01,
+        DE_Dirt_02,
+        DE_Dirt_05,
+        Dead_01_M_A,
+        Dead_01_M_C,
+        DeadBush_01_S_B,
+        DebrisPlank_01A,
+        DebrisWoodPile_05,
+        Decal_128x128_NoCollision,
+        Decal256x256,
+        DirtMoundLarge_01,
+        DirtPile_01_A,
+        DirtRidge_01_CC,
+        DirtRidge_01_CV,
+        DirtRidge_02,
+        DirtRidge_02_B,
+        DirtRidge_02_C,
+        DirtRidge_02_CC,
+        DirtRidge_02_CV,
+        Dressing_Trash_01,
+        Dressing_Trash_02,
+        Dressing_Trash_03,
+        Dressing_Trash_04,
+        Dressing_Trash_05,
+        Dufflebag_01,
+        Dufflebag_02,
+        Dufflebag_03,
+        Dufflebag_04,
+        Dufflebag_05,
+        Dumpster_01_A,
+        Dumpster_01_C,
+        Dumpster_01_Open,
+        Dumpster_02,
+        Dumpster_02_DDPF,
+        Dumpster_04_B,
+        Dumpster_04_DDPF,
+        DumpTruck_01,
+        DumpTruck_01_DoorLeft,
+        DumpTruck_01_DoorRight,
+        DumpTruck_01_DumpBed,
+        DumpTruck_01_DumpBedDoor,
+        DWWaterTank_01_Badlands,
+        EarthMoundLarge_01_B,
+        ElectricalBox_01,
+        ElectricalBox_04,
+        ElectricalBox_05,
+        ElectricalOutletSwitch_01_B,
+        ElectricBox_01_B,
+        ElectricBox_01_D,
+        ElectricBox_02_B,
+        EmergencyKitBag_01,
+        EntrancePrivate_01,
+        EucalyptusSugarGum_01_L,
+        Evacuated_01_SafetyVest,
+        Evacuated_01_Toolbox,
+        FenceMetal_01_256,
+        FenceMetal_01_512_A,
+        FenceMetalBarbwire_01_C_1024,
+        FenceMetalBarbwire_01_C_256,
+        FenceMetalBarbwire_01_C_512,
+        FencePlywoodPillar_01,
+        FencePlywoodStraight_01_1024,
+        FencePlywoodStraight_01_128,
+        FencePlywoodStraight_01_256_A,
+        FencePlywoodStraight_01_256_B,
+        FencePlywoodStraight_01_256_C,
+        FencePlywoodStraight_01_512,
+        FenceWood_02_1024,
+        FenceWood_02_256,
+        FenceWood_02_512,
+        FenceWood_02_Stick,
+        FilingCabinet_02,
+        FilingCabinet_02B,
+        FireExtinguisher_01,
+        Flashlight_01,
+        FlatbedTrailer_01_A,
+        FlatbedTrailer_01_Base,
+        FlatbedTrailer_01_Landing_Gear_01,
+        FloorPlate_01_128,
+        FloorPlate_01_256,
+        Forklift_01,
+        Forklift_01_DDPF,
+        FuelTrailer_01,
+        FX_GenDest_Rubble_Pile_Stone_L_GS,
+        FXSiloMedium_01,
+        GarbageCluster_01,
+        GarbageCluster_02_B,
+        GarbageCluster_03,
+        GarbageCluster_03_VFX,
+        GarbageCluster_04,
+        GarbageCluster_05,
+        GarbageCluster_Set_06,
+        GasCutter_01,
+        GasCutterTank_01,
+        GasCutterTank_01_DDPF,
+        GCar4x4_01,
+        GCarSUV_01,
+        GCarSUV_01_OpenDoors,
+        GDumpTruck_01_B,
+        GDumpTruck_01_D,
+        Generator_01,
+        Gloves_01,
+        GM1083CargoTruck_01,
+        GM1083CargoTruck_01_Bed,
+        GM1083CargoTruck_01_Bed_Cargo01,
+        GM1083CargoTruck_01_Canopy,
+        GM1083CargoTruck_01_Canopy_Cargo01,
+        GM1083CargoTruck_01_GasTank,
+        GMRAP_01,
+        GSemiTruck_01_EngineIdle,
+        GTruckPickup_01,
+        GTruckPickup_01_LightsOn,
+        Guard_Post,
+        GunsmithToolkit_01_Open,
+        GVanCargo_01,
+        HalfaGrass_01_M,
+        HalfaGrass_01_S,
+        Handcart_01,
+        Helmet_01,
+        HEMTT_01,
+        HEMTT_01_B,
+        HEMTT_01_Door_FrontLeft,
+        HEMTT_01_Door_FrontRight,
+        HEMTT_01_Wheel,
+        HescoBastionRoof_01,
+        HotBunzBurgerBox_01_Dirty,
+        HotBunzBurgerBox_01_Ruin,
+        HotBunzCup_01,
+        HotBunzFryBox_01,
+        IMM_CableTray_256_01_B,
+        IMM_CableTray_64_01_B,
+        IMM_CableTray_DiagonalDown_256_01,
+        IMM_CableTray_End_128_01,
+        IvyCapeLargeWall_01,
+        IvyCapeLargeWall_02,
+        IvyCapeLargeWall_03,
+        IvyCapeOuterCorner_01,
+        IvyCapeOuterCorner_02,
+        IvyCapeWall_01_M_A,
+        IvyCapeWall_01_M_B,
+        IvyCapeWall_01_M_C,
+        IvyCapeWall_01_M_D,
+        IvyCapeWall_01_M_E,
+        IvyCapeWall_01_M_F,
+        JerryCan_01_B,
+        Ladder_01,
+        LampPostStadium_01,
+        LandSlideRocks_02,
+        LandSlideRocks_03,
+        Laptop_01,
+        LemonadeBerry_01_L,
+        LemonadeBerryDead_01_L_B,
+        LICPLA_PlatesGrouped,
+        Lockers_01,
+        LunchBox_01,
+        M1083CargoTruck_01,
+        M1083CargoTruck_01_Bed,
+        M1083CargoTruck_01_Canopy,
+        M1083CargoTruck_01_Door_FrontLeft,
+        M1083CargoTruck_01_Door_FrontRight,
+        M1083CargoTruck_01_Hitch,
+        M1083CargoTruck_01_WheelDamage,
+        M1083CargoTruck_01_WheelPuncture,
+        MailBoxO01,
+        Manzanita_01_L,
+        Manzanita_01_M_A,
+        Manzanita_01_M_B,
+        Mattress_01,
+        MetalRack_01_3x2,
+        MetalRack_01_C,
+        MetalRailing_01_128,
+        MetalRailing_01_192,
+        MetalRailing_01_192_CCW90,
+        MetalRailing_01_256,
+        MetalRailing_01_768x384,
+        MetalRailingBroken_01,
+        MetalSign_01,
+        MeteringSkid_01,
+        MeteringSkid_01_B,
+        Military_Warehouse_Medium_04,
+        Military_Warehouse_Small_03,
+        MilitaryLocker_01,
+        MilkCrate_01,
+        MissileContainer_01_B,
+        MissileContainerStack_01_B,
+        MissileContainerStack_02_B,
+        MissileContainerStack_03,
+        MobileAntenna_01,
+        MRAP_01_B,
+        MRAP_01_CargoNet,
+        MRAP_01_FrontDoorL,
+        MRAP_01_FrontDoorR,
+        MRAP_01_RearDoorL,
+        MRAP_01_RearDoorR,
+        MRAP_01_RearSeat,
+        MRAP_01_WheelPuncture,
+        MudRidgeHuge_Straight_01,
+        MudRidgeHuge_Straight_02,
+        NASA01_A,
+        NASA01_B_UNGROUPED,
+        NASA01_F_UNGROUPED,
+        NASABase_01,
+        NASAHatch_01,
+        NASAMissileContainers_01,
+        NASAStrutsLong_01,
+        NASAStrutsLonger_01,
+        NASATurret_01,
+        OakShrub_01_S_B,
+        OB_PRJ_Missile_AIM9X,
+        OilPumpJackMid_03,
+        OilPumpJackNear_03,
+        OilPumpJackNearSkinned_03,
+        OilWell_01,
+        OilWell_01_Column,
+        OilWell_01_Pipes_1,
+        OilWell_01_Pipes_2,
+        OilWell_01_Pipes_3,
+        OliveUrban_01_M,
+        PaintBucket_01_A,
+        PaintBucket_01_B,
+        PaintBucket_01_C,
+        PaintBucket_02_A,
+        PalletAirDrop_01,
+        PalletBarrelDiesel_01_A,
+        PalletBarrelDiesel_01_B,
+        PalletBarrelDiesel_01_C,
+        PalletCardbox_02,
+        PalletCratePack_01,
+        PalletCratePack_01_Sand,
+        PalletCratePack_03,
+        PalletWooden_01,
+        PalletWooden_02,
+        PalletWoodenCrate_01,
+        PalletWoodenCrate_02,
+        PalletWoodenPile_01_B,
+        PalletWoodenPile_01_C,
+        PalletWoodenPile_01_D,
+        PanelMetal_01,
+        PaperPile_01,
+        PaperTrash_01,
+        ParkingBarrierGate_01,
+        ParticleBoard_01_big,
+        ParticleBoard_01_Medium,
+        ParticleBoard_01_Medium_B,
+        ParticleBoard_01_Pile_A1,
+        ParticleBoard_01_Pile_B1,
+        ParticleBoard_01_Small,
+        ParticleBoard_01_Small_B,
+        PCBox_01,
+        PileGravelDirt_01,
+        PilePlanks_02,
+        PilePlanks_02_DDPF,
+        PineTorrey_01_L,
+        PineTorrey_01_M,
+        PipeMetalStack_01_A,
+        PipeMetalStack_01_A_DDPF,
+        PipeOilFie01_1024_A,
+        PipeOilFie01_1024_B,
+        PipeOilFie01_128,
+        PipeOilFie01_128_B,
+        PipeOilFie01_256_A,
+        PipeOilFie01_256_A_Thin,
+        PipeOilFie01_256_B,
+        PipeOilFie01_32,
+        PipeOilFie01_512_A,
+        PipeOilFie01_512_B,
+        PipeOilFie01_64,
+        PipeOilFie01_C45_A,
+        PipeOilFie01_C45_B,
+        PipeOilFie01_C90_A,
+        PipeOilFie01_C90_A_Thin,
+        PipeOilFie01_C90_B,
+        PipeOilFie01_Connector_Assembler,
+        PipeOilFie01_Connector_Assembler_B,
+        PipeOilFie01_Connector_Assembler_C,
+        PipeOilFie01_Meter,
+        PipeOilFieldAdapter_01,
+        PipeOilFieldHigh_01_A,
+        PipeOilFieldHigh_01_B,
+        PipeOilFieldSupport_01_A,
+        PipeOilFieldSupport_01_B,
+        PipeOilFieldTee_01,
+        PipeOilFieldValve_01_A,
+        PipeOilFieldValve_01_B,
+        PipeOilFieldValve_01_C,
+        PipeOilFieldValve_01_D,
+        PipeShip_01_512,
+        PipeShip_01_C90,
+        PipeShipTurningCap_01,
+        PipeShipTurningHandle_01,
+        PipeValve_01,
+        PizzaBox_01,
+        Pizzabox_01_Open,
+        PizzaWhole_01_B,
+        PlankPile_01,
+        PlankStackBeamSingle_01_320,
+        PlankStackBeamsLow_01_320x60x128,
+        PlankStackDebris_01,
+        PlankStackDebris_01_DDPF,
+        PlankStackHigh_01_512x180x128,
+        PlankStackHigh_01_512x180x128_DDPF,
+        PlankStackMedium_01_512x120x128,
+        PlankStackMedium_01_512x120x128_DDPF,
+        PlankStackSingle_01_320,
+        PlywoodBoards_01,
+        PortableDieselEngine_01,
+        PortableLamp_Rect_02,
+        PortableToilet_01,
+        PortaPotty_01,
+        Pouch_01,
+        Pouch_02,
+        Pouch_03,
+        Pouch_04,
+        Powerbox_A_02,
+        PowerLinePole_01,
+        PowerlineRural_01_A_Single,
+        PowerlineRural_01_D,
+        PropaneTank_01,
+        RackCase_01A,
+        RackCase_01B,
+        RackCase_01C,
+        RadioTower_01_A,
+        RadioTower_01_B,
+        RadioTower_01_Dish,
+        RadioTowerDish_01,
+        Rations_01,
+        Refrigerator_01_Off,
+        RepairStation,
+        ResidentialHouse_01_Badlands,
+        ResidentialHouse_01_Props_Badlands,
+        RetroBoomBox_01,
+        RoadBarrierMetal_01_128,
+        RoadBarrierMetal_01_512_A,
+        RoadBarrierMetal_01_End,
+        RoadBarrierMetal_01_End_Inverted,
+        RoadBarrierMetal_02_512,
+        RoadBarrierMetalEnd_01,
+        RoadSign_01_A,
+        RockCluster_S_01,
+        RockEmbedded_01,
+        RockEmbedded_02,
+        RockLarge_01_C,
+        RockLarge_02,
+        RockLarge_03,
+        RockMound_L_01,
+        RockMound_L_02,
+        RockMound_L_03,
+        RockMound_L_Split_01,
+        RockSingle_01,
+        RoofAntenna_01,
+        RubbleMetal_01,
+        RuralTire_Set_01,
+        RuralTire_Set_02,
+        RustyTank_01,
+        Sandbags_01,
+        SandBagSingles_01_A,
+        SandBarrier_01,
+        Scaffolding_01,
+        ScaffoldingPlywood_01_A_256,
+        ScissorLift_01,
+        SemiTruck_01_Door_Left,
+        SemiTruck_01_Door_Right,
+        SemiTruck_01_EngineIdle,
+        SemiTruck_01_Hood,
+        SemiTruckTrailer_01,
+        SemiTruckTrailer_01_Door_RearLeft_01,
+        SemiTruckTrailer_01_Door_RearRight_01,
+        SemiTruckTrailer_01_Landing_Gear_01,
+        SemiTruckTrailer_01_Wheel,
+        ShedWall_01,
+        SheetMetalSmall_01,
+        ShelfMetal_01,
+        ShoppingCart_01,
+        SignConstructionZone_01,
+        SignConstructionZone_01_MilitarySign,
+        SignPark_04,
+        SignPole_01,
+        SiloMedium_01,
+        SiloMedium_01_Pipes,
+        SingleFlagPole_01,
+        Sleepingbag_01_02,
+        SmallGenerator_01,
+        SmallGenerator_01_Large_DDPF,
+        SmallWaterBottle_01_B,
+        SnackBag_01_Open,
+        snacksmetalshe01,
+        SodaCan_01_C,
+        SodaCan_01_E,
+        SodaCan_01_G,
+        SpeedBump_01,
+        StackMetal_01,
+        StepLadder_02,
+        StopSign_01,
+        StorageBin_01,
+        StorageWorkshop_01,
+        StorageWorkshop_01_Props,
+        StorageWorkshop_01_Props_B,
+        StreetLight_02,
+        StuffedAnimal_Bear_01,
+        SuppliesPack_02,
+        SuppliesPack_07,
+        SuppliesPack_09,
+        SupplyCase_01_B,
+        Surfboard_01_B,
+        TableCamping_01,
+        TableFoldable_01_A,
+        TableFoldable_01_B,
+        TablePicnic_01,
+        TableRestaurantSquare_01,
+        TankCovered_Abra01,
+        TankPlasticIBC_01,
+        TarpFloor_01_A,
+        TinCanSet_01_A,
+        TinCanSet_01_B,
+        Tipu_01_M,
+        TirePile_01_A,
+        TirePile_01_A_DDPF,
+        TirePile_01_B,
+        TirePile_01_B_DDPF,
+        TirePile_01_C,
+        TirePile_01_C_DDPF,
+        TirePile_01_D,
+        TirePile_01_E,
+        TirePile_01_E_DDPF,
+        TirePile_01_F,
+        TirePile_01_Single,
+        TirePileReinforced_01_A,
+        TirePileReinforced_01_B,
+        TirePileReinforced_01_C,
+        ToolAxe_01,
+        ToolCart_01_A,
+        ToolCart_01_B,
+        ToolRope_01_B,
+        ToolSaw_01,
+        ToolShovel_01,
+        TrafficCones_01_B,
+        TrafficSign_02,
+        TransformeMetal_01,
+        TransformeMetal_02,
+        TransformeMetal_03,
+        Trashbag_01,
+        TrashBagCluster_01,
+        TrashbagPile_01_A,
+        TrashbinPlastic_01,
+        TrashCan_01_B,
+        TrashCouch_01,
+        TrashPile_01_B,
+        TrashPileLarge_01,
+        TreeStumpBurnt_01,
+        Triceratops_01,
+        TruckPickup_01,
+        TruckPickup_01_Door_FrontLeft,
+        TruckPickup_01_Door_FrontRight,
+        TruckPickup_01_Door_RearLeft,
+        TruckPickup_01_Door_RearRight,
+        TruckPickup_01_Hood,
+        TruckPickup_01_LightsOn,
+        TruckPickup_01_Trunk,
+        TruckPickup_01_Trunk_LightsOn,
+        TruckPickup_01_Wreck_B,
+        TruckPickup_01_Wreck_C,
+        TruckPickup_01_Wreck_Door_FrontLeft,
+        TruckPickup_01_Wreck_Door_FrontRight,
+        TruckPickup_01_Wreck_Door_RearLeft,
+        TruckPickup_01_Wreck_Door_RearRight,
+        TruckPickup_01_Wreck_Hood,
+        TruckPickup_01_Wreck_Rim,
+        TruckPickup_01_Wreck_TireCable,
+        truckpickup_01_wreck_trunk,
+        TruckPickup_01_Wreck_Wheel,
+        TrunkDead_01_L_A,
+        TrunkDead_01_L_B,
+        TrunkDead_01_L_B_Burning,
+        TrunkDead_01_M_A_Burning,
+        TrunkDead_01_M_C_Burning,
+        TrunkDead_01_M_E,
+        TrunkDead_01_M_G,
+        VanCargo_01,
+        VanCargo_01_Door_FrontLeft,
+        VanCargo_01_Door_FrontRight,
+        VanCargo_01_Door_MiddleRight,
+        VanCargo_01_Door_RearLeft,
+        VanCargo_01_Door_RearRight,
+        VanCargo_01_Hood,
+        VanPassenger_01_Wreck_A,
+        VanPassenger_01_Wreck_B,
+        VanPassenger_01_Wreck_Door_FrontLeft,
+        VanPassenger_01_Wreck_Door_FrontRight,
+        VanPassenger_01_Wreck_Door_MiddleLeft,
+        VanPassenger_01_Wreck_Door_MiddleRight,
+        VanPassenger_01_Wreck_Rim,
+        VanPassenger_01_Wreck_Tire,
+        VanPassenger_01_Wreck_TireFlat,
+        VillageShack_01_A,
+        VillageShack_01_B,
+        WalkwayGrate_128x256,
+        WalkwayGrate_256x256,
+        WalkwayGrate_256x512,
+        WalkwayPillar_384_B,
+        WalkwayRail_128,
+        WalkwayRail_256_A,
+        WalkwayRail_512_A,
+        WalkwayRail_96,
+        WalkwayShipRailStanding_256,
+        WalkwayStair_384,
+        WallCableVariation_01,
+        WallCableVariation_03,
+        WallCableVariation_04,
+        WallLamp_Oval_01_nbrk,
+        WarehouseSheFlatBase_01,
+        WarehouseShelfWreck_01,
+        WarningSign_01_E,
+        WarningSign_03,
+        WarningSign_04_G,
+        WarningSign_04_H,
+        WarningSign_04_I,
+        WarningSign_04_L,
+        WarningSign_04_N,
+        WarningSign_05,
+        WarningSign_06,
+        WarTorn_02,
+        WaterBottle_01_A,
+        WaterBottle_01_B,
+        WaterHoseAttached_01,
+        WaterHoseHeap_01,
+        WaterJug_01_A,
+        WaterSupply_01,
+        WaterTank_01,
+        WaterTank_01_DDPF,
+        WaterTank_02_Nordvik,
+        WaterTankCaged_01,
+        WeaponCase_MG_01,
+        WeaponCasesPack_03,
+        WeaponCasesPallet_01,
+        WheelBarrow_01,
+        Windmill_01,
+        WindmillStructure_01,
+        WindmillWheel_01,
+        WindowAwning_01_6m,
+        WindowBarricaded_A,
+        WindowBarricaded_B,
+        WindowBarricaded_D,
+        WiringFacadeConnectorBottom_01,
+        WoodenFence_01_256,
+        WoodenFence_01_512,
+        WoodenFence_01_End,
+        WoodStool_02,
+        WorkBench_01,
+        WreckBus_01,
+        WreckDebris_01,
+        WreckHelicopter_UH60_01,
+        WreckHelicopter_UH60_01_Debis01,
+        WreckHelicopter_UH60_01_Debis02,
+        WreckHelicopter_UH60_01_Debis03,
+        WreckHelicopter_UH60_01_Debis04,
+        WreckHelicopter_UH60_01_Debis05,
+        WreckHelicopter_UH60_01_Fuselage01,
+        WreckHelicopter_UH60_01_Fuselage02,
+        WreckHelicopter_UH60_01_Rotor,
+        WreckHelicopter_UH60_01_Tail01,
+        WreckHelicopter_UH60_01_Tail02,
+        WreckTank_Abra01_Debris03,
+        WreckTank_Abra01_Debris05,
+        WreckTank_Bradley_01_Debris02,
+        WreckTank_Bradley_01_Debris04,
+        WreckTank_Bradley_01_Debris05,
+        WreckTank_CV90_01,
+        WreckTank_CV90_01_Barrel,
+        WreckTank_CV90_01_Chassis,
+        WreckTank_CV90_01_Debris_1,
+        WreckTank_CV90_01_Debris_2,
+        WreckTank_CV90_01_Turret,
+        WreckTank_Leopard_01_Barrel,
+        WreckTank_Leopard_01_Chassis,
+        WreckTank_Leopard_01_Debris01,
+        WreckTank_Leopard_01_Debris02,
+        WreckTank_Leopard_01_Debris03,
+        WreckTank_Leopard_01_Debris04,
+        WreckTank_Leopard_01_Debris05,
+        WreckTank_Leopard_01_Debris06,
+        WreckTank_Leopard_01_Turret,
+        WreckTank_Leopard_02,
+        WreckTruck_01_A,
+        WreckTruck_01_B,
+        WreckTruck_01_Bed_01,
+        WreckTruck_01_Cab_01,
+        WreckTruck_01_Canopy,
+        WreckTruck_01_Canopy_01,
+        WreckTruck_01_Canopy_3,
+        WreckTruck_01_Debris,
+        WreckTruck_01_DoorL_01,
+        WreckTruck_01_DoorR_01,
+        WreckTruck_01_Rim_01,
+        WreckTruck_01_TrailerHitch_01,
+        WreckTruck_01_TruckBed_01,
+        WreckTruck_01_WheelFlat_01,
+        WreckTruck_01_WheelFlat_Right_01,
+        WreckTruck_01_WheelRubber_01,
+        WreckTrucks_01_NoRubble,
+    }
     export enum RuntimeSpawn_Battery {
         AAGun_01,
         ACModule_01,
@@ -3172,6 +4084,10 @@ declare namespace mod {
         ACUnit_03_animated,
         ACUnit_03_Running,
         ACUnit_04,
+        AftermathDebrisPileBrickPlaster_120,
+        AftermathDebrisPileBrickPlaster_120_01,
+        AftermathDebrisPileBrickPlaster_210,
+        AftermathDebrisPileBrickPlaster_210_01,
         AgaveAmericana_01_S_A,
         AgaveAmericana_01_S_B,
         AgaveAmericanaPotted_01_S_B,
@@ -3214,7 +4130,6 @@ declare namespace mod {
         BarrierHesco_01_128x120,
         BarrierHesco_01_128x240,
         BarrierPlastic_01,
-        Basketball_01,
         BasketballNet_01,
         Bench_01,
         Bicycle_01_C,
@@ -3272,10 +4187,8 @@ declare namespace mod {
         BR_StoneFoundationWall_02_768x384_CCW45_B,
         BrickPileLarge_01,
         BrickPileSmall_01,
-        BroadleafUrban_01_L_A,
         BroadleafUrban_01_L_B,
         BroadleafUrban_01_M_A,
-        BroadleafUrban_01_M_B,
         BrokenAsphaltRidge_01,
         BrokenAsphaltRidge_02,
         BrokenAsphaltRidge_02_B,
@@ -3399,7 +4312,6 @@ declare namespace mod {
         CarSUV_01_Wreck_Tire_A,
         ChairFolding_01_A,
         ChairFolding_01_B,
-        ChairPlastic_01_B,
         ChairRestaurant_01_B,
         ChairRestaurant_01_C,
         ChairWooden_01_A,
@@ -3667,6 +4579,7 @@ declare namespace mod {
         FoundationWallStraight_01_Tall_A_512,
         Fridge_01_B,
         FuelTrailer_01,
+        FX_GenDest_Rubble_Pile_Stone_L_GS,
         GarbageCluster_01,
         GarbageCluster_02_B,
         GarbageCluster_03,
@@ -3993,7 +4906,6 @@ declare namespace mod {
         PalmPygmyDate_01_S_C,
         PaperTrash_01,
         Parasol_01,
-        PatioMetalChair_01_B,
         PatioMetalChair_01_C,
         PatioMetalTable_01_B,
         PD_YuccaPlanterBox_01_L,
@@ -4413,11 +5325,9 @@ declare namespace mod {
         Awning_02_C,
         Awning_02_D,
         BarrelBurned_01,
-        BarrelOil_01_A,
         BarrelOil_01_B,
         BarrelOil_01_D,
         BarrelOil_01_group_05,
-        BarrelOilExplosive_01,
         BarrelOilExplosive_01_DDPF_B,
         BarrierBlockConcrete_01_256x60,
         BarrierBlockConcrete_02_128_60,
@@ -4435,7 +5345,6 @@ declare namespace mod {
         BarrierHesco_01_64x60,
         BarrierJersey_01_256x124_B,
         BarrierJersey_02_256_120,
-        Basketball_01,
         BasketballNet_01,
         BenchRural_01,
         BenchWood_01,
@@ -4498,7 +5407,6 @@ declare namespace mod {
         ChainLinkFence_01_1024,
         ChainLinkFence_01_313,
         ChainLinkFence_01_512,
-        ChairPlastic_01_B,
         ChairWooden_01_B,
         CinderblockWall_01_256x120x192,
         CinderblockWall_01_256x192x120,
@@ -4533,11 +5441,7 @@ declare namespace mod {
         CoffeeCup_01_A,
         CollapsibleTable_01,
         CommandPost_01_B,
-        CommandPost_01_PropsA,
-        CommandPost_01_PropsB,
-        CommandPost_01_PropsC,
         ConcreteStep_01,
-        ConstructionSetRebar_01_A_96x512x32,
         ContainerBox_02,
         ContainerPlastic_01,
         ContainerStandard_01_640,
@@ -5024,7 +5928,11 @@ declare namespace mod {
         AmmoChest_Small_Int_01,
         AmmoChest_Small_Lid_01,
         AreaTrigger,
+        BallGo01,
         BarbedWire_01_B,
+        BarrelOil_01_A,
+        BarrelOilExplosive_01,
+        BarrelOilFire_01,
         BarriersPedestrian_01_B,
         BarrierStoneBlock_01_A,
         BarrierStoneBlock_01_B,
@@ -5034,11 +5942,16 @@ declare namespace mod {
         BarrierStoneBlock_01_F,
         BarrierStoneBlock_01_G,
         BarrierStoneBlock_01_H,
+        Basketball_01,
         BeverageFridge_01_B,
+        BroadleafUrban_01_L_A,
+        BroadleafUrban_01_M_B,
         CameraSurveillance_01_B,
         CapturePoint,
         CautionSticker_01,
         CCTVSign_01,
+        ChairPlastic_01_A,
+        ChairPlastic_01_B,
         CinderblockStack_01_A_120,
         CinderblockStack_01_A_180,
         CinderblockStack_01_A_60,
@@ -5048,6 +5961,23 @@ declare namespace mod {
         CinderblockStack_01_C_120,
         CinderblockStack_01_C_180,
         CombatArea,
+        CommandPost_01_A,
+        CommandPost_01_DoorFront,
+        CommandPost_01_DoorRear,
+        CommandPost_01_Drone_Props,
+        CommandPost_01_PropsA,
+        CommandPost_01_PropsB,
+        CommandPost_01_PropsC,
+        ConcretePipe_01_512x160,
+        ConcretePipe_01_512x256,
+        ConstructionSetDoorwayConcrete_01_256x512x64,
+        ConstructionSetPillar_01_C_96x512x96,
+        ConstructionSetPillar01_A_128x512x128,
+        ConstructionSetPillarChip_01_B_128x512x128,
+        ConstructionSetRebar_01_A_96x512x32,
+        ConstructionSetRebar_01_A_96x512x32_Destructible,
+        ConstructionSetRebar_01_B_96x128x32,
+        ConstructionSetStairs_01_A_320x288x384,
         ContainerStandard_01_1280,
         Crate_01_A,
         Crate_03_B,
@@ -5060,6 +5990,7 @@ declare namespace mod {
         CrateAmmo_03,
         CrateMetal_01_B,
         CrateWeapon_01,
+        CypressItalian_01_M_A,
         DecalStrip_01_1024,
         DecalStrip_01_2048,
         DecalStrip_01_512,
@@ -5125,6 +6056,7 @@ declare namespace mod {
         FiringRange_WindowedWall_01,
         FiringRangeCrate_01,
         FiringRangeCrateWeapon_01,
+        FlagPole_01_USA,
         FX_Airburst_Incendiary_Detonation,
         FX_Airburst_Incendiary_Detonation_Friendly,
         FX_Airplane_Jetwash_Dirt,
@@ -5134,8 +6066,6 @@ declare namespace mod {
         FX_Airplane_Jetwash_Water,
         fx_ambwar_artillarystrike,
         FX_AmbWar_UAV_Circling,
-        FX_Amphibious_FNSS_ZAHA_Propulsion,
-        FX_Amphibious_FNSS_ZAHA_Water_Deep,
         FX_ArtilleryStrike_Explosion_01,
         FX_ArtilleryStrike_Explosion_GS,
         FX_ArtilleryStrike_Explosion_GS_SP_Beach,
@@ -5355,6 +6285,8 @@ declare namespace mod {
         FX_Impact_LoadoutCrate_Sand,
         FX_Impact_LoadoutCrate_Stone,
         FX_Impact_LoadoutCrate_Wood,
+        FX_Impact_LootCrate_Dirt,
+        FX_Impact_LootCrate_Generic,
         FX_Impact_SafeImpact_Brick,
         FX_Impact_SafeImpact_Dirt,
         FX_Impact_SafeImpact_Generic,
@@ -5434,6 +6366,7 @@ declare namespace mod {
         FX_Vehicle_Wreck_PTV,
         FX_Vehicle_Wreck_PTV_Calm,
         FX_WireGuidedMissile_SpooledWire,
+        GolfFlagStickPole_01,
         HighwayOverpass_Bridge_01,
         HighwayOverpass_Bridge_02,
         HighwayOverpass_Bridge_04,
@@ -5451,6 +6384,7 @@ declare namespace mod {
         HighwayTurn_01,
         HQ_PlayerSpawner,
         InteractPoint,
+        LootSpawner,
         MannequinRotation_01,
         MCOM,
         MRAP_WeaponCage_01,
@@ -5468,6 +6402,7 @@ declare namespace mod {
         PlayerCustomization_Headgear_02_A,
         PlayerCustomization_Headgear_02_B,
         PlayerSpawner,
+        RingOfFire,
         SandBags_01_256x120,
         SandBags_01_256x180,
         SandBags_01_256x60,
@@ -5652,6 +6587,64 @@ declare namespace mod {
         SFX_Gadgets_Flashbang_FlashbangLoop_OneShot2D,
         SFX_Gadgets_Flashbang_FlashbangStart_OneShot2D,
         SFX_Gadgets_SupplyDrop_CrateExplode_3D,
+        SFX_GameModes_BR_Circle_Appear_OneShot2D,
+        SFX_GameModes_BR_Circle_Boundary_SimpleLoop2D,
+        SFX_GameModes_BR_Circle_Damage_OneShot2D,
+        SFX_GameModes_BR_Circle_Damage_OneShot3D,
+        SFX_GameModes_BR_Circle_DamageStart_Loop2D,
+        SFX_GameModes_BR_Circle_DamageStart_Loop3D,
+        SFX_GameModes_BR_Circle_DamageStop_Loop2D,
+        SFX_GameModes_BR_Circle_DamageStop_Loop3D,
+        SFX_GameModes_BR_Circle_DeathWarning_SimpleLoop2D,
+        SFX_GameModes_BR_Circle_DeathWarning_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Debris_OneShot3D,
+        SFX_GameModes_BR_Circle_Fire_Close_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Distant_High_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Distant_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Embers_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_High_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Mid_Distant_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Perimeter_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Phase_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_VeryHigh_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_Fire_Wide_SimpleLoop3D,
+        SFX_GameModes_BR_Circle_FlareUp_OneShot3D,
+        SFX_GameModes_BR_Circle_Wind_OneShot3D,
+        SFX_GameModes_BR_MidroundRespawn_RespawnTower_Capture_OneShot2D,
+        SFX_GameModes_BR_MidroundRespawn_RespawnTower_PanelReset_OneShot2D,
+        SFX_GameModes_BR_MidroundRespawn_RespawnTower_Stow_OneShot2D,
+        SFX_GameModes_BR_Mission_CTF_DataDrive_Insert_OneShot3D,
+        SFX_GameModes_BR_Mission_CTF_Download_OneShot3D,
+        SFX_GameModes_BR_Mission_CTF_DriveCarrierTracking_OneShot3D,
+        SFX_GameModes_BR_Mission_DataExtraction_DataCase_PickUp_OneShot3D,
+        SFX_GameModes_BR_Mission_DemoCrew_Alarm_Close_SimpleLoop3D,
+        SFX_GameModes_BR_Mission_DemoCrew_Alarm_Distant_SimpleLoop3D,
+        SFX_GameModes_BR_Mission_DemoCrew_BombPickUp_OneShot3D,
+        SFX_GameModes_BR_Mission_DemoCrew_BombPlace_OneShot3D,
+        SFX_GameModes_BR_Mission_DemoCrewAlarmClose_SimpleLoop_3D,
+        SFX_GameModes_BR_Mission_RetrievalBeaconBeep_OneShot3D,
+        SFX_GameModes_BR_Mission_WeaponCache_BoltCutter_Pickup_OneShot3D,
+        SFX_GameModes_BR_Mission_WeaponCache_Open_OneShot3D,
+        SFX_GameModes_BR_Mission_Wreckage_BombBeeping_Loop_SimpleLoop3D,
+        SFX_GameModes_BR_Mission_Wreckage_BombBeeping_OneShot3D,
+        SFX_GameModes_BR_Mission_Wreckage_ComputerAlarm_SimpleLoop3D,
+        SFX_GameModes_BR_RespawnTower_Activate_Alarm_SimpleLoop3D,
+        SFX_GameModes_BR_RespawnTower_Activate_Close_OneShot3D,
+        SFX_GameModes_BR_RespawnTower_Activate_Distant_SimpleLoop3D,
+        SFX_GameModes_BR_UXUI_CircleShrink_Start_OneShot2D,
+        SFX_GameModes_BR_UXUI_CIrcleShrink_Stop_OneShot2D,
+        SFX_GameModes_Gauntlet_Mission_Beacons_Beeping_SimpleLoop3D,
+        SFX_GameModes_Gauntlet_Mission_Circuit_TerminalSpotLoop_SimpleLoop3D,
+        SFX_GameModes_Gauntlet_Mission_Heist_AltCacheCarrierBeep_SimpleLoop3D,
+        SFX_GameModes_Gauntlet_Mission_Heist_CacheBeep_SimpleLoop3D,
+        SFX_GameModes_Gauntlet_Mission_Heist_PlayerPickupCache_OneShot3D,
+        SFX_GameModes_Gauntlet_Mission_Wreckage_ActiveBombNearby_OneShot3D,
+        SFX_GameModes_Gauntlet_Mission_Wreckage_BombPickup3D_OneShot3D,
+        SFX_GameModes_Gauntlet_Mission_Wreckage_KeyboardTyping_SimpleLoop3D,
+        SFX_Gamemodes_Payload_Breacher_Decel_OneShot3D,
+        SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D,
+        SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D,
+        SFX_Gamemodes_Payload_Breacher_Tracks_SimpleLoop3D,
         SFX_GameModes_Rush_Alarm_Leadout_SimpleLoop3D,
         SFX_GameModes_Rush_Alarm_SimpleLoop3D,
         SFX_GameModes_Rush_Arm_SimpleLoop3D,
@@ -5846,6 +6839,7 @@ declare namespace mod {
         SFX_Soldier_Damage_Drowning_OneShot2D,
         SFX_Soldier_Damage_Explosion_Crack_OneShot2D,
         SFX_Soldier_Damage_Explosion_Death_OneShot2D,
+        SFX_Soldier_Damage_Explosion_Ring_SimpleLoop2D,
         SFX_Soldier_Damage_ExplosionDebris_OneShot2D,
         SFX_Soldier_Damage_Fall_Death_OneShot2D,
         SFX_Soldier_Damage_Fall_Low_OneShot2D,
@@ -5858,6 +6852,9 @@ declare namespace mod {
         SFX_Soldier_Damage_MeleeBlunt_OneShot2D,
         SFX_Soldier_Damage_MeleeKnife_Death_OneShot2D,
         SFX_Soldier_Damage_MeleeKnife_OneShot2D,
+        SFX_Soldier_Damage_Ring_Death_OneShot2D,
+        SFX_Soldier_Damage_Ring_Normal_OneShot2D,
+        SFX_Soldier_Damage_Ring_Start_OneShot2D,
         SFX_Soldier_Damage_Sabotage_Death_OneShot2D,
         SFX_Soldier_Damage_Sabotage_OneShot2D,
         SFX_Soldier_Damage_Throwable_OneShot2D,
@@ -6075,6 +7072,100 @@ declare namespace mod {
         SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D,
         SFX_UI_Gamemode_Shared_OutOfBounds_ReturnAreaEcho_OneShot2D,
         SFX_UI_Gamemode_Shared_OutOfBounds_SFXLoop_SimpleLoop2D,
+        SFX_UI_Gauntlet_Beacons_BeaconPickup_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_CalibrationBegin_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_CalibrationComplete_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_CalibrationTick_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_CalibrationTickUrgency_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_Drop_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_EnemyCalibrationBeeping_OneShot2D,
+        SFX_UI_Gauntlet_Beacons_SignalLost_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_ChainStateChange_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalCaptured_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalCaptureLoop_SimpleLoop2D,
+        SFX_UI_Gauntlet_Circuit_TerminalCaptureStart_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalCaptureStop_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalEnemyCapturing_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalFriendlyCapturing_OneShot2D,
+        SFX_UI_Gauntlet_Circuit_TerminalLost_OneShot2D,
+        SFX_UI_Gauntlet_Contract_SquadWipe_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataDeposit_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataDepositLoop_SimpleLoop2D,
+        SFX_UI_Gauntlet_DataUpload_DataDepositPointDisable_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataDepositPointEnable_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataDepositStart_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataDepositStop_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataLost_OneShot2D,
+        SFX_UI_Gauntlet_DataUpload_DataPickup_OneShot2D,
+        SFX_UI_Gauntlet_Dogtags_OneShot2D,
+        SFX_UI_Gauntlet_EOM_AdvanceCardArrive_OneShot2D,
+        SFX_UI_Gauntlet_EOM_AdvanceCardReveal_OneShot2D,
+        SFX_UI_Gauntlet_EOM_AdvanceScreen_In_OneShot2D,
+        SFX_UI_Gauntlet_EOM_CountdownTick_OneShot2D,
+        SFX_UI_Gauntlet_EOM_Defeat_OneShot2D,
+        SFX_UI_Gauntlet_EOM_DefeatCardReveal_OneShot2D,
+        SFX_UI_Gauntlet_EOM_DefeatScreen_Arrive_OneShot2D,
+        SFX_UI_Gauntlet_EOM_DefeatScreen_Out_LeadIn_OneShot2D,
+        SFX_UI_Gauntlet_EOM_PlayerSquadCardDetails_OneShot2D,
+        SFX_UI_Gauntlet_EOM_Qualified_OneShot2D,
+        SFX_UI_Gauntlet_EOM_Qualified_ReceiveReinforcement_OneShot2D,
+        SFX_UI_Gauntlet_EOM_Reassigned_OneShot2D,
+        SFX_UI_Gauntlet_EOM_ReinforcementCardReveal_OneShot2D,
+        SFX_UI_Gauntlet_EOM_ReinforcementsGiven_OneShot2D,
+        SFX_UI_Gauntlet_EOM_ReinforcementsReceived_OneShot2D,
+        SFX_UI_Gauntlet_EOM_TopAdvanceCardReveal_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltCacheStolen_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltEnemyCapturedCache_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltFriendlyRecoveredCache_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltRecoveringCacheStart_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltRecoveringCacheStop_OneShot2D,
+        SFX_UI_Gauntlet_Heist_AltRecoveringCacheTimer_OneShot2D,
+        SFX_UI_Gauntlet_Heist_EnemyCapturedCache_OneShot2D,
+        SFX_UI_Gauntlet_Heist_EnemyPickedUpCache_OneShot2D,
+        SFX_UI_Gauntlet_Heist_FriendlyCapturedCache_OneShot2D,
+        SFX_UI_Gauntlet_Heist_FriendlyPickedUpCache_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Base_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Circuit_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Contract_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Decryption_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Extraction_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Heist_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Rodeo_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Standoff_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Vendetta_OneShot2D,
+        SFX_UI_Gauntlet_MissionBriefing_Wreckage_OneShot2D,
+        SFX_UI_Gauntlet_Qualifier_Disqualified_OneShot2D,
+        SFX_UI_Gauntlet_Qualifier_PositionGained_OneShot2D,
+        SFX_UI_Gauntlet_Qualifier_PositionLost_OneShot2D,
+        SFX_UI_Gauntlet_Qualifier_Qualified_OneShot2D,
+        SFX_UI_Gauntlet_Rodeo_TankAcquired_OneShot2D,
+        SFX_UI_Gauntlet_Rodeo_TankKillPoint_OneShot2D,
+        SFX_UI_Gauntlet_Rodeo_TanksAvailable_OneShot2D,
+        SFX_UI_Gauntlet_Rodeo_TanksLockerUnlocking_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneAlmostDepleted_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneCaptured_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneCaptureTick_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneContested_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneEnter_OneShot2D,
+        SFX_UI_Gauntlet_Standoff_ZoneExit_OneShot2D,
+        SFX_UI_Gauntlet_Vendetta_FriendlyHVTKilled_OneShot2D,
+        SFX_UI_Gauntlet_Vendetta_IncomingHVTSelection_OneShot2D,
+        SFX_UI_Gauntlet_Vendetta_NewHVT_OneShot2D,
+        SFX_UI_Gauntlet_Vendetta_PlayerKilledHVT_OneShot2D,
+        SFX_UI_Gauntlet_Vendetta_YouAreTheTarget_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombBeeping_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombCarrier_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombKilledSelf_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombPickup_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombPlanted_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombPlantLoop_SimpleLoop2D,
+        SFX_UI_Gauntlet_Wreckage_BombPlantStart_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BombPlantStop_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_BompDropped_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_EnemyCarrierKilled_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_FriendlyBombPlanted_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_FuseLow_OneShot2D,
+        SFX_UI_Gauntlet_Wreckage_MCOMDestroyed_OneShot2D,
         SFX_UI_Highlight_A_2D,
         SFX_UI_Highlight_B_2D,
         SFX_UI_MainMenu_PressPlay_OneShot2D,
@@ -6274,6 +7365,14 @@ declare namespace mod {
         VehicleSpawner,
         VFX_Launchers_GroundShockwave_Dirt,
         VFX_Launchers_GroundShockwave_Grass,
+        WalkwayLadder_1024,
+        WalkwayLadder_1750,
+        WalkwayLadder_256,
+        WalkwayLadder_384,
+        WalkwayLadder_512,
+        WalkwayLadder_512_NoDestruction,
+        WalkwayLadder_768,
+        WalkwayLadder_768_NoDestruction,
         WarningSign_01_F,
         WarningSign_02_G,
         WeaponBench_Spraysilicone_01,
@@ -6398,13 +7497,11 @@ declare namespace mod {
         BarCounterGlassFridge_01,
         BarCounterWorkStation_01,
         BarrelLabratory_01_115,
-        BarrelOil_01_A,
         BarrelOil_01_C,
         BarrelOil_01_D,
         BarrelOil_01_group_04,
         BarrelOil_01_group_05,
         BarrelOil_03,
-        BarrelOilFire_01,
         Barrels_01,
         BarrierBlockConcrete_01_256x180_A,
         BarrierBlockConcrete_01_256x60,
@@ -6512,7 +7609,6 @@ declare namespace mod {
         Bread_01,
         BrickPileLarge_01,
         BrickPileSmall_01,
-        BroadleafUrban_01_M_B,
         Brooklyn_Area05_Archway_Doorframe_Double_01,
         Brooklyn_Area05_Archway_Doorframe_Single_01,
         Brooklyn_ElevatorDoors_01,
@@ -6626,8 +7722,6 @@ declare namespace mod {
         ChairCamping_01,
         ChairFolding_01_A,
         ChairFolding_01_B,
-        ChairPlastic_01_A,
-        ChairPlastic_01_B,
         Cinderblock_01,
         CinderblockStack_01_B_61_01,
         CinderblockWall_01_256x120x192,
@@ -6645,9 +7739,6 @@ declare namespace mod {
         CoffeePaperCup_01,
         CoffeeShopStool_01_A,
         CollapsibleTable_01,
-        CommandPost_01_A,
-        CommandPost_01_DoorFront,
-        CommandPost_01_DoorRear,
         Commercial_Modern_Building_03_B,
         Commercial_Modern_Building_03_C,
         Commercial_Modern_Building_09,
@@ -6660,8 +7751,6 @@ declare namespace mod {
         ConcreteLedge_01_CornerNoCover_128x128x32,
         ConcreteLedge_01_Straight_128x18x32,
         ConcreteParkingBlock_01,
-        ConcretePipe_01_512x160,
-        ConcretePipe_01_512x256,
         ConcretePipe_01_512x256_B,
         ConcreteRubbleSlab_01,
         ConcreteRubbleSlab_02,
@@ -6698,7 +7787,6 @@ declare namespace mod {
         ConstructionFoundationConcrete_02_512x256x512,
         ConstructionHangingTarps_01_D,
         ConstructionHangingTarps_01_E,
-        ConstructionSetPillar_01_C_96x512x96,
         ConstructionSite_01_3580x4100_CustomFloor,
         ConstructionSite_01_384x512_Wall,
         ConstructionSite_01_384x512_Wall_Door,
@@ -6928,7 +8016,6 @@ declare namespace mod {
         FireHydrant_01_A,
         FireHydrantWall_01,
         Firepipeline_512_01,
-        FlagPole_01,
         Flashlight_01,
         FloatingShe01,
         FLoodLight_Rect_01,
@@ -7702,7 +8789,6 @@ declare namespace mod {
         VentilationDrumSmall_C90_01,
         VentilationDrumSmallBox_192x192_01,
         VentilationDrumSmallBox_192x384_01,
-        WalkwayLadder_384,
         WalkwayPillar_384_B,
         WalkwayPillar_384x256x512,
         WalkwayPlatform_160x256,
@@ -7744,7 +8830,6 @@ declare namespace mod {
         WarningSign_04_J,
         WarningSign_04_M,
         WarningSign_04_N,
-        WarningSign_06,
         WasteContainer_01_B,
         Water_Tanks_01,
         WaterBottle_01_A,
@@ -7802,6 +8887,12 @@ declare namespace mod {
     export enum RuntimeSpawn_FireStorm {
         AcaciaUrban_01_S,
         ACUnit_04,
+        AftermathDebrisPileConcrete_Center_120,
+        AftermathDebrisPileConcrete_Center_120_B,
+        AftermathDebrisPileConcrete_Skew_120,
+        AftermathDebrisPileConcrete_Skew_120_B,
+        AftermathDebrisPileConcrete_Skew_210_C,
+        AftermathDebrisPileConcrete_Skew_210_E,
         AirDuct_02_A_256,
         AirDuct_02_A_512,
         AirDuct_02_A_End,
@@ -7814,7 +8905,6 @@ declare namespace mod {
         Barrack_01_A_Firestorm,
         BarrelBurned_01,
         BarrelOil_03,
-        BarrelOilFire_01,
         BarricadeboardsWood_01_B,
         BarrierBlockConcrete_01_256x60,
         BarrierBlockConcrete_03_128_120,
@@ -7924,7 +9014,6 @@ declare namespace mod {
         ChainLinkFenceTarp_01_313,
         ChainLinkFenceTarp_01_512,
         ChairFolding_01_A,
-        ChairPlastic_01_B,
         CinderblockStack_01_A_120_DDPF,
         CinderblockStack_01_B_120_DDPF,
         CinderblockStack_01_B_61_01,
@@ -7960,9 +9049,6 @@ declare namespace mod {
         ConstructionHangingTarps_01_D,
         ConstructionHangingTarps_01_E,
         ConstructionRebarb_Pile_01,
-        ConstructionSetPillarChip_01_B_128x512x128,
-        ConstructionSetRebar_01_A_96x512x32,
-        ConstructionSetRebar_01_B_96x128x32,
         ConstructionSite_02_B,
         ConstructionSite_03_C,
         ConstructionSite_04_B,
@@ -7970,6 +9056,7 @@ declare namespace mod {
         ConstructionSite_04_PropsB,
         ConstructionSite_04_PropsC,
         Container_02_Closed,
+        Container_02_Closed_DD_ProxyRadiosity,
         Container_02_Closed_DDPF,
         Container_02_Door_A,
         Container_02_Door_B,
@@ -8473,9 +9560,6 @@ declare namespace mod {
         TunnelSystemSprinkler_512,
         TunnelSystemSprinkler_Bend_90,
         ValvePurgeButton_01,
-        WalkwayLadder_1750,
-        WalkwayLadder_512_NoDestruction,
-        WalkwayLadder_768_NoDestruction,
         WalkwayLadderCage_384,
         WalkwayLadderCage_512,
         WalkwayLadderCage_768,
@@ -8557,6 +9641,10 @@ declare namespace mod {
         ACUnit_03_Running,
         ACUnit_04,
         ACUnit_04_Off,
+        AftermathDebrisPileBrickPlaster_120,
+        AftermathDebrisPileBrickPlaster_120_01,
+        AftermathDebrisPileConcrete_Skew_210_A,
+        AftermathDebrisPileConcrete_Skew_210_D,
         AgaveAmericana_01_S_A,
         AgaveAmericana_01_S_B,
         AgaveAmericanaPotted_01_S_A,
@@ -8646,7 +9734,6 @@ declare namespace mod {
         BrickPileLarge_01,
         BrickPileSmall_01,
         BroadleafUrban_01_M_A,
-        BroadleafUrban_01_M_B,
         Broom_01,
         Bucket_01,
         BucketMetal_01,
@@ -8755,7 +9842,6 @@ declare namespace mod {
         ChainLinkFenceTarp_01_512,
         ChairFolding_01_A,
         ChairFolding_01_B,
-        ChairPlastic_01_B,
         ChairRestaurant_01_C,
         ChairWooden_01_A,
         ChairWooden_01_B,
@@ -8798,6 +9884,7 @@ declare namespace mod {
         ConcreteStairs_01_B_192x384x384_C,
         ConcreteStairs_01_B_256x192x384,
         ConcreteStairs_01_B_256x384x384,
+        ConcreteStep_01,
         CondimentsMetalTrim_01,
         ConstructionBarrierSet_01_A,
         ConstructionBarrierSet_01_B,
@@ -8955,6 +10042,7 @@ declare namespace mod {
         Fridge_01_B,
         FuelCanisterPortable_01,
         FuelTrailer_01,
+        FX_GenDest_Rubble_Pile_Stone_L_GS,
         FX_RE_Ceiling_Dirt_Falling,
         FX_RE_PropogatingShockwave,
         GarbageCluster_01,
@@ -9268,8 +10356,8 @@ declare namespace mod {
         SignStreet_02_MorettisSteps,
         SignStreet_02_TumartPassage,
         SMartPhone_01,
-        SodaCan_01_A,
-        SodaCan_01_B,
+        SodaCan_01_I,
+        SodaCan_01_J,
         SpeedBump_02,
         SpeedBump_03,
         SportBottle_01_B,
@@ -9500,7 +10588,6 @@ declare namespace mod {
         BarrackFoundation_01,
         BarrackStair_01,
         BarrelBurned_01,
-        BarrelOil_01_A,
         BarrelOil_01_B,
         BarrelOil_01_C,
         BarrelOil_01_D,
@@ -9563,7 +10650,6 @@ declare namespace mod {
         BrickStack_01_A_180,
         BrickStack_01_B_180,
         BroadleafUrban_01_M_A,
-        BroadleafUrban_01_M_B,
         BrokenAsphaltRidge_02_B,
         Bucket_01,
         Bucket_02,
@@ -9653,8 +10739,6 @@ declare namespace mod {
         ChainLinkFenceTarp_01_313,
         ChainLinkFenceTarp_01_512,
         ChairFolding_01_A,
-        ChairPlastic_01_A,
-        ChairPlastic_01_B,
         ChairWooden_01_B,
         Cinderblock_01,
         CinderblockStack_01_A_120_DDPF,
@@ -9681,7 +10765,6 @@ declare namespace mod {
         ConcreteCover_02,
         ConcreteCover_04,
         ConcreteCover_06,
-        ConcretePipe_01_512x256,
         ConcretePipe_01_512x256_NoReflection,
         ConcreteRubble_512,
         ConcreteRubbleSlab_01,
@@ -9705,10 +10788,6 @@ declare namespace mod {
         ConstructionHangingTarps_01_D,
         ConstructionHangingTarps_01_E,
         ConstructionRoadPanel_01,
-        ConstructionSetPillar01_A_128x512x128,
-        ConstructionSetRebar_01_A_96x512x32,
-        ConstructionSetRebar_01_B_96x128x32,
-        ConstructionSetStairs_01_A_320x288x384,
         ConstructionSite_01_Building_01,
         ConstructionSite_01_Building_02,
         ConstructionSite_01_Building_03,
@@ -10254,7 +11333,6 @@ declare namespace mod {
         VillageShack_01_A,
         VillageShack_01_B,
         WalkwayGrate_256x256,
-        WalkwayLadder_384,
         WalkwayPillar_384_B,
         WallCompoundFence_01_144x1024,
         WallCompoundFence_01_144x256,
@@ -10348,7 +11426,6 @@ declare namespace mod {
         BarrelOil_01_B,
         BarrelOil_01_D,
         BarrelOil_03,
-        BarrelOilExplosive_01,
         BarrelOilExplosive_01_DDPF_B,
         BarrelTools_01,
         BarrelWater_01,
@@ -10457,7 +11534,6 @@ declare namespace mod {
         CementMixer_01,
         ChairCamping_01,
         ChairFolding_01_A,
-        ChairPlastic_01_B,
         ChairWooden_01_B,
         Cinderblock_01,
         CinderblockStack_01_B_61_01,
@@ -10483,7 +11559,6 @@ declare namespace mod {
         ConcreteBarriers_01,
         ConcreteDebrisPileBase_512x128_01,
         ConcreteDebrisPileStaticSlope_01,
-        ConcretePipe_01_512x256,
         ConcretePipe_01_512x256_B,
         ConcreteRubblePile_01,
         Construction_CableRolls_01,
@@ -11216,6 +12291,11 @@ declare namespace mod {
         NotSet,
         Off,
     }
+    export enum ScreenEffects {
+        Saturated,
+        Stealth,
+    }
+    export enum SecondaryWeapons {}
     export enum SoldierClass {
         Assault,
         Engineer,
@@ -11262,7 +12342,7 @@ declare namespace mod {
     export enum SpawnModes {
         AutoSpawn,
         Deploy,
-        NoChange,
+        Spectating,
     }
     export enum SpotStatus {
         SpotInBoth,
@@ -11280,6 +12360,7 @@ declare namespace mod {
         GDF009,
         M2MG,
     }
+    export enum Throwables {}
     export enum Types {
         AreaTrigger,
         Array,
@@ -11309,6 +12390,7 @@ declare namespace mod {
         Enum_ResupplyTypes,
         Enum_RuntimeSpawn_Abbasid,
         Enum_RuntimeSpawn_Aftermath,
+        Enum_RuntimeSpawn_Badlands,
         Enum_RuntimeSpawn_Battery,
         Enum_RuntimeSpawn_Capstone,
         Enum_RuntimeSpawn_Common,
@@ -11316,8 +12398,10 @@ declare namespace mod {
         Enum_RuntimeSpawn_FireStorm,
         Enum_RuntimeSpawn_Limestone,
         Enum_RuntimeSpawn_Outskirts,
+        Enum_RuntimeSpawn_Sand,
         Enum_RuntimeSpawn_Tungsten,
         Enum_ScoreboardType,
+        Enum_ScreenEffects,
         Enum_SecondaryWeapons,
         Enum_SoldierClass,
         Enum_SoldierStateBool,
@@ -11343,12 +12427,15 @@ declare namespace mod {
         Enum_WorldIconImages,
         HQ,
         InteractPoint,
+        LootMissionObjectManager,
+        LootSpawner,
         MCOM,
         Message,
         Number,
         Object,
         Player,
         PortalEnum,
+        RingOfFire,
         ScoreboardType,
         ScreenEffect,
         Sector,
@@ -11426,12 +12513,16 @@ declare namespace mod {
         F22,
         Flyer60,
         Gepard,
+        GolfCart,
         JAS39,
         Leopard,
         M2Bradley,
+        Marauder,
+        Marauder_Pax,
         Quadbike,
         SU57,
         UH60,
+        UH60_Pax,
         Vector,
     }
     export enum VehicleStateVector {
@@ -11524,6 +12615,7 @@ declare namespace mod {
         Ammo_Tungsten_Core,
         Barrel_10_Factory,
         Barrel_10_Full,
+        Barrel_102mm_Compact,
         Barrel_105_Custom,
         Barrel_105_Factory,
         Barrel_11_Extended,
@@ -11541,6 +12633,7 @@ declare namespace mod {
         Barrel_13_Fluted,
         Barrel_13_Prototype,
         Barrel_13_Standard,
+        Barrel_135mm_Long,
         Barrel_145_Alt,
         Barrel_145_Carbine,
         Barrel_145_Common,
@@ -11574,6 +12667,7 @@ declare namespace mod {
         Barrel_20_Long,
         Barrel_20_OH,
         Barrel_20_SDM_R,
+        Barrel_200mm_Custom,
         Barrel_200mm_Custom_H,
         Barrel_200mm_Factory,
         Barrel_200mm_Fluted,
@@ -11670,12 +12764,12 @@ declare namespace mod {
         Barrel_68_Factory,
         Barrel_68_Fluted,
         Barrel_730mm_3LR,
+        Barrel_75_Compact,
         Barrel_8_Extended,
         Barrel_837_Long,
         Barrel_9_Factory,
         Barrel_9_Fluted,
         Barrel_9_Heavy,
-        Barrel_Extended_Barrel,
         Barrel_IAR_Heavy,
         Bottom_5_mW_Green,
         Bottom_5_mW_Red,
@@ -11709,6 +12803,7 @@ declare namespace mod {
         Ergonomic_Improved_Mag_Catch,
         Ergonomic_Magwell_Flare,
         Ergonomic_Match_Trigger,
+        Ergonomic_Rail_Cover,
         Left_120_mW_Blue,
         Left_5_mW_Green,
         Left_5_mW_Red,
@@ -11830,6 +12925,7 @@ declare namespace mod {
         Scope_SSDS_600x,
         Scope_ST_Prisim_500x,
         Scope_SU_123_150x,
+        Scope_SU_230_LPVO,
         Scope_TS_HD_600x,
         Top_120_mW_Blue,
         Top_5_mW_Green,
@@ -11853,6 +12949,7 @@ declare namespace mod {
         Carbine_M4A1,
         Carbine_QBZ_192,
         Carbine_SG_553R,
+        Carbine_SOR_300SC,
         DMR_LMR27,
         DMR_M39_EMR,
         DMR_SVDM,
@@ -11869,6 +12966,7 @@ declare namespace mod {
         Shotgun_M1014,
         Shotgun_M87A1,
         Sidearm_ES_57,
+        Sidearm_GGH_22,
         Sidearm_M44,
         Sidearm_M45A1,
         Sidearm_P18,
@@ -11881,6 +12979,7 @@ declare namespace mod {
         SMG_UMG_40,
         SMG_USG_90,
         Sniper_M2010_ESR,
+        Sniper_Mini_Scout,
         Sniper_PSR,
         Sniper_SV_98,
     }
@@ -11904,6 +13003,7 @@ declare namespace mod {
     }
     //------------------------
     export function Wait(n: number): Promise<void>;
+
     // Sets the value of a Variable.
     export function SetVariable(variable: Variable, value: Any): void;
 
@@ -12022,9 +13122,6 @@ declare namespace mod {
     // Finds or initializes an Array on a provided Variable, and stores a provided value in that Array at the specified index.
     export function SetVariableAtIndex(arrayVariable: Variable, arrayIndex: number, value: Any): void;
 
-    // Enables or disables a world sound effect.
-    export function EnableSFX(sfx: SFX, enable: boolean): void;
-
     // Plays a sound using runtime spawner tech.
     export function PlaySound(objectId: number, amplitude: number, team: Team): void;
 
@@ -12038,20 +13135,155 @@ declare namespace mod {
     export function PlaySound(objectId: number, amplitude: number): void;
 
     // Plays a sound using runtime spawner tech.
-    export function PlaySound(sound: SFX, amplitude: number, team: Team): void;
-
-    // Plays a sound using runtime spawner tech.
-    export function PlaySound(sound: SFX, amplitude: number, squad: Squad): void;
-
-    // Plays a sound using runtime spawner tech.
-    export function PlaySound(sound: SFX, amplitude: number, player: Player): void;
-
-    // Plays a sound using runtime spawner tech.
-    export function PlaySound(sound: SFX, amplitude: number): void;
+    export function PlaySound(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        amplitude: number,
+        team: Team
+    ): void;
 
     // Plays a sound using runtime spawner tech.
     export function PlaySound(
-        sound: SFX,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        amplitude: number,
+        squad: Squad
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        amplitude: number,
+        player: Player
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        amplitude: number
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         amplitude: number,
         location: Vector,
         attenuationRange: number,
@@ -12060,7 +13292,31 @@ declare namespace mod {
 
     // Plays a sound using runtime spawner tech.
     export function PlaySound(
-        sound: SFX,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         amplitude: number,
         location: Vector,
         attenuationRange: number,
@@ -12069,7 +13325,31 @@ declare namespace mod {
 
     // Plays a sound using runtime spawner tech.
     export function PlaySound(
-        sound: SFX,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         amplitude: number,
         location: Vector,
         attenuationRange: number,
@@ -12077,22 +13357,205 @@ declare namespace mod {
     ): void;
 
     // Plays a sound using runtime spawner tech.
-    export function PlaySound(sound: SFX, amplitude: number, location: Vector, attenuationRange: number): void;
+    export function PlaySound(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        amplitude: number,
+        location: Vector,
+        attenuationRange: number
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(objectId: number, amplitude: number, location: Vector, attenuationRange: number): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        objectId: number,
+        amplitude: number,
+        location: Vector,
+        attenuationRange: number,
+        team: Team
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        objectId: number,
+        amplitude: number,
+        location: Vector,
+        attenuationRange: number,
+        squad: Squad
+    ): void;
+
+    // Plays a sound using runtime spawner tech.
+    export function PlaySound(
+        objectId: number,
+        amplitude: number,
+        location: Vector,
+        attenuationRange: number,
+        player: Player
+    ): void;
 
     // Plays a voice-over event clip.
-    export function PlayVO(voiceOver: VO, event: VoiceOverEvents2D, flag: VoiceOverFlags): void;
+    export function PlayVO(objectId: number, event: VoiceOverEvents2D, flag: VoiceOverFlags): void;
 
     // Plays a voice-over event clip.
-    export function PlayVO(voiceOver: VO, event: VoiceOverEvents2D, flag: VoiceOverFlags, player: Player): void;
+    export function PlayVO(objectId: number, event: VoiceOverEvents2D, flag: VoiceOverFlags, player: Player): void;
 
     // Plays a voice-over event clip.
-    export function PlayVO(voiceOver: VO, event: VoiceOverEvents2D, flag: VoiceOverFlags, squad: Squad): void;
+    export function PlayVO(objectId: number, event: VoiceOverEvents2D, flag: VoiceOverFlags, squad: Squad): void;
 
     // Plays a voice-over event clip.
-    export function PlayVO(voiceOver: VO, event: VoiceOverEvents2D, flag: VoiceOverFlags, team: Team): void;
+    export function PlayVO(objectId: number, event: VoiceOverEvents2D, flag: VoiceOverFlags, team: Team): void;
 
-    // Sets a volume associated with a Sound Effect.
-    export function SetSFXVolume(sFX: SFX, volume: number): void;
+    // Plays a voice-over event clip.
+    export function PlayVO(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        event: VoiceOverEvents2D,
+        flag: VoiceOverFlags
+    ): void;
+
+    // Plays a voice-over event clip.
+    export function PlayVO(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        event: VoiceOverEvents2D,
+        flag: VoiceOverFlags,
+        player: Player
+    ): void;
+
+    // Plays a voice-over event clip.
+    export function PlayVO(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        event: VoiceOverEvents2D,
+        flag: VoiceOverFlags,
+        squad: Squad
+    ): void;
+
+    // Plays a voice-over event clip.
+    export function PlayVO(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        event: VoiceOverEvents2D,
+        flag: VoiceOverFlags,
+        team: Team
+    ): void;
 
     // Stops a given sound.
     export function StopSound(objectId: number, team: Team): void;
@@ -12132,6 +13595,9 @@ declare namespace mod {
 
     // Enables or disables a player-specific screen effect.
     export function EnableScreenEffect(player: Player, screenEffect: ScreenEffect, enable: boolean): void;
+
+    // Enables or disables a player-specific screen effect.
+    export function EnableScreenEffect(player: Player, screenEffect: ScreenEffects, enable: boolean): void;
 
     // Enables or disables a visual effect.
     export function EnableVFX(vfx: VFX, enable: boolean): void;
@@ -12223,6 +13689,9 @@ declare namespace mod {
     // Resets the gamemode time to its starting value.
     export function ResetGameModeTime(): void;
 
+    // Signals the RingOfFire to start shrinking.
+    export function RingOfFireStart(ringOfFire: RingOfFire): void;
+
     // Enables of disables friendly fire.
     export function SetFriendlyFire(enableFriendlyFire: boolean): void;
 
@@ -12240,6 +13709,12 @@ declare namespace mod {
 
     // Sets a HQ to a specific Team.
     export function SetHQTeam(hq: HQ, teamID: Team): void;
+
+    // Sets the damage dealt by the RingOfFire to players caught.
+    export function SetRingOfFireDamageAmount(ringOfFireId: RingOfFire, ringOfFireDamageAmount: number): void;
+
+    // Sets the duration the RingOfFire remains stable before Shrinking again.
+    export function SetRingOfFireStableTime(ringOfFireId: RingOfFire, ringOfFireStableTime: number): void;
 
     // Using this command prevents anyone from joining this server. There is no way to undo this at the time.
     export function DisablePlayerJoin(): void;
@@ -12262,8 +13737,67 @@ declare namespace mod {
     // Sets the target player's team.
     export function SetTeam(player: Player, team: Team): void;
 
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: PrimaryWeapons): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: SecondaryWeapons): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: OpenGadgets): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: Throwables): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: MeleeWeapons): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: MiscGadgets): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, weapon: Weapons): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, gadget: Gadgets): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, ammo: AmmoTypes): void;
+
+    // Spawns a weapon or gadget at a LootSpawner.
+    export function SpawnLoot(lootSpawner: LootSpawner, armor: ArmorTypes): void;
+
+    // Removes all existing loot from the world
+    export function UnspawnAllLoot(): void;
+
     // Unspawn an Object spawned using SpawnObject.
-    export function UnspawnObject(obj: mod.Object): void;
+    export function UnspawnObject(
+        obj:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): void;
 
     // Deals a provided amount of damage to a target player. Can optionally specify damage giver..
     export function DealDamage(player: Player, damageAmount: number): void;
@@ -12399,6 +13933,9 @@ declare namespace mod {
         desiredInventorySlots: InventorySlots
     ): void;
 
+    // Adds a Weapon or Gadget to a Soldier's loadout.
+    export function AddEquipment(player: Player, armor: ArmorTypes): void;
+
     // Forces the target player to switch to the provided inventory slot.
     export function ForceSwitchInventory(player: Player, inventorySlot: InventorySlots): void;
 
@@ -12433,14 +13970,93 @@ declare namespace mod {
     export function SkipManDown(player: Player, skipManDown: boolean): void;
 
     // Move the Object provided, Euler rotation optional
-    export function MoveObject(object: mod.Object, positionDelta: Vector): void;
+    export function MoveObject(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        positionDelta: Vector
+    ): void;
 
     // Move the Object provided, Euler rotation optional
-    export function MoveObject(object: mod.Object, positionDelta: Vector, rotationDelta: Vector): void;
+    export function MoveObject(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        positionDelta: Vector,
+        rotationDelta: Vector
+    ): void;
 
     // Moves the Object by the delta position and rotation over the time provided. Options to loop indefinitely and reverse
     export function MoveObjectOverTime(
-        object: mod.Object,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         positionDelta: Vector,
         rotationDelta: Vector,
         timeInSeconds: number,
@@ -12450,7 +14066,31 @@ declare namespace mod {
 
     // Orbits the Object around the provided transform over time. Optional orbitAxis otherwise transform's up vector is used
     export function OrbitObjectOverTime(
-        object: mod.Object,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         orbitTransform: Transform,
         timeInSeconds: number,
         radius: number,
@@ -12461,7 +14101,31 @@ declare namespace mod {
 
     // Orbits the Object around the provided transform over time. Optional orbitAxis otherwise transform's up vector is used
     export function OrbitObjectOverTime(
-        object: mod.Object,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         orbitTransform: Transform,
         timeInSeconds: number,
         radius: number,
@@ -12472,14 +14136,92 @@ declare namespace mod {
     ): void;
 
     // Rotate the Object provided using Euler angles
-    export function RotateObject(object: mod.Object, rotationDelta: Vector): void;
+    export function RotateObject(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        rotationDelta: Vector
+    ): void;
 
     // Sets the transform of the Object provided
-    export function SetObjectTransform(object: mod.Object, transform: Transform): void;
+    export function SetObjectTransform(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        transform: Transform
+    ): void;
 
     // Sets the transform of the Object provided over the time provided. Options to loop indefinitely and reverse
     export function SetObjectTransformOverTime(
-        object: mod.Object,
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         transform: Transform,
         timeInSeconds: number,
         shouldLoop: boolean,
@@ -12487,11 +14229,61 @@ declare namespace mod {
     ): void;
 
     // Stops the Over Time movement for the provided Object if one is active
-    export function StopActiveMovementForObject(object: mod.Object): void;
+    export function StopActiveMovementForObject(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): void;
 
     // Attaches a new UI Icon Widget to an object.
     export function AddUIIcon(
-        parentObject: mod.Object,
+        parentObject:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         image: WorldIconImages,
         verticalOffset: number,
         iconColour: Vector,
@@ -12501,7 +14293,31 @@ declare namespace mod {
 
     // Attaches a new UI Icon Widget to an object.
     export function AddUIIcon(
-        parentObject: mod.Object,
+        parentObject:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
         image: WorldIconImages,
         verticalOffset: number,
         iconColour: Vector,
@@ -12515,10 +14331,63 @@ declare namespace mod {
     export function EnableWorldIconText(worldIcon: WorldIcon, enableText: boolean): void;
 
     // Removes a UI Icon Widget from an object.
-    export function RemoveUIIcon(objectWithIcon: mod.Object): void;
+    export function RemoveUIIcon(
+        objectWithIcon:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): void;
 
     // Removes a UI Icon Widget from an object.
-    export function RemoveUIIcon(objectWithIcon: mod.Object, visibility: Player | Team): void;
+    export function RemoveUIIcon(
+        objectWithIcon:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon,
+        visibility: Player | Team
+    ): void;
 
     // Changes the color of a world icon.
     export function SetWorldIconColor(worldIcon: WorldIcon, newColor: Vector): void;
@@ -13297,12 +15166,6 @@ declare namespace mod {
     // Returns the value of a variable.
     export function GetVariable(variable: Variable): Any;
 
-    // Returns the variable specified by a number.
-    export function GlobalVariable(variableIndex: number): Variable;
-
-    // Returns the variable specified by an object.
-    export function ObjectVariable(ownerObject: mod.Object, variableIndex: number): Variable;
-
     // Returns the waypoint path object corresponding to the provided id.
     export function GetWaypointPath(waypointPathNumber: number): WaypointPath;
 
@@ -13336,16 +15199,25 @@ declare namespace mod {
     // Returns the value found at a provided index of an array.
     export function ValueInArray(array: Array, index: number): Any;
 
-    // Returns the SFX object corresponding to the provided id.
-    export function GetSFX(number: number): SFX;
-
     // Returns the VO object corresponding to the provided id.
     export function GetVO(number: number): VO;
 
-    // Returns the screen effect object corresponding to the provided id.
-    export function GetScreenEffect(modBuilderEnum: PortalEnum): ScreenEffect;
+    // Returns the SFX object corresponding to the provided id.
+    /**
+     * @deprecated The method should not be used
+     */
+    export function GetSFX(number: number): SFX;
 
     // Returns the screen effect object corresponding to the provided id.
+    /**
+     * @deprecated The method should not be used
+     */
+    export function GetScreenEffect(arg0: PortalEnum): ScreenEffect;
+
+    // Returns the screen effect object corresponding to the provided id.
+    /**
+     * @deprecated The method should not be used
+     */
     export function GetScreenEffect(number: number): ScreenEffect;
 
     // Returns the VFX object corresponding to the provided id.
@@ -13366,6 +15238,9 @@ declare namespace mod {
     // Returns the amount of time left (in seconds) in the current gamemode.
     export function GetMatchTimeRemaining(): number;
 
+    // Returns the ring of fire object corresponding to the provided id.
+    export function GetRingOfFire(number: number): RingOfFire;
+
     // Returns the time limit set for the gamemode (in seconds).
     export function GetRoundTime(): number;
 
@@ -13384,8 +15259,37 @@ declare namespace mod {
     // Returns the interact point object corresponding to the provided id.
     export function GetInteractPoint(interactPointNumber: number): InteractPoint;
 
+    // Returns the loot spawner object corresponding to the provided id.
+    export function GetLootSpawner(number: number): LootSpawner;
+
     // Returns the id corresponding to the provided object.
-    export function GetObjId(modBuilderObject: mod.Object): number;
+    export function GetObjId(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): number;
 
     // Returns the spatial object corresponding to the provided id.
     export function GetSpatialObject(spatialObjectNumber: number): SpatialObject;
@@ -13405,6 +15309,7 @@ declare namespace mod {
             | RuntimeSpawn_Common
             | RuntimeSpawn_Abbasid
             | RuntimeSpawn_Aftermath
+            | RuntimeSpawn_Badlands
             | RuntimeSpawn_Battery
             | RuntimeSpawn_Capstone
             | RuntimeSpawn_Dumbo
@@ -13423,6 +15328,7 @@ declare namespace mod {
             | RuntimeSpawn_Common
             | RuntimeSpawn_Abbasid
             | RuntimeSpawn_Aftermath
+            | RuntimeSpawn_Badlands
             | RuntimeSpawn_Battery
             | RuntimeSpawn_Capstone
             | RuntimeSpawn_Dumbo
@@ -13629,9 +15535,6 @@ declare namespace mod {
     // Returns the sector object corresponding to the provided id.
     export function GetSector(number: number): Sector;
 
-    // Returns all objects of the given type.
-    export function AllObjectsOfType(): Array;
-
     // Returns an array of all players within a game.
     export function AllPlayers(): Array;
 
@@ -13701,6 +15604,9 @@ declare namespace mod {
     // Returns true whether or not the active inventory slot of the target player is the provided inventory slots.
     export function IsInventorySlotActive(player: Player, inventorySlots: InventorySlots): boolean;
 
+    // Returns true if the provided player is using the specified class.
+    export function IsSoldierClass(player: Player, soldierClass: SoldierClass): boolean;
+
     // Returns the backward directional vector of (0, 0, 1).
     export function BackwardVector(): Vector;
 
@@ -13711,13 +15617,91 @@ declare namespace mod {
     export function ForwardVector(): Vector;
 
     // Returns the position vector of the provided object.
-    export function GetObjectPosition(object: mod.Object): Vector;
+    export function GetObjectPosition(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): Vector;
 
     // Returns the rotation vector of the provided object.
-    export function GetObjectRotation(object: mod.Object): Vector;
+    export function GetObjectRotation(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): Vector;
 
     // Returns the transform vector of the provided object.
-    export function GetObjectTransform(object: mod.Object): Transform;
+    export function GetObjectTransform(
+        object:
+            | mod.Object
+            | Global
+            | AreaTrigger
+            | CapturePoint
+            | EmplacementSpawner
+            | HQ
+            | InteractPoint
+            | LootSpawner
+            | MCOM
+            | Player
+            | RingOfFire
+            | ScreenEffect
+            | Sector
+            | SFX
+            | SpatialObject
+            | Spawner
+            | SpawnPoint
+            | Team
+            | Vehicle
+            | VehicleSpawner
+            | VFX
+            | VO
+            | WaypointPath
+            | WorldIcon
+    ): Transform;
 
     // Returns the leftward directional vector of (-1, 0, 0).
     export function LeftVector(): Vector;
@@ -13925,11 +15909,13 @@ declare namespace mod {
 
         export function OngoingInteractPoint(eventInteractPoint: mod.InteractPoint): void;
 
+        export function OngoingLootSpawner(eventLootSpawner: mod.LootSpawner): void;
+
         export function OngoingMCOM(eventMCOM: mod.MCOM): void;
 
         export function OngoingPlayer(eventPlayer: mod.Player): void;
 
-        export function OngoingScreenEffect(eventScreenEffect: mod.ScreenEffect): void;
+        export function OngoingRingOfFire(eventRingOfFire: mod.RingOfFire): void;
 
         export function OngoingSector(eventSector: mod.Sector): void;
 
@@ -13946,6 +15932,8 @@ declare namespace mod {
         export function OngoingWaypointPath(eventWaypointPath: mod.WaypointPath): void;
 
         export function OngoingWorldIcon(eventWorldIcon: mod.WorldIcon): void;
+
+        export function Ongoing(): void;
 
         // This will trigger when an AI Soldier stops trying to reach a destination.
         export function OnAIMoveToFailed(eventPlayer: mod.Player): void;
@@ -14090,6 +16078,9 @@ declare namespace mod {
 
         // This will trigger when a Player is revived by another Player.
         export function OnRevived(eventPlayer: mod.Player, eventOtherPlayer: mod.Player): void;
+
+        // This will trigger when a RingOfFire changes size.
+        export function OnRingOfFireZoneSizeChange(eventRingOfFire: mod.RingOfFire, eventNumber: number): void;
 
         // This will trigger when an AISpawner spawns an AI Soldier.
         export function OnSpawnerSpawned(eventPlayer: mod.Player, eventSpawner: mod.Spawner): void;
