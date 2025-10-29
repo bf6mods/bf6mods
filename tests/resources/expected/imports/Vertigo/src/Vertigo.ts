@@ -358,13 +358,11 @@ class CaptureManager {
     ToggleAlarmSFX() {
         var StartSFX = mod.SpawnObject(AlarmSFX, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         if (this.IsBeingCaptured) {
-            mod.EnableSFX(StartSFX, true);
             mod.PlaySound(StartSFX, 80, mod.GetTeam(1));
             mod.PlaySound(StartSFX, 80, mod.GetTeam(2));
             mod.PlaySound(StartSFX, 80, mod.GetTeam(3));
             mod.PlaySound(StartSFX, 80, mod.GetTeam(4));
         } else {
-            mod.EnableSFX(StartSFX, false);
         }
 
     }
