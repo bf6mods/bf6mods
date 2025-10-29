@@ -7,6 +7,7 @@ export const ROOT = path.resolve(__dirname, "..");
 export const PACKAGE_DIR = path.resolve(ROOT, "packages");
 export const CLI_PACKAGE = path.resolve(PACKAGE_DIR, "cli");
 export const SDK_PACKAGE = path.resolve(PACKAGE_DIR, "sdk");
+export const PORTAL_PACKAGE = path.resolve(PACKAGE_DIR, "portal");
 
 export const CLI_PATH = path.resolve(CLI_PACKAGE, "dist/cli/index.js");
 export async function runCli(args: string[], cwd: string) {
@@ -112,14 +113,16 @@ export async function buildPackages() {
 
 	const cliTarPath = await packageDep(CLI_PACKAGE);
 	const sdkTarPath = await packageDep(SDK_PACKAGE);
+	const portalTarPath = await packageDep(PORTAL_PACKAGE);
 
-	return [path.resolve(CLI_PACKAGE, cliTarPath), path.resolve(SDK_PACKAGE, sdkTarPath)];
+	return [path.resolve(CLI_PACKAGE, cliTarPath), path.resolve(SDK_PACKAGE, sdkTarPath), path.resolve(PORTAL_PACKAGE, portalTarPath)];
 }
 
 export async function installDependenciesForMod(
 	modPath: string,
 	cliTarPath: string,
 	sdkTarPath: string,
+	portalTarPath: string,
 ) {
 	const pkgJsonPath = path.resolve(modPath, "package.json");
 	if (!fs.existsSync(pkgJsonPath))
@@ -133,6 +136,9 @@ export async function installDependenciesForMod(
 	if (pkg.devDependencies["@bf6mods/sdk"]) {
 		pkg.devDependencies["@bf6mods/sdk"] = `file:${sdkTarPath}`;
 	}
+
+	if (!pkg.overrides) pkg.overrides = {};
+	pkg.overrides["@bf6mods/portal"] = `file:${portalTarPath}`;
 
 	await fs.promises.writeFile(pkgJsonPath, JSON.stringify(pkg, null, 2));
 

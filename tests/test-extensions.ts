@@ -39,6 +39,7 @@ export const tmpdirTest = test.extend<TmpDirFixture>({
 export function createModTest(
 	cliTarPath: string,
 	sdkTarPath: string,
+	portalTarPath: string,
 	{
 		template = "Exfil",
 		modPath = "./test-mod",
@@ -80,7 +81,7 @@ export function createModTest(
 
 			const fullPath = path.join(tmpdir, modPath);
 			if (installDependencies)
-				await installDependenciesForMod(fullPath, cliTarPath, sdkTarPath);
+				await installDependenciesForMod(fullPath, cliTarPath, sdkTarPath, portalTarPath);
 
 			// Provide modDir to the test
 			await use({

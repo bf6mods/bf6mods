@@ -16,8 +16,9 @@ const __dirname = path.dirname(__filename);
 
 let cliTarPath: string;
 let sdkTarPath: string;
+let portalTarPath: string;
 describe.concurrent("@bf6mods/cli", async () => {
-	[cliTarPath, sdkTarPath] = await buildPackages();
+	[cliTarPath, sdkTarPath, portalTarPath] = await buildPackages();
 
 	tmpdirTest.concurrent(
 		"shows help when no args are provided",
@@ -28,7 +29,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath).concurrent(
+	createModTest(cliTarPath, sdkTarPath, portalTarPath).concurrent(
 		"creates a new mod project via `init`",
 		async ({ mod }) => {
 			const expectedDir = path.resolve(
@@ -75,7 +76,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		installDependencies: true,
 	}).concurrent(
 		"create a new project and install dependencies",
@@ -85,7 +86,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		async () => {},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "Exfil",
 		installDependencies: true,
 	}).concurrent(
@@ -102,7 +103,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "AcePursuit",
 		installDependencies: true,
 	}).concurrent(
@@ -119,7 +120,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "BombSquad",
 		installDependencies: true,
 	}).concurrent(
@@ -136,7 +137,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "Vertigo",
 		installDependencies: true,
 	}).concurrent(
@@ -153,7 +154,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "Basic",
 		installDependencies: true,
 	}).concurrent(
@@ -170,7 +171,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 		},
 	);
 
-	createModTest(cliTarPath, sdkTarPath, {
+	createModTest(cliTarPath, sdkTarPath, portalTarPath, {
 		template: "Basic",
 		installDependencies: true,
 	}).concurrent(
