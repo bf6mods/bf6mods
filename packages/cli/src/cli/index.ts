@@ -101,7 +101,10 @@ program
 program
 	.command("deploy")
 	.argument("[input]")
-	.option("--session-id", `The session id to use when deploying, should be web-xxxx`)
+	.option(
+		"--session-id",
+		`The session id to use when deploying, should be web-xxxx`,
+	)
 	.option("--publish", `Whether to publish your mod`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
