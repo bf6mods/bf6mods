@@ -1,7 +1,12 @@
-// Generated automatically, do not modify, make changes to generation script instead!
+// Generated automatically, do not modify!
 syntax = "proto3";
 
 package santiago.common;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
 
 message AssetCategory {
 	string tag_id = 1;
@@ -33,26 +38,26 @@ message AssetInfo {
 message Attachment {
 	string id = 1;
 	string version = 2;
-	StringValue filename = 3;
+	google.protobuf.StringValue filename = 3;
 	bool is_processable = 4;
 	int32 processing_status = 5;
 	AttachmentData attachment_data = 6;
 	int32 attachment_type = 7;
-	StringValue metadata = 8;
+	google.protobuf.StringValue metadata = 8;
 	repeated string errors = 9;
 }
 
 message AttachmentData {
 	bytes original = 1;
-	BytesValue compiled = 2;
+	google.protobuf.BytesValue compiled = 2;
 }
 
 message AuthCodeAuthentication {
 	string auth_code = 1;
 	int32 platform = 2;
-	StringValue redirect_uri = 3;
-	StringValue patch_version = 4;
-	StringValue protocol_version = 5;
+	google.protobuf.StringValue redirect_uri = 3;
+	google.protobuf.StringValue patch_version = 4;
+	google.protobuf.StringValue protocol_version = 5;
 }
 
 message AuthenticationResponse {
@@ -95,7 +100,11 @@ message AvailableIntValue {
 
 message AvailableIntValues {
 	IntRange range = 1;
-	int32 sparse_values = 2;
+	Sparse sparse_values = 2;
+}
+
+message Sparse {
+    repeated int32 values = 1;
 }
 
 message AvailableMapEntry {
@@ -149,7 +158,7 @@ message AvailableMutatorSparseIntValues {
 message AvailableTag {
 	string id = 1;
 	Metadata metadata = 2;
-	StringValue category = 3;
+	google.protobuf.StringValue category = 3;
 }
 
 message AvailableTags {
@@ -184,10 +193,7 @@ message BuildStatusError {
 	string error_message = 1;
 }
 
-message BuildStatusSuccess {}
-
-message BytesValue {
-	bytes value = 1;
+message BuildStatusSuccess {
 }
 
 message CategoryIdList {
@@ -217,7 +223,7 @@ message CreateModDataVersionRequest {
 
 message CreateModDataVersionResponse {
 	string signed_url = 1;
-	Timestamp valid_until = 2;
+	google.protobuf.Timestamp valid_until = 2;
 	string mod_level_data_id = 3;
 }
 
@@ -232,7 +238,7 @@ message CreatePetitionSuccess {
 
 message CreatePlayElementRequest {
 	string name = 1;
-	StringValue description = 2;
+	google.protobuf.StringValue description = 2;
 	DesignMetadata design_metadata = 3;
 	MapRotation map_rotation = 4;
 	repeated Mutator mutators = 5;
@@ -240,8 +246,8 @@ message CreatePlayElementRequest {
 	bytes original_mod_rules = 7;
 	PlayElementSettings play_element_settings = 9;
 	int32 publish_state = 10;
-	StringValue mod_level_data_id = 11;
-	StringValue thumbnail_url = 12;
+	google.protobuf.StringValue mod_level_data_id = 11;
+	google.protobuf.StringValue thumbnail_url = 12;
 	repeated Attachment attachments = 13;
 }
 
@@ -257,25 +263,20 @@ message DeleteAttachmentsRequest {
 	repeated string attachment_ids = 2;
 }
 
-message DeleteAttachmentsResponse {}
+message DeleteAttachmentsResponse {
+}
 
 message DeletePlayElementRequest {
 	string play_element_id = 1;
 }
 
-message DeletePlayElementResponse {}
+message DeletePlayElementResponse {
+}
 
 message DesignMetadata {
-	StringValue progression_mode = 1;
+	google.protobuf.StringValue progression_mode = 1;
 	repeated FirstPartyMetadata first_party_metadata = 2;
 }
-
-message Duration {
-	int64 seconds = 1;
-	int32 nanos = 2;
-}
-
-message Empty {}
 
 message EnrichedPlayElement {
 	PlayElement play_element = 1;
@@ -288,10 +289,11 @@ message EntityList {
 
 message ErrorModRules {
 	bytes original = 1;
-	StringValue error_message = 2;
+	google.protobuf.StringValue error_message = 2;
 }
 
-message ExternalCreator {}
+message ExternalCreator {
+}
 
 message FirstPartyMetadata {
 	PSNMetadata psn_metadata = 1;
@@ -311,7 +313,8 @@ message GameServerMessage {
 	string text = 2;
 }
 
-message GetAvailableTagsRequest {}
+message GetAvailableTagsRequest {
+}
 
 message GetAvailableTagsResponse {
 	AvailableTags available_tags = 1;
@@ -325,7 +328,8 @@ message GetBlueprintsByIdResponse {
 	repeated Blueprint blueprints = 1;
 }
 
-message GetLicenseRequirementsRequest {}
+message GetLicenseRequirementsRequest {
+}
 
 message GetLicenseRequirementsResponse {
 	repeated string owned_licenses = 1;
@@ -350,13 +354,15 @@ message GetPlayElementRequest {
 	bool include_denied = 2;
 }
 
-message GetProgressionTypesRequest {}
+message GetProgressionTypesRequest {
+}
 
 message GetProgressionTypesResponse {
 	repeated ProgressionEntry entries = 1;
 }
 
-message GetScheduledBlueprintsRequest {}
+message GetScheduledBlueprintsRequest {
+}
 
 message GetScheduledBlueprintsResponse {
 	repeated BlueprintId blueprint_ids = 1;
@@ -365,12 +371,12 @@ message GetScheduledBlueprintsResponse {
 message GetTranslationsRequest {
 	TranslationsQuery translations_query = 1;
 	string locale = 2;
-	Timestamp fetch_from = 3;
+	google.protobuf.Timestamp fetch_from = 3;
 }
 
 message GetTranslationsResponse {
 	repeated LocalizedText localized_texts = 1;
-	Timestamp fetched_until = 2;
+	google.protobuf.Timestamp fetched_until = 2;
 }
 
 message IncompatibleModRules {
@@ -388,7 +394,8 @@ message IntRange {
 	int32 max_value = 2;
 }
 
-message InternalCreator {}
+message InternalCreator {
+}
 
 message InternalTeamStructure {
 	int32 team_id = 1;
@@ -454,14 +461,14 @@ message Metadata {
 message ModDataVersion {
 	string id = 1;
 	string play_element_id = 2;
-	Timestamp created = 3;
+	google.protobuf.Timestamp created = 3;
 	ModDataVersionBuildInfo build_info = 4;
 }
 
 message ModDataVersionBuildInfo {
 	string pipeline_version = 1;
-	Empty pending = 3;
-	Empty no_build_available = 4;
+	google.protobuf.Empty pending = 3;
+	google.protobuf.Empty no_build_available = 4;
 	BuildStatusError error = 5;
 	BuildStatusSuccess success = 6;
 }
@@ -608,22 +615,22 @@ message PlayElement {
 	string design_id = 2;
 	Creator creator = 3;
 	string name = 4;
-	StringValue description = 5;
-	Timestamp created = 6;
-	Timestamp updated = 7;
+	google.protobuf.StringValue description = 5;
+	google.protobuf.Timestamp created = 6;
+	google.protobuf.Timestamp updated = 7;
 	PlayElementSettings play_element_settings = 8;
 	int32 publish_state_type = 9;
 	Int32Value likes = 10;
-	Timestamp publish_at = 11;
-	StringValue thumbnail_url = 12;
+	google.protobuf.Timestamp publish_at = 11;
+	google.protobuf.StringValue thumbnail_url = 12;
 	int32 moderation_state = 13;
-	StringValue short_code = 14;
+	google.protobuf.StringValue short_code = 14;
 }
 
 message PlayElementDesign {
 	string design_id = 1;
 	string design_name = 2;
-	Timestamp created = 4;
+	google.protobuf.Timestamp created = 4;
 	DesignMetadata design_metadata = 5;
 	MapRotation map_rotation = 6;
 	repeated Mutator mutators = 7;
@@ -632,7 +639,7 @@ message PlayElementDesign {
 	ModRules mod_rules = 10;
 	repeated Tag tags = 12;
 	BlazePlayElementDesignSettings blaze_settings = 13;
-	StringValue mod_level_data_id = 14;
+	google.protobuf.StringValue mod_level_data_id = 14;
 	repeated Attachment attachments = 15;
 	repeated string group_licenses = 16;
 	int32 attachment_compile_status = 17;
@@ -642,11 +649,11 @@ message PlayElementDesign {
 message PlayElementResponse {
 	PlayElement play_element = 1;
 	PlayElementDesign play_element_design = 2;
-	StringValue progression_mode = 3;
+	google.protobuf.StringValue progression_mode = 3;
 }
 
 message PlayElementSettings {
-	StringValue secret = 1;
+	google.protobuf.StringValue secret = 1;
 	repeated GameServerMessage messages = 2;
 	bool allow_copies = 3;
 }
@@ -655,13 +662,13 @@ message PlayExperience {
 	string id = 1;
 	string name = 2;
 	Creator creator = 3;
-	StringValue description = 4;
-	StringValue short_code = 5;
-	StringValue thumbnail_url = 6;
+	google.protobuf.StringValue description = 4;
+	google.protobuf.StringValue short_code = 5;
+	google.protobuf.StringValue thumbnail_url = 6;
 	Int32Value likes = 7;
 	Int32Value player_count = 8;
-	Timestamp created = 9;
-	Timestamp updated = 10;
+	google.protobuf.Timestamp created = 9;
+	google.protobuf.Timestamp updated = 10;
 	MapRotation map_rotation = 11;
 	repeated Tag tags = 12;
 	bool is_premium = 13;
@@ -675,8 +682,8 @@ message PlayExperienceQuery {
 	PlayerCreator player_creator_eq = 7;
 	int32 ordering = 8;
 	int32 page_size = 9;
-	StringValue name_prefix = 10;
-	StringValue short_code = 11;
+	google.protobuf.StringValue name_prefix = 10;
+	google.protobuf.StringValue short_code = 11;
 }
 
 message Player {
@@ -711,12 +718,12 @@ message ProtocolVersionOverride {
 
 message ReportExperienceRequest {
 	string experience_id = 1;
-	StringValue subject = 2;
+	google.protobuf.StringValue subject = 2;
 }
 
 message ReportPlayerRequest {
 	Player offending_player = 1;
-	StringValue subject = 2;
+	google.protobuf.StringValue subject = 2;
 }
 
 message ReportingResponse {
@@ -744,10 +751,6 @@ message SparseFloatValues {
 
 message SparseIntValues {
 	repeated int32 values = 1;
-}
-
-message StringValue {
-	string value = 1;
 }
 
 message SubAssetProfanityStatus {
@@ -780,12 +783,7 @@ message TeamStructure {
 }
 
 message TimeTravel {
-	Duration offset = 1;
-}
-
-message Timestamp {
-	int64 seconds = 1;
-	int32 nanos = 2;
+	google.protobuf.Duration offset = 1;
 }
 
 message TranslationMetadata {
@@ -807,7 +805,7 @@ message Uncompressed {
 message UpdatePlayElementRequest {
 	string id = 1;
 	string name = 2;
-	StringValue description = 3;
+	google.protobuf.StringValue description = 3;
 	DesignMetadata design_metadata = 4;
 	MapRotation map_rotation = 5;
 	repeated Mutator mutators = 6;
@@ -815,8 +813,8 @@ message UpdatePlayElementRequest {
 	bytes original_mod_rules = 8;
 	PlayElementSettings play_element_settings = 10;
 	int32 publish_state = 11;
-	StringValue mod_level_data_id = 12;
-	StringValue thumbnail_url = 13;
+	google.protobuf.StringValue mod_level_data_id = 12;
+	google.protobuf.StringValue thumbnail_url = 13;
 	repeated Attachment attachments = 14;
 }
 
@@ -830,4 +828,3 @@ message UploadExperienceThumbnailResponse {
 	string url = 2;
 	string verification_url = 3;
 }
-
