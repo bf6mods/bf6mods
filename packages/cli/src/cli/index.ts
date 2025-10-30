@@ -3,7 +3,7 @@ import colors from "colors";
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build/index.ts";
-import { deploy } from "./deploy.ts";
+import { deploy } from "./deploy/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies, templates } from "./init.js";
