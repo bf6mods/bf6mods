@@ -111,7 +111,7 @@ message AvailableMapEntry {
 	string level_name = 1;
 	string level_location = 2;
 	AvailableIntValue game_size = 3;
-	AvailableIntValue rounds = 4;
+	uint32 rounds = 4;
 	AvailableIntValue allowed_spectators = 5;
 	Metadata metadata = 6;
 	AvailableIntValue allowed_teams_range = 7;
@@ -449,8 +449,15 @@ message MapRotation {
 	MapRotationAttributes attributes = 2;
 }
 
+enum RotationBehavior {
+    LOOP = 0;
+    EORMM = 1;
+    ONE_MAP = 2;
+    UNRECOGNIZED = 3;
+}
+
 message MapRotationAttributes {
-	int32 rotation_behavior = 1;
+	RotationBehavior rotation_behavior = 1;
 }
 
 message Metadata {
