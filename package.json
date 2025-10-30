@@ -1,22 +1,25 @@
 {
-	"name": "bf6mods",
-	"private": true,
-	"version": "1.0.0",
-	"description": "Monorepo for BF6 modding tools and type definitions",
-	"workspaces": [
-		"packages/*"
-	],
-	"scripts": {
-		"build": "npm run build -ws",
-		"test": "vitest",
-		"lint": "biome check",
-		"lint:fix": "biome check --write"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "2.2.5",
-		"@types/node": "^24.7.1",
-		"tsdown": "^0.15.9",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.2"
-	}
+  "name": "bf6mods",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for BF6 modding tools and type definitions",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build:sdk && npm run build:portal && npm run build:cli",
+    "build:sdk": "npm --workspace=@bf6mods/sdk run build",
+    "build:portal": "npm --workspace=@bf6mods/portal run build",
+    "build:cli": "npm --workspace=@bf6mods/cli run build",
+    "test": "vitest",
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.5",
+    "@types/node": "^24.7.1",
+    "tsdown": "^0.15.9",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.2"
+  }
 }
