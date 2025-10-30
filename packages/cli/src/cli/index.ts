@@ -100,13 +100,14 @@ program
 
 program
 	.command("deploy")
-	.argument("<input>")
-	.option("--auth-code", `The auth code to use when deploying`)
+	.argument("[input]")
+	.option("--session-id", `The session id to use when deploying, should be web-xxxx`)
+	.option("--publish", `Whether to publish your mod`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
 	)
 	.action(async (input, options) => {
-		await deploy(input, options?.authCode);
+		await deploy(input, options?.sessionId);
 	});
 
 program.exitOverride((_err) => {
