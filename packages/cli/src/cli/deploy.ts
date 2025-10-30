@@ -2,12 +2,16 @@ import os from "node:os";
 import path from "node:path";
 import { Clients, Generated_pb, protobuf } from "@bf6mods/portal";
 import colors from "colors";
+import { importGlobal } from "import-global";
 import keytar from "keytar";
 import { printToConsole } from "./utils.ts";
 
+type PuppeteerImport = typeof import("puppeteer");
+
 async function getSessionIdFromCookies() {
+	let puppeteer: PuppeteerImport;
 	try {
-		await import("puppeteer");
+		puppeteer = (await importGlobal("puppeteer")) as unknown as PuppeteerImport;
 	} catch (_error) {
 		printToConsole(`${colors.red.bold("✗")} Puppeteer could not be loaded.`);
 		console.error(
@@ -22,12 +26,11 @@ async function getSessionIdFromCookies() {
 			"you can instead provide an auth code using the --auth-code option:",
 		);
 		console.error("	 bf6mods deploy <input> --auth-code=<code>\n");
-		throw new Error("No puppeteer");
+		process.exit(0);
 	}
 
 	const profileDir = path.join(os.homedir(), ".bf6mods-browser");
 
-	const puppeteer = await import("puppeteer");
 	const browser = await puppeteer.launch({
 		headless: false,
 		defaultViewport: null,
