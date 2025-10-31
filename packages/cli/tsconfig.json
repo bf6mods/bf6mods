@@ -6,7 +6,8 @@
 		"strict": true,
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"types": ["@types/node"]
+		"types": ["@types/node"],
+		"resolveJsonModule": true,
 	},
 	"include": ["./src/**/*"]
 }

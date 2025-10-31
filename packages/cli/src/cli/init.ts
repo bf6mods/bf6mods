@@ -77,6 +77,12 @@ export async function startProject(
 		recursive: true,
 	});
 
+	const gitignorePath = path.join(destination, "_gitignore");
+	const dotGitignorePath = path.join(destination, ".gitignore");
+	if (fs.existsSync(gitignorePath)) {
+		fs.renameSync(gitignorePath, dotGitignorePath);
+	}
+
 	if (name) renameFilesRecursively(destination, name);
 }
 

@@ -35,21 +35,21 @@ service WebPlay {
   rpc listModDataVersions(santiago.common.ListModDataVersionsRequest)
       returns (santiago.common.ListModDataVersionsResponse);
 
-  rpc uploadExperienceThumbnail(santiago.common.UploadExperienceThumbnailRequest)
+  rpc UploadExperienceThumbnail(santiago.common.UploadExperienceThumbnailRequest)
       returns (santiago.common.UploadExperienceThumbnailResponse);
 
-  rpc getProgressionTypes(santiago.common.GetProgressionTypesRequest)
+  rpc GetProgressionTypes(santiago.common.GetProgressionTypesRequest)
       returns (santiago.common.GetProgressionTypesResponse);
 
-  rpc getLicenseRequirements(santiago.common.GetLicenseRequirementsRequest)
+  rpc GetLicenseRequirements(santiago.common.GetLicenseRequirementsRequest)
       returns (santiago.common.GetLicenseRequirementsResponse);
 
-  rpc getAvailableTags(santiago.common.GetAvailableTagsRequest)
+  rpc GetAvailableTags(santiago.common.GetAvailableTagsRequest)
       returns (santiago.common.GetAvailableTagsResponse);
 
-  rpc listExperiences(santiago.common.ListExperiencesRequest)
+  rpc ListExperiences(santiago.common.ListExperiencesRequest)
       returns (santiago.common.ListExperiencesResponse);
 
-  rpc deleteAttachments(santiago.common.DeleteAttachmentsRequest)
+  rpc DeleteAttachments(santiago.common.DeleteAttachmentsRequest)
       returns (santiago.common.DeleteAttachmentsResponse);
 }

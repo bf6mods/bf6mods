@@ -3,7 +3,7 @@ import colors from "colors";
 import { Command } from "commander";
 import pkg from "../../package.json" with { type: "json" };
 import { build } from "./build/index.ts";
-import { deploy } from "./deploy.ts";
+import { deploy } from "./deploy/index.ts";
 import { dev } from "./dev.ts";
 import { importFile } from "./import.ts";
 import { init, installDependencies, templates } from "./init.js";
@@ -100,13 +100,17 @@ program
 
 program
 	.command("deploy")
-	.argument("<input>")
-	.option("--auth-code", `The auth code to use when deploying`)
+	.argument("[input]")
+	.option(
+		"--session-id",
+		`The session id to use when deploying, should be web-xxxx`,
+	)
+	.option("--publish", `Whether to publish your mod`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
 	)
 	.action(async (input, options) => {
-		await deploy(input, options?.authCode);
+		await deploy(input, options?.sessionId);
 	});
 
 program.exitOverride((_err) => {

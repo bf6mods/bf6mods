@@ -27,12 +27,15 @@
 		"url": "git+https://github.com/bf6mods/bf6mods.git"
 	},
 	"dependencies": {
+		"@bf6mods/portal": "*",
 		"@bf6mods/sdk": "*",
 		"@clack/prompts": "^0.11.0",
 		"chokidar": "^4.0.3",
 		"colors": "^1.4.0",
 		"commander": "^14.0.1",
+		"import-global": "^1.1.1",
 		"jiti": "^2.6.1",
+		"keytar": "^7.9.0",
 		"knitwork": "^1.2.0",
 		"rolldown": "^1.0.0-beta.44",
 		"stringify-object": "^6.0.0",
@@ -46,6 +49,7 @@
 		"@types/stringify-object": "^4.0.5",
 		"cross-env": "^10.1.0",
 		"execa": "^9.6.0",
+		"puppeteer": "^24.27.0",
 		"tsx": "^4.20.6"
 	}
 }

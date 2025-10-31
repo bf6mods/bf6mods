@@ -10,6 +10,9 @@ export enum MapId {
 	SaintsQuarter = "MP_Limestone-ModBuilderCustom0",
 	NewSobekCity = "MP_Outskirts-ModBuilderCustom0",
 	MirakValley = "MP_Tungsten-ModBuilderCustom0",
+	ClubHouse = "MP_Granite_ClubHouse_Portal-ModBuilderCustom0",
+	TechCenter = "MP_Granite_TechCampus_Portal-ModBuilderCustom0",
+	BlackwellFields = "MP_Badlands-ModBuilderCustom0",
 }
 
 /**
