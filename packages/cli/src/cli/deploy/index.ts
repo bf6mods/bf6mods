@@ -33,6 +33,8 @@ export async function deploy({input, sessionIdParam, publish, modId}: {
 		blueprintIds: blueprints.blueprintIds,
 	}, sessionIdParam);
 
+  console.log('blueprint:', blueprint);
+
   const config = await getBf6Config(rootDir);
 
   let id: string | undefined;
