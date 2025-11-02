@@ -27,6 +27,17 @@ export enum MapId {
  */
 export type Bf6Config = {
 	/**
+	 * The unique identifier of your mod experience.
+	 *
+	 * You can find this ID in the URL when editing your experience:
+	 * [https://portal.battlefield.com/bf6/experience/settings/mode?id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx](https://portal.battlefield.com/bf6/experience/settings/mode?id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+	 *
+	 * This ID is referenced when deploying your mod using:
+	 * npx \@bf6mods/cli deploy
+	 */
+	id?: string;
+
+	/**
 	 * The human-readable name of the mod.
 	 *
 	 * Typically matches the project name used in the BF6 mod editor or
