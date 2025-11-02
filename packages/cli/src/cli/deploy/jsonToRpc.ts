@@ -659,123 +659,41 @@ export function getMutatorKindData(
   return undefined;
 }
 
+function getModRulesPayload<T>(V: T) {
+  const J = new TextEncoder().encode(JSON.stringify(V));
+  return V && Object.keys(V).length ? J : void 0;
+}
 
-export function toGrpc(mod: ConfigType, blueprint: Generated_pb.Blueprint) {
-  const balancingMethod = GAME_MOD_TEAM_BALANCING_MAP.get(mod.gameMode as string)
-  const teamCompositionPayload = getTeamCompositionPayload({
-    teamComposition: getSyncTeamComposition(new Map(mod.teamComposition)),
-    aiType: MUTATOR_AI_SPAWN_TYPE_TO_CAPACITY_TYPE.get(Number(mod.mutators?.AiSpawnType)),
-    teamBalancingMethod: balancingMethod,
-    removeBots: GAME_MODES_THAT_DO_NOT_SUPPORT_BOTS.includes(mod.gameMode as string),
-  })
-
-  const maps = (mod.mapRotation ?? []).map((map) => {
-    const [levelName, levelLocation] = map.id.split('-');
-    const rawMapData = getRawMapData(levelLocation, levelName, blueprint.availableGameData?.maps ?? [])
-    return {
-      levelName,
-      levelLocation,
-      gameSize: getTeamSize(mod.teamComposition) ?? DEFAULT_GAME_SIZE_MIN,
-      teamComposition: teamCompositionPayload,
-      rounds: rawMapData?.rounds ?? 0,
-      allowedSpectators: rawMapData?.allowedSpectators?.defaultValue ?? 0,
+export function bytesFromBase64(value: string): Uint8Array {
+  if (typeof Buffer !== "undefined") {
+    return Uint8Array.from(Buffer.from(value, "base64"));
+  } else {
+    const decoded = atob(value);
+    const bytes = new Uint8Array(decoded.length);
+    for (let i = 0; i < decoded.length; i++) {
+      bytes[i] = decoded.charCodeAt(i);
     }
-  })
-
-  const mapRotation = {
-    maps,
-    attributes: {
-      rotationBehavior: Generated_pb.RotationBehavior.LOOP,
-    },
+    return bytes;
   }
+}
 
-  const availableGameData = blueprint.availableGameData!;
-
-  const mutators: Record<string, WebMutator> =
-      availableGameData?.mutators?.reduce<Record<string, WebMutator>>((acc, { name, kind, category, metadata }) => {
-        const translations = metadata?.translations ?? [];
-        const resources = metadata?.resources ?? [];
-
-        // Parse child mutator querystring (RESOURCE_KIND.CHILD_MUTATOR_KIND)
-        const childUrl = resources.find((r) => r.kind === RESOURCE_KIND.CHILD_MUTATOR_KIND)?.location?.url;
-        const displayFormat = getResourceMetadata(resources, RESOURCE_KIND.DISPLAY_FORMAT_KIND);
-        const forceSave =
-          getResourceMetadata(resources, RESOURCE_KIND.FORCE_SAVE_KIND) === "true" ||
-          // @ts-expect-error
-          HARDCODED_FORCE_SAVE_MUTATOR_IDS.includes(name);
-        const isInternal = doesResourceKindExist(resources, RESOURCE_KIND.INTERNAL);
-        const displayPriorityStr = getResourceMetadata(resources, RESOURCE_KIND.DISPLAY_PRIORITY);
-        const categoryMeta = getResourceMetadata(resources, RESOURCE_KIND.CATEGORY);
-        const parentActiveValueStr = childUrl
-          ? new URLSearchParams(childUrl).get(RESOURCE_KIND.PARENT_ACTIVE_VALUE) ?? undefined
-          : undefined;
-
-        // Linked child mutators requested via querystring (?OtherMutator=42)
-        const childMutators =
-          childUrl
-            ? Array.from(new URLSearchParams(childUrl)).reduce<Array<{ name: string; lockToValue: any }>>(
-                (list, [k, v]) => {
-                  if (k === RESOURCE_KIND.PARENT_ACTIVE_VALUE) return list;
-                  const exists = availableGameData?.mutators?.some((m) => m.name === k);
-                  if (exists) list.push({ name: k, lockToValue: convertStringToType(v) });
-                  return list;
-                },
-                [],
-              )
-            : [];
-
-        // Tag categories on the mutator (comma-separated)
-        const tags = category.split(",");
-
-        if (!kind) return acc;
-        const base = getMutatorKindData(kind, name);
-        if (!base) return acc;
-
-        // Choose display format for number UIs
-        let rangeDisplayFormat: string | undefined;
-        if (base.mutatorUi === MUTATOR_UI_NAMES.NUMBER) {
-          if (displayFormat === "minutes") rangeDisplayFormat = RANGE_MUTATOR_DISPLAY_FORMAT.MINUTES;
-          else if (displayFormat === "seconds") rangeDisplayFormat = RANGE_MUTATOR_DISPLAY_FORMAT.SECONDS;
-          else if (displayFormat === "percent") rangeDisplayFormat = RANGE_MUTATOR_DISPLAY_FORMAT.PERCENT;
-        }
-
-        // Build translationIds, including option labels (Value <n>)
-        const translationIds = translations.reduce<Record<string, any>>((t, { kind: k, translationId }) => {
-          const mapped = MUTATOR_TRANSLATION_KIND_ID_MAP.get(k);
-          if (mapped) {
-            t[mapped] = translationId;
-          } else if (k.includes("Value")) {
-            const match = k.match(/Value\s(-?\d+)/);
-            const code = match?.[1];
-            if (code && base.availableValues?.includes(Number(code))) {
-              if (!("options" in t) || !t.options) t.options = new Map<string, string>();
-              t.options.set(code, translationId);
-            }
-          }
-          return t;
-        }, { name: "" });
-
-        acc[name] = {
-          ...base,
-          tags,
-          translationIds,
-          ...(categoryMeta && { category: categoryMeta }),
-          ...(forceSave && { isForceSave: forceSave }),
-          ...(displayPriorityStr !== undefined &&
-            !Number.isNaN(Number(displayPriorityStr)) && { displayPriority: Number(displayPriorityStr) }),
-          ...(rangeDisplayFormat && { displayFormat: rangeDisplayFormat }),
-          ...(isInternal && { isInternal }),
-          ...(parentActiveValueStr !== undefined && { parentActiveValue: convertStringToType(parentActiveValueStr) }),
-          ...(childMutators.length && { childMutators }),
-        };
-
-        return acc;
-      }, {}) ?? {};
+export function buildSaveExperiencePayload(mod: ConfigType, blueprint: Generated_pb.Blueprint, playElementResponse: Required<Generated_pb.PlayElementResponse>) {
+  const saveExperienceMutators: Omit<Generated_pb.Mutator[], '$typeName'> = [];
+  const saveExperienceAssetCategories: Omit<Generated_pb.AssetCategory[], '$typeName'> = [];
+  const saveExperienceAttachments: Omit<Generated_pb.Attachment[], '$typeName'> = [];
+  console.log(playElementResponse.playElementDesign?.modRules?.compatibleRules?.original)
+  // const saveExperienceOriginalModRules: Uint8Array<ArrayBufferLike> = bytesFromBase64()
+  const saveExperienceOriginalModRules: Uint8Array<ArrayBufferLike> = new Uint8Array();
 
 
-  let normalizedMutators = getSyncMutatorsOrAssetTags(mod.mutators ?? {});
-  normalizedMutators = applyLinkedMutators(
-    normalizedMutators,
-    blueprint?.mutators as any, // metadata object with .defaultValue per mutator
-  );
+  const saveExperiencePayload: Omit<Generated_pb.UpdatePlayElementRequest, '$typeName'> = {
+    name: mod.name,
+    id: mod.description,
+    mutators: saveExperienceMutators,
+    assetCategories: [],
+    originalModRules: saveExperienceOriginalModRules,
+    publishState: playElementResponse.playElement.publishStateType,
+    playElementSettings: playElementResponse.playElement.playElementSettings,
+    attachments: saveExperienceAttachments,
+  }
 }

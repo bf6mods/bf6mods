@@ -106,11 +106,17 @@ program
 		`The session id to use when deploying, should be web-xxxx`,
 	)
 	.option("--publish", `Whether to publish your mod`)
+	.option("--id", `The id of your mod`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
 	)
 	.action(async (input, options) => {
-		await deploy(input, options?.sessionId);
+		await deploy({
+		  input,
+			sessionIdParam: options?.sessionId,
+			publish: options?.publish,
+			modId: options?.modId
+		});
 	});
 
 program.exitOverride((_err) => {

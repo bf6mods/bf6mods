@@ -10,6 +10,7 @@ import { printToConsole } from "./utils.ts";
 export async function dev() {
 	const workingDir = path.resolve(".");
 	let config = await getBf6Config(workingDir);
+	if (!config) throw new Error('Cannot find bf6.config.ts!');
 	const outDir = path.resolve(workingDir, config.outDir);
 	fs.mkdirSync(outDir, { recursive: true });
 
