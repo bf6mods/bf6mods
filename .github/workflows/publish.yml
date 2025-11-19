@@ -1,41 +1,46 @@
 name: Publish Packages
 
 on:
-  push:
-    tags:
-      - 'cli-v*'   # Triggers for CLI package releases
-      - 'sdk-v*'   # Triggers for SDK package releases
+    push:
+        tags:
+            - "cli-v*" # Triggers for CLI package releases
+            - "portal-v*" # Triggers for portal package releases
+            - "sdk-v*" # Triggers for SDK package releases
 
 permissions:
-  id-token: write  # Required for OIDC
-  contents: read
+    id-token: write # Required for OIDC
+    contents: read
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          registry-url: 'https://registry.npmjs.org/'
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  registry-url: "https://registry.npmjs.org/"
 
-      - name: Update npm
-        run: npm install -g npm@latest
+            - name: Update npm
+              run: npm install -g npm@latest
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Run tests
-        run: npm run test
+            - name: Run tests
+              run: npm run test
 
-      - name: Run build
-        run: npm run build
+            - name: Run build
+              run: npm run build
 
-      - name: Publish CLI
-        if: startsWith(github.ref_name, 'cli-v')
-        run: npm publish --workspace @bf6mods/cli
+            - name: Publish CLI
+              if: startsWith(github.ref_name, 'cli-v')
+              run: npm publish --workspace @bf6mods/cli
 
-      - name: Publish SDK
-        if: startsWith(github.ref_name, 'sdk-v')
-        run: npm publish --workspace @bf6mods/sdk
+            - name: Publish Portal
+              if: startsWith(github.ref_name, 'portal-v')
+              run: npm publish --workspace @bf6mods/portal
+
+            - name: Publish SDK
+              if: startsWith(github.ref_name, 'sdk-v')
+              run: npm publish --workspace @bf6mods/sdk
