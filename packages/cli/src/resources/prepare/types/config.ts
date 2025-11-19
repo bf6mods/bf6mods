@@ -1,18 +1,20 @@
 import type { ConfigType } from "@bf6mods/sdk";
 
 export enum MapId {
-	FireStorm = "MP_FireStorm-ModBuilderCustom0",
 	SiegeOfCairo = "MP_Abbasid-ModBuilderCustom0",
 	EmpireState = "MP_Aftermath-ModBuilderCustom0",
+	BlackwellFields = "MP_Badlands-ModBuilderCustom0",
 	IberianOffensive = "MP_Battery-ModBuilderCustom0",
 	LiberationPeak = "MP_Capstone-ModBuilderCustom0",
 	ManhattanBridge = "MP_Dumbo-ModBuilderCustom0",
+	Eastwoord = "MP_Eastwood-ModBuilderCustom0",
+	FireStorm = "MP_FireStorm-ModBuilderCustom0",
 	SaintsQuarter = "MP_Limestone-ModBuilderCustom0",
 	NewSobekCity = "MP_Outskirts-ModBuilderCustom0",
 	MirakValley = "MP_Tungsten-ModBuilderCustom0",
-	ClubHouse = "MP_Granite_ClubHouse_Portal-ModBuilderCustom0",
-	TechCenter = "MP_Granite_TechCampus_Portal-ModBuilderCustom0",
-	BlackwellFields = "MP_Badlands-ModBuilderCustom0",
+	GolfCourse = "MP_Granite_ClubHouse_Portal-ModBuilderCustom0",
+	DefenseNexus = "MP_Granite_TechCampus_Portal-ModBuilderCustom0",
+	PortalSandbox = "MP_Portal_Sand-ModBuilderCustom0",
 }
 
 /**
