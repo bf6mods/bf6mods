@@ -2,67 +2,116 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { Clients, Generated_pb, protobuf } from "@bf6mods/portal";
+import type { ConfigType } from "@bf6mods/sdk";
 import colors from "colors";
 import { importGlobal } from "import-global";
+import { getBf6Config } from "../build/index.ts";
 import { printToConsole } from "../utils.ts";
-import { ConfigType } from "@bf6mods/sdk";
 import { alwaysAuthenticatedRequest } from "./authenticate.ts";
 import { buildSaveExperiencePayload } from "./jsonToRpc.ts";
-import { getBf6Config } from "../build/index.ts";
 
 export const clients = new Clients();
 
-
-
-export async function deploy({input, sessionIdParam, publish, modId}: {
-  input?: string,
-  sessionIdParam?: string,
-  publish?: boolean,
-  modId?: string
+export async function deploy({
+	input,
+	sessionIdParam,
+	publish,
+	modId,
+}: {
+	input?: string;
+	sessionIdParam?: string;
+	publish?: boolean;
+	modId?: string;
 }) {
-  const rootDir = path.resolve('.');
+	const rootDir = path.resolve(".");
 	if (!input) input = path.resolve(rootDir, "dist", "mod.json");
 	printToConsole(`🚀 Starting deploy for ${colors.cyan(input)}…`);
-	if (!fs.existsSync(input)) return printToConsole(`${colors.red.bold("✗")} File ${colors.cyan(input)} does not exist!`, true);
-	const mod = JSON.parse(fs.readFileSync(input, { encoding: 'utf-8' })) as ConfigType
+	if (!fs.existsSync(input))
+		return printToConsole(
+			`${colors.red.bold("✗")} File ${colors.cyan(input)} does not exist!`,
+			true,
+		);
+	const mod = JSON.parse(
+		fs.readFileSync(input, { encoding: "utf-8" }),
+	) as ConfigType;
 
-	const blueprints = await alwaysAuthenticatedRequest('getScheduledBlueprints', {}, sessionIdParam);
+	const blueprints = await alwaysAuthenticatedRequest(
+		"getScheduledBlueprints",
+		{},
+		sessionIdParam,
+	);
 	console.log("blueprints", blueprints.blueprintIds);
 
-	const blueprint = await alwaysAuthenticatedRequest('getBlueprintsById', {
-		blueprintIds: blueprints.blueprintIds,
-	}, sessionIdParam);
+	const blueprint = await alwaysAuthenticatedRequest(
+		"getBlueprintsById",
+		{
+			blueprintIds: blueprints.blueprintIds,
+		},
+		sessionIdParam,
+	);
 
-  console.log('blueprint:', blueprint);
+	const config = await getBf6Config(rootDir);
 
-  const config = await getBf6Config(rootDir);
+	let id: string | undefined = modId;
+	if (!config)
+		printToConsole(
+			`Cannot find bf6mods config in dir ${rootDir}, proceeding without it.`,
+		);
+	else if (config?.id) id = config.id;
+	else {
+		printToConsole(
+			`No id specified in bf6.config.ts! Defaulting to experience with same name!`,
+		);
+	}
 
-  let id: string | undefined;
-  if (!config) printToConsole(`Cannot find bf6mods config in dir ${rootDir}, proceeding without it.`);
-  else if (config?.id) id = config.id;
-  else {
-    printToConsole(`No id specified in bf6.config.ts! Defaulting to experience with same name!`);
-  }
+	if (!id) {
+		const owned = await alwaysAuthenticatedRequest(
+			"getOwnedPlayElementsV2",
+			{
+				includeDenied: true,
+				publishStates: [
+					Generated_pb.PublishStateType.Draft,
+					Generated_pb.PublishStateType.Published,
+					Generated_pb.PublishStateType.Error,
+				],
+			},
+			sessionIdParam,
+		);
+		console.log("owned:", owned.playElements.map(owned => owned.playElement));
+		const found = owned.playElements.find(
+			(element) => element?.playElement?.name === mod.name,
+		);
+		if (found?.playElement?.id) id = found.playElement.id;
+	}
 
-  // if (!id) {
-  //   const owned = await alwaysAuthenticatedRequest('getOwnedPlayElementsV2', {}, sessionIdParam);
-  //   const found = owned.playElements.find(element => element?.playElement?.name === mod.name);
-  //   if (found?.playElement?.id) id = found.playElement.id;
-  // }
+	if (!id) {
+		printToConsole(
+			`${colors.red.bold("✗")} Cannot find an id for your mod to deploy with! Please specify the id explicitly with \`--id\` or by having a mod with the same name!`,
+		);
+		process.exit(0);
+	}
 
-  // if (!id) {
-  //   printToConsole(`${colors.red.bold("✗")} Cannot find an id for your mod to deploy with! Please specify the id explicitly with \`--id\` or by having a mod with the same name!`);
-  //   process.exit(0);
-  // }
+	const playElementResponse = await alwaysAuthenticatedRequest(
+		"getPlayElement",
+		{
+			id,
+			includeDenied: true,
+		},
+		sessionIdParam,
+	);
 
-	// const playElementResponse = await alwaysAuthenticatedRequest('getPlayElement', {
-	//   id,
-	// 	includeDenied: true
-	// }, sessionIdParam);
+	if (
+		!playElementResponse.playElement ||
+		!playElementResponse.playElementDesign ||
+		!playElementResponse.progressionMode
+	)
+		throw new Error(
+			"Cannot find essential attribute in mod, please report to GitHub!",
+		);
 
-	// if (!playElementResponse.playElement || !playElementResponse.playElementDesign || !playElementResponse.progressionMode) throw new Error('Cannot find essential attribute in mod, please report to GitHub!')
+	if (!mod.mapRotation) throw new Error("You must specify at least one map!");
 
-	// if (!mod.mapRotation) throw new Error('You must specify at least one map!')
+	console.log("playElementResponse:", playElementResponse);
 
 	// buildSaveExperiencePayload(mod, blueprint.blueprints[0], playElementResponse as Required<typeof playElementResponse>)
 
