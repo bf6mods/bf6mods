@@ -1,7 +1,5 @@
-import { fromBinary } from "@bufbuild/protobuf";
 import { createClient } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
-import { UpdatePlayElementRequestSchema } from "../gen/santiago/common/generated_pb";
 import { WebAuthentication } from "../gen/santiago/web/authentication/WebAuthentication_pb";
 import { WebPlay } from "../gen/santiago/web/play/WebPlay_pb";
 

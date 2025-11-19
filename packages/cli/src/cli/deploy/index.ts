@@ -1,21 +1,17 @@
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
-import { Clients, Generated_pb, protobuf } from "@bf6mods/portal";
+import { Clients, Generated_pb } from "@bf6mods/portal";
 import type { ConfigType } from "@bf6mods/sdk";
 import colors from "colors";
-import { importGlobal } from "import-global";
 import { getBf6Config } from "../build/index.ts";
 import { printToConsole } from "../utils.ts";
 import { alwaysAuthenticatedRequest } from "./authenticate.ts";
-import { buildSaveExperiencePayload } from "./jsonToRpc.ts";
 
 export const clients = new Clients();
 
 export async function deploy({
 	input,
 	sessionIdParam,
-	publish,
 	modId,
 }: {
 	input?: string;
@@ -23,8 +19,8 @@ export async function deploy({
 	publish?: boolean;
 	modId?: string;
 }) {
-    printToConsole('To be implemented in a future release');
-    process.exit(0);
+	printToConsole("To be implemented in a future release");
+	process.exit(0);
 	const rootDir = path.resolve(".");
 	if (!input) input = path.resolve(rootDir, "dist", "mod.json");
 	printToConsole(`🚀 Starting deploy for ${colors.cyan(input)}…`);
@@ -79,7 +75,10 @@ export async function deploy({
 			},
 			sessionIdParam,
 		);
-		console.log("owned:", owned.playElements.map(owned => owned.playElement));
+		console.log(
+			"owned:",
+			owned.playElements.map((owned) => owned.playElement),
+		);
 		const found = owned.playElements.find(
 			(element) => element?.playElement?.name === mod.name,
 		);

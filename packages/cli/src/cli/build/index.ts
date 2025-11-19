@@ -25,18 +25,20 @@ declare global {
 /**
  * Dynamically imports and validates bf6.config.ts
  */
-export async function getBf6Config(rootDir: string): Promise<Bf6Config | undefined> {
-  try {
-    globalThis.defineBf6Config = (c) => c;
-    globalThis.MapId = MapIdEnum;
-    const jiti = createJiti(rootDir, { interopDefault: true });
-    const result = await jiti.import("./bf6.config", { default: true });
-    delete globalThis.defineBf6Config;
-    delete globalThis.MapId;
-    return result as Bf6Config;
-  } catch (_error) {
-    return;
-  }
+export async function getBf6Config(
+	rootDir: string,
+): Promise<Bf6Config | undefined> {
+	try {
+		globalThis.defineBf6Config = (c) => c;
+		globalThis.MapId = MapIdEnum;
+		const jiti = createJiti(rootDir, { interopDefault: true });
+		const result = await jiti.import("./bf6.config", { default: true });
+		delete globalThis.defineBf6Config;
+		delete globalThis.MapId;
+		return result as Bf6Config;
+	} catch (_error) {
+		return;
+	}
 }
 
 /**
@@ -45,7 +47,7 @@ export async function getBf6Config(rootDir: string): Promise<Bf6Config | undefin
 export async function build() {
 	const workingDir = path.resolve(".");
 	const config = await getBf6Config(workingDir);
-  if (!config) throw new Error('Cannot find bf6.config.ts!');
+	if (!config) throw new Error("Cannot find bf6.config.ts!");
 
 	const outDir = path.resolve(workingDir, config.outDir);
 	if (fs.existsSync(outDir))
