@@ -102,20 +102,20 @@ program
 	.command("deploy")
 	.argument("[input]")
 	.option(
-		"--session-id",
+		"--session-id <session id>",
 		`The session id to use when deploying, should be web-xxxx`,
 	)
 	.option("--publish", `Whether to publish your mod`)
-	.option("--id", `The id of your mod`)
+	.option("--id <id>", `The id of your mod`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
 	)
 	.action(async (input, options) => {
 		await deploy({
-		  input,
+			input,
 			sessionIdParam: options?.sessionId,
 			publish: options?.publish,
-			modId: options?.modId
+			modId: options?.id,
 		});
 	});
 

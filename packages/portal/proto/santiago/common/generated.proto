@@ -245,7 +245,7 @@ message CreatePlayElementRequest {
 	repeated AssetCategory asset_categories = 6;
 	bytes original_mod_rules = 7;
 	PlayElementSettings play_element_settings = 9;
-	int32 publish_state = 10;
+	PublishStateType publish_state = 10;
 	google.protobuf.StringValue mod_level_data_id = 11;
 	google.protobuf.StringValue thumbnail_url = 12;
 	repeated Attachment attachments = 13;
@@ -336,8 +336,17 @@ message GetLicenseRequirementsResponse {
 	repeated MapEntryRequirement map_entry_requirements = 2;
 }
 
+enum PublishStateType {
+    Invalid = 0;
+    Draft = 1;
+    Published = 2;
+    Archived = 3;
+    Error = 4;
+    Unrecognized = -1;
+}
+
 message GetOwnedPlayElementsRequest {
-	repeated int32 publish_states = 1;
+	repeated PublishStateType publish_states = 1;
 	bool include_denied = 2;
 }
 
@@ -626,7 +635,7 @@ message PlayElement {
 	google.protobuf.Timestamp created = 6;
 	google.protobuf.Timestamp updated = 7;
 	PlayElementSettings play_element_settings = 8;
-	int32 publish_state_type = 9;
+	PublishStateType publish_state_type = 9;
 	Int32Value likes = 10;
 	google.protobuf.Timestamp publish_at = 11;
 	google.protobuf.StringValue thumbnail_url = 12;
@@ -819,7 +828,7 @@ message UpdatePlayElementRequest {
 	repeated AssetCategory asset_categories = 7;
 	bytes original_mod_rules = 8;
 	PlayElementSettings play_element_settings = 10;
-	int32 publish_state = 11;
+	PublishStateType publish_state = 11;
 	google.protobuf.StringValue mod_level_data_id = 12;
 	google.protobuf.StringValue thumbnail_url = 13;
 	repeated Attachment attachments = 14;
