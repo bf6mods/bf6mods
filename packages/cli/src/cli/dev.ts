@@ -1,15 +1,16 @@
+import chokidar, { type FSWatcher } from "chokidar";
+import colors from "colors";
 import fs from "node:fs";
 import { glob } from "node:fs/promises";
 import path from "node:path";
-import chokidar, { type FSWatcher } from "chokidar";
-import colors from "colors";
+import type { Bf6Config } from "../resources/prepare/types/config.ts";
 import { build, getBf6Config } from "./build/index.ts";
 import { Bf6Logger } from "./log.ts";
 import { printToConsole } from "./utils.ts";
 
 export async function dev() {
 	const workingDir = path.resolve(".");
-	let config = await getBf6Config(workingDir);
+	const config = await getBf6Config(workingDir);
 	if (!config) throw new Error('Cannot find bf6.config.ts!');
 	const outDir = path.resolve(workingDir, config.outDir);
 	fs.mkdirSync(outDir, { recursive: true });
@@ -52,7 +53,7 @@ export async function dev() {
 
 	const debouncedRebuild = debounce(rebuild, 200);
 
-	async function collectWatchTargets(): Promise<string[]> {
+	async function collectWatchTargets(config: Bf6Config): Promise<string[]> {
 		const targets: string[] = [];
 
 		if (config.entrypoint)
@@ -67,7 +68,7 @@ export async function dev() {
 		return targets;
 	}
 
-	async function setupWatcher() {
+	async function setupWatcher(config: Bf6Config) {
 		if (watcher) {
 			await watcher.close();
 			printToConsole(
@@ -76,7 +77,7 @@ export async function dev() {
 			await new Promise((r) => setTimeout(r, 10));
 		}
 
-		const watchTargets = await collectWatchTargets();
+		const watchTargets = await collectWatchTargets(config);
 		printToConsole(colors.cyan(`👀 Watching ${watchTargets.length} files...`));
 
 		watcher = chokidar.watch(watchTargets, {
@@ -99,8 +100,9 @@ export async function dev() {
 				printToConsole(
 					colors.magenta("⚙ Config changed — reloading watcher..."),
 				);
-				config = await getBf6Config(workingDir);
-				await setupWatcher();
+				const newConfig = await getBf6Config(workingDir);
+				if (!newConfig) throw new Error('Cannot find bf6.config.ts!');
+				await setupWatcher(newConfig);
 				return;
 			}
 			debouncedRebuild(file);
@@ -116,7 +118,7 @@ export async function dev() {
 		process.exit(0);
 	});
 
-	await setupWatcher();
+	await setupWatcher(config);
 
 	let logger: Bf6Logger | undefined;
 	try {

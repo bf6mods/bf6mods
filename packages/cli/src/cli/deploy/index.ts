@@ -23,6 +23,8 @@ export async function deploy({
 	publish?: boolean;
 	modId?: string;
 }) {
+    printToConsole('To be implemented in a future release');
+    process.exit(0);
 	const rootDir = path.resolve(".");
 	if (!input) input = path.resolve(rootDir, "dist", "mod.json");
 	printToConsole(`🚀 Starting deploy for ${colors.cyan(input)}…`);
@@ -42,7 +44,7 @@ export async function deploy({
 	);
 	console.log("blueprints", blueprints.blueprintIds);
 
-	const blueprint = await alwaysAuthenticatedRequest(
+	const _blueprint = await alwaysAuthenticatedRequest(
 		"getBlueprintsById",
 		{
 			blueprintIds: blueprints.blueprintIds,
