@@ -1,10 +1,10 @@
-import colors from 'colors';
-import { importGlobal } from "import-global";
 import os from "node:os";
 import path from "node:path";
+import colors from "colors";
+import { importGlobal } from "import-global";
+import keytar from "keytar";
 import { printToConsole } from "../utils.ts";
 import { clients } from "./index.ts";
-import keytar from "keytar";
 
 export type PuppeteerImport = typeof import("puppeteer");
 
@@ -119,25 +119,25 @@ export async function authenticate(sessionIdParam?: string) {
 
 type PlayClient = typeof clients.play;
 export async function alwaysAuthenticatedRequest<K extends keyof PlayClient>(
-  method: K,
-  request: Parameters<PlayClient[K]>[0],
-  sessionId: string | undefined,
-  options?: Parameters<PlayClient[K]>[1]
+	method: K,
+	request: Parameters<PlayClient[K]>[0],
+	sessionId: string | undefined,
+	options?: Parameters<PlayClient[K]>[1],
 ): Promise<Awaited<ReturnType<PlayClient[K]>>> {
-  const fn = clients.play[method] as (
-    req: Parameters<PlayClient[K]>[0],
-    opts?: Parameters<PlayClient[K]>[1]
-  ) => ReturnType<PlayClient[K]>;
+	const fn = clients.play[method] as (
+		req: Parameters<PlayClient[K]>[0],
+		opts?: Parameters<PlayClient[K]>[1],
+	) => ReturnType<PlayClient[K]>;
 
-  try {
-    return await fn(request, options);
-  } catch (error) {
-    if (error instanceof Error && error.message === "[unauthenticated]") {
-      printToConsole("🔄 Session expired. Re-authenticating…");
-      const success = await authenticate(sessionId);
-      if (!success) throw error;
-      return await fn(request, options);
-    }
-    throw error;
-  }
+	try {
+		return await fn(request, options);
+	} catch (error) {
+		if (error instanceof Error && error.message === "[unauthenticated]") {
+			printToConsole("🔄 Session expired. Re-authenticating…");
+			const success = await authenticate(sessionId);
+			if (!success) throw error;
+			return await fn(request, options);
+		}
+		throw error;
+	}
 }
