@@ -46,7 +46,7 @@ export function FilteredArray(array: mod.Array, cond: (currentElement: any) => b
     let n = arr.length;
     for (let i = 0; i < n; i++) {
         let currentElement = arr[i];
-        if (cond(currentElement)) mod.AppendToArray(v, currentElement);
+        if (cond(currentElement)) v = mod.AppendToArray(v, currentElement);
     }
     return v;
 }
@@ -99,13 +99,14 @@ export function Equals(a: any, b: any) {
     return mod.Equals(a, b);
 }
 
+// Waits for a provided number of seconds or if the provided condition evaluates to true during that interval.
 export async function WaitUntil(delay: number, cond: () => boolean) {
-    // complete rush hack. this will likely wait way too long and other problems.
-    let deltaCount = 10;
-    let deltaWait = delay / deltaCount;
-    for (let t = 0; t < deltaCount; t++) {
-        if (!cond()) break;
-        await mod.Wait(deltaWait);
+    // rush hack. this will likely wait too long and other problems.
+    const interval = 0.2; // seconds
+    const checks = Math.ceil(delay / interval);
+    for (let t = 0; t < checks; t++) {
+        if (cond()) break;
+        await mod.Wait(interval);
     }
 }
 
@@ -197,14 +198,15 @@ export function getGlobalCondition(n: number) {
     return globalConditions.getConditionState(n);
 }
 
-export function getPlayersInTeam(team: mod.Team) {
+export function getPlayersInTeam(teamObj: mod.Team) {
+    const team = mod.GetObjId(teamObj);
     const allPlayers = mod.AllPlayers();
     const n = mod.CountOf(allPlayers);
     let teamMembers = [];
 
     for (let i = 0; i < n; i++) {
         let player = mod.ValueInArray(allPlayers, i) as mod.Player;
-        if (mod.GetTeam(player) == team) {
+        if (mod.GetObjId(mod.GetTeam(player)) == team) {
             teamMembers.push(player);
         }
     }

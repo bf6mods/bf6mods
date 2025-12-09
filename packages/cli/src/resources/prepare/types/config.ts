@@ -15,6 +15,10 @@ export enum MapId {
 	GolfCourse = "MP_Granite_ClubHouse_Portal-ModBuilderCustom0",
 	DefenseNexus = "MP_Granite_TechCampus_Portal-ModBuilderCustom0",
 	PortalSandbox = "MP_Portal_Sand-ModBuilderCustom0",
+	Marina = "MP_Granite_Marina_Portal-ModBuilderCustom0",
+	Downtown = "MP_Granite_MainStreet_Portal-ModBuilderCustom0",
+	Area22B = "MP_Granite_MilitaryRnD_Portal-ModBuilderCustom0",
+	RedlineStorage = "MP_Granite_MilitaryStorage_Portal-ModBuilderCustom0",
 }
 
 /**

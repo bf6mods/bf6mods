@@ -1,0 +1,199 @@
+{
+	"Portal_Dynamic": [
+		{
+			"name": "TEAM_1_HQ",
+			"AltTeam": "TeamNeutral",
+			"ObjId": 1,
+			"InfantrySpawns": [
+				"TEAM_1_HQ/SpawnPoint_1_1",
+				"TEAM_1_HQ/SpawnPoint_1_2",
+				"TEAM_1_HQ/SpawnPoint_1_3",
+				"TEAM_1_HQ/SpawnPoint_1_4"
+			],
+			"HQArea": "TEAM_1_HQ/HQ_Team1",
+			"type": "HQ_PlayerSpawner",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0, "y": 0, "z": 1 },
+			"position": { "x": -1474.05, "y": 103.092, "z": -690.451 },
+			"id": "TEAM_1_HQ",
+			"linked": ["HQArea", "InfantrySpawns"]
+		},
+		{
+			"name": "HQ_Team1",
+			"type": "PolygonVolume",
+			"id": "TEAM_1_HQ/HQ_Team1",
+			"height": 0,
+			"points": [
+				{ "x": -1469.05, "y": 108.092, "z": -685.451 },
+				{ "x": -1469.05, "y": 108.092, "z": -695.451 },
+				{ "x": -1479.05, "y": 108.092, "z": -695.451 },
+				{ "x": -1479.05, "y": 108.092, "z": -685.451 }
+			]
+		},
+		{
+			"name": "SpawnPoint_1_1",
+			"type": "SpawnPoint",
+			"right": { "x": 0.999884, "y": 0, "z": 0.0152535 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": -0.0152535, "y": 0, "z": 0.999884 },
+			"position": { "x": -1474.05, "y": 103.092, "z": -693.451 },
+			"id": "TEAM_1_HQ/SpawnPoint_1_1"
+		},
+		{
+			"name": "SpawnPoint_1_2",
+			"type": "SpawnPoint",
+			"right": { "x": -0.9995, "y": 0, "z": 0.0316198 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": -0.0316198, "y": 0, "z": -0.9995 },
+			"position": { "x": -1471.05, "y": 103.092, "z": -690.451 },
+			"id": "TEAM_1_HQ/SpawnPoint_1_2"
+		},
+		{
+			"name": "SpawnPoint_1_3",
+			"type": "SpawnPoint",
+			"right": { "x": -0.0428871, "y": 0, "z": -0.99908 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0.99908, "y": 0, "z": -0.0428871 },
+			"position": { "x": -1477.05, "y": 103.092, "z": -690.451 },
+			"id": "TEAM_1_HQ/SpawnPoint_1_3"
+		},
+		{
+			"name": "SpawnPoint_1_4",
+			"type": "SpawnPoint",
+			"right": { "x": 0.0841819, "y": 0, "z": 0.99645 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": -0.99645, "y": 0, "z": 0.0841819 },
+			"position": { "x": -1474.05, "y": 103.092, "z": -687.451 },
+			"id": "TEAM_1_HQ/SpawnPoint_1_4"
+		},
+		{
+			"name": "TEAM_2_HQ",
+			"Team": "Team2",
+			"AltTeam": "TeamNeutral",
+			"ObjId": 2,
+			"InfantrySpawns": [
+				"TEAM_2_HQ/SpawnPoint_2_1",
+				"TEAM_2_HQ/SpawnPoint_2_2",
+				"TEAM_2_HQ/SpawnPoint_2_3",
+				"TEAM_2_HQ/SpawnPoint_2_4"
+			],
+			"HQArea": "TEAM_2_HQ/HQ_Team2",
+			"type": "HQ_PlayerSpawner",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0, "y": 0, "z": 1 },
+			"position": { "x": -1465.44, "y": 102.992, "z": -746.428 },
+			"id": "TEAM_2_HQ",
+			"linked": ["HQArea", "InfantrySpawns"]
+		},
+		{
+			"name": "HQ_Team2",
+			"type": "PolygonVolume",
+			"id": "TEAM_2_HQ/HQ_Team2",
+			"height": 0,
+			"points": [
+				{ "x": -1460.44, "y": 107.992, "z": -741.428 },
+				{ "x": -1460.44, "y": 107.992, "z": -751.428 },
+				{ "x": -1470.44, "y": 107.992, "z": -751.428 },
+				{ "x": -1470.44, "y": 107.992, "z": -741.428 }
+			]
+		},
+		{
+			"name": "SpawnPoint_2_1",
+			"type": "SpawnPoint",
+			"right": { "x": 0.87795, "y": 0, "z": 0.478754 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": -0.478754, "y": 0, "z": 0.87795 },
+			"position": { "x": -1465.44, "y": 102.992, "z": -749.428 },
+			"id": "TEAM_2_HQ/SpawnPoint_2_1"
+		},
+		{
+			"name": "SpawnPoint_2_2",
+			"type": "SpawnPoint",
+			"right": { "x": -0.997604, "y": 0, "z": -0.0691822 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0.0691822, "y": 0, "z": -0.997604 },
+			"position": { "x": -1462.44, "y": 102.992, "z": -746.428 },
+			"id": "TEAM_2_HQ/SpawnPoint_2_2"
+		},
+		{
+			"name": "SpawnPoint_2_3",
+			"type": "SpawnPoint",
+			"right": { "x": 0.162758, "y": 0, "z": -0.986666 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0.986666, "y": 0, "z": 0.162758 },
+			"position": { "x": -1468.44, "y": 102.992, "z": -746.428 },
+			"id": "TEAM_2_HQ/SpawnPoint_2_3"
+		},
+		{
+			"name": "SpawnPoint_2_4",
+			"type": "SpawnPoint",
+			"right": { "x": -0.165771, "y": 0, "z": 0.986164 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": -0.986164, "y": 0, "z": -0.165771 },
+			"position": { "x": -1465.44, "y": 102.992, "z": -743.428 },
+			"id": "TEAM_2_HQ/SpawnPoint_2_4"
+		},
+		{
+			"name": "CombatArea",
+			"CombatVolume": "CombatArea/CombatVolume",
+			"type": "CombatArea",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0, "y": 0, "z": 1 },
+			"position": { "x": -1167.17, "y": 20.9261, "z": -717.832 },
+			"id": "CombatArea",
+			"linked": ["CombatVolume"]
+		},
+		{
+			"name": "CombatVolume",
+			"type": "PolygonVolume",
+			"id": "CombatArea/CombatVolume",
+			"height": 100,
+			"points": [
+				{ "x": -1357.251, "y": 155.3071, "z": -1034.926 },
+				{ "x": -1469.924, "y": 155.3071, "z": -1028.479 },
+				{ "x": -1650.029, "y": 155.3071, "z": -957.8978 },
+				{ "x": -1653.68, "y": 155.3071, "z": -670.704 },
+				{ "x": -1652.463, "y": 155.3071, "z": -373.775 },
+				{ "x": -1019.3671, "y": 155.3071, "z": -396.461 },
+				{ "x": -961.249, "y": 155.3071, "z": -699.989 },
+				{ "x": -962.699, "y": 155.3071, "z": -790.358 },
+				{ "x": -911.012, "y": 155.3071, "z": -829.2179 },
+				{ "x": -1023.5895, "y": 155.3071, "z": -993.8091 },
+				{ "x": -1125.9083, "y": 155.3071, "z": -1078.787 },
+				{ "x": -1302.49, "y": 155.3071, "z": -1060.481 }
+			]
+		},
+		{
+			"name": "DeployCam",
+			"type": "DeployCam",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 0.101056, "z": -0.994881 },
+			"front": { "x": 0, "y": 0.994881, "z": 0.101056 },
+			"position": { "x": -1286.43, "y": 419.438, "z": -701.466 },
+			"id": "Camera3D/DeployCam"
+		}
+	],
+	"Static": [
+		{
+			"name": "MP_Granite_Marina_Portal_Terrain",
+			"type": "MP_Granite_Marina_Portal_Terrain",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0, "y": 0, "z": 1 },
+			"position": { "x": 0, "y": 0, "z": 0 },
+			"id": "Static/MP_Granite_Marina_Portal_Terrain"
+		},
+		{
+			"name": "MP_Granite_Marina_Portal_Assets",
+			"type": "MP_Granite_Marina_Portal_Assets",
+			"right": { "x": 1, "y": 0, "z": 0 },
+			"up": { "x": 0, "y": 1, "z": 0 },
+			"front": { "x": 0, "y": 0, "z": 1 },
+			"position": { "x": 0, "y": 0, "z": 0 },
+			"id": "Static/MP_Granite_Marina_Portal_Assets"
+		}
+	]
+}
