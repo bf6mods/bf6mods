@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package santiago.web.localization;
+
+import "santiago/common/generated.proto";
+
+service ClientLocalization {
+  rpc getTranslations(santiago.common.GetTranslationsRequest) returns (santiago.common.GetTranslationsResponse);
+}

@@ -1,11 +1,13 @@
 import { createClient } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
 import { WebAuthentication } from "../gen/santiago/web/authentication/WebAuthentication_pb";
+import { ClientLocalization } from "../gen/santiago/web/localization/ClientLocalization_pb";
 import { WebPlay } from "../gen/santiago/web/play/WebPlay_pb";
 
 export * as protobuf from "@bufbuild/protobuf";
 export * as Generated_pb from "../gen/santiago/common/generated_pb";
 export * as WebAuthentication_pb from "../gen/santiago/web/authentication/WebAuthentication_pb";
+export * as ClientLocalization_pb from "../gen/santiago/web/localization/ClientLocalization_pb";
 export * as WebPlay_pb from "../gen/santiago/web/play/WebPlay_pb";
 
 export type AuthOptions =
@@ -51,6 +53,7 @@ export class Clients {
 
 	auth = createClient(WebAuthentication, this.transport);
 	play = createClient(WebPlay, this.transport);
+	localization = createClient(ClientLocalization, this.transport);
 
 	async authenticate(options: AuthOptions) {
 		if (options?.sessionId) this.session = options?.sessionId;
