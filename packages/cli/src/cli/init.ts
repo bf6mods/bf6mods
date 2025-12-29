@@ -51,6 +51,7 @@ function renameFilesRecursively(dir: string, modName: string) {
 
 export const templates = [
 	"Basic",
+	"Complete",
 	"AcePursuit",
 	"BombSquad",
 	"Exfil",
