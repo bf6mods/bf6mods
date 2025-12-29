@@ -186,6 +186,23 @@ describe.concurrent("@bf6mods/cli", async () => {
     );
 
     createModTest(cliTarPath, sdkTarPath, portalTarPath, {
+        template: "Complete",
+        installDependencies: true,
+    }).concurrent(
+        "build & verify Complete template",
+        {
+            timeout: 100_000,
+        },
+        async ({ mod }) => {
+            const { exitCode } = await build(mod.fullPath);
+            expect(exitCode, "Exit code is not 0!").toBe(0);
+
+            const { exitCode: typeExit } = await checkTypes(mod.fullPath);
+            expect(typeExit, "TypeScript type check failed!").toBe(0);
+        },
+    );
+
+    createModTest(cliTarPath, sdkTarPath, portalTarPath, {
         template: "Basic",
         installDependencies: true,
     }).concurrent(
