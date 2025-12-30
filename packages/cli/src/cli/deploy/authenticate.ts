@@ -49,7 +49,7 @@ export async function getSessionIdFromCookies() {
 
 	console.log(`${colors.green.bold("✓")} Login detected!`);
 
-	const cookies = await browser.cookies()
+	const cookies = await browser.cookies();
 	await browser.close();
 
 	return cookies.find((cookie) => cookie.name === "bf6sessionId")?.value;
@@ -127,7 +127,7 @@ export async function alwaysAuthenticatedRequest<T>(
 			printToConsole("🔄 Session expired. Re-authenticating…");
 			const success = await authenticate(sessionId);
 			if (!success) throw error;
-      return await method();
+			return await method();
 		}
 		throw error;
 	}
