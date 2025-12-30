@@ -252,12 +252,6 @@ export type ConfigType = {
 	description: string;
 
 	/**
-	 * Optional base64-encoded thumbnail image for the mod.
-	 * Must be 352x248 pixels, less than 78KB, and in JPEG or PNG format.
-	 */
-	thumbnail?: string;
-
-	/**
 	 * Optional list of maps included in this configuration’s rotation.
 	 * Each entry defines a playable map and its associated parameters.
 	 */
