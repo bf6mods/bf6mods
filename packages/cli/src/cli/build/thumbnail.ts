@@ -104,7 +104,7 @@ function getImageDimensions(
 				offset += segmentLength;
 			}
 		}
-	} catch (error) {
+	} catch (_error) {
 		// Failed to parse dimensions
 	}
 	return null;
@@ -151,7 +151,9 @@ export async function processThumbnail(
 			);
 		} catch (error) {
 			printToConsole(
-				colors.red(`✗ Failed to resize thumbnail: ${error instanceof Error ? error.message : "Unknown error"}`),
+				colors.red(
+					`✗ Failed to resize thumbnail: ${error instanceof Error ? error.message : "Unknown error"}`,
+				),
 			);
 			printToConsole(
 				colors.yellow(
@@ -170,7 +172,9 @@ export async function processThumbnail(
 	const outputPath = path.resolve(outDir, `thumbnail${ext}`);
 	await fs.promises.writeFile(outputPath, buffer);
 	printToConsole(
-		colors.green(`✓ Thumbnail saved to: ${path.relative(workingDir, outputPath)}`),
+		colors.green(
+			`✓ Thumbnail saved to: ${path.relative(workingDir, outputPath)}`,
+		),
 	);
 
 	return true;
@@ -241,4 +245,3 @@ export function createThumbnailDataUrl(
 	const mimeType = format === "png" ? "image/png" : "image/jpeg";
 	return `data:${mimeType};base64,${base64}`;
 }
-
