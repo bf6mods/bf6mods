@@ -1,7 +1,6 @@
 import os from "node:os";
 import path from "node:path";
 import colors from "colors";
-import { importGlobal } from "import-global";
 import keytar from "keytar";
 import { printToConsole } from "../utils.ts";
 import { clients } from "./index.ts";
@@ -11,7 +10,7 @@ export type PuppeteerImport = typeof import("puppeteer");
 export async function getSessionIdFromCookies() {
 	let puppeteer: PuppeteerImport;
 	try {
-		puppeteer = (await importGlobal("puppeteer")) as unknown as PuppeteerImport;
+		puppeteer = (await import("puppeteer")) as unknown as PuppeteerImport;
 	} catch (_error) {
 		printToConsole(`${colors.red.bold("✗")} Puppeteer could not be loaded.`);
 		console.error(
