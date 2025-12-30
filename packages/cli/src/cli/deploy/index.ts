@@ -19,8 +19,6 @@ export async function deploy({
 	publish?: boolean;
 	modId?: string;
 }) {
-	printToConsole("To be implemented in a future release");
-	process.exit(0);
 	const rootDir = path.resolve(".");
 	if (!input) input = path.resolve(rootDir, "dist", "mod.json");
 	printToConsole(`🚀 Starting deploy for ${colors.cyan(input)}…`);
@@ -33,20 +31,12 @@ export async function deploy({
 		fs.readFileSync(input, { encoding: "utf-8" }),
 	) as ConfigType;
 
-	const blueprints = await alwaysAuthenticatedRequest(
-		"getScheduledBlueprints",
-		{},
-		sessionIdParam,
-	);
+	const blueprints = await alwaysAuthenticatedRequest(() => clients.play.getScheduledBlueprints({}), sessionIdParam);
 	console.log("blueprints", blueprints.blueprintIds);
 
-	const _blueprint = await alwaysAuthenticatedRequest(
-		"getBlueprintsById",
-		{
-			blueprintIds: blueprints.blueprintIds,
-		},
-		sessionIdParam,
-	);
+  const _blueprint = await alwaysAuthenticatedRequest(() => clients.play.getBlueprintsById({
+    blueprintIds: blueprints.blueprintIds,
+  }), sessionIdParam);
 
 	const config = await getBf6Config(rootDir);
 
@@ -63,18 +53,14 @@ export async function deploy({
 	}
 
 	if (!id) {
-		const owned = await alwaysAuthenticatedRequest(
-			"getOwnedPlayElementsV2",
-			{
-				includeDenied: true,
-				publishStates: [
-					Generated_pb.PublishStateType.Draft,
-					Generated_pb.PublishStateType.Published,
-					Generated_pb.PublishStateType.Error,
-				],
-			},
-			sessionIdParam,
-		);
+	  const owned = await alwaysAuthenticatedRequest(() => clients.play.getOwnedPlayElementsV2({
+			includeDenied: true,
+			publishStates: [
+				Generated_pb.PublishStateType.Draft,
+				Generated_pb.PublishStateType.Published,
+				Generated_pb.PublishStateType.Error,
+			],
+		}), sessionIdParam);
 		console.log(
 			"owned:",
 			owned.playElements.map((owned) => owned.playElement),
@@ -92,14 +78,10 @@ export async function deploy({
 		process.exit(0);
 	}
 
-	const playElementResponse = await alwaysAuthenticatedRequest(
-		"getPlayElement",
-		{
-			id,
-			includeDenied: true,
-		},
-		sessionIdParam,
-	);
+	const playElementResponse = await alwaysAuthenticatedRequest(() => clients.play.getPlayElement({
+		id,
+		includeDenied: true,
+	}), sessionIdParam);
 
 	if (
 		!playElementResponse.playElement ||

@@ -49,7 +49,7 @@ export async function getSessionIdFromCookies() {
 
 	console.log(`${colors.green.bold("✓")} Login detected!`);
 
-	const cookies = await page.cookies();
+	const cookies = await browser.cookies()
 	await browser.close();
 
 	return cookies.find((cookie) => cookie.name === "bf6sessionId")?.value;
@@ -116,26 +116,18 @@ export async function authenticate(sessionIdParam?: string) {
 	return false;
 }
 
-type PlayClient = typeof clients.play;
-export async function alwaysAuthenticatedRequest<K extends keyof PlayClient>(
-	method: K,
-	request: Parameters<PlayClient[K]>[0],
+export async function alwaysAuthenticatedRequest<T>(
+	method: () => Promise<T> | T,
 	sessionId: string | undefined,
-	options?: Parameters<PlayClient[K]>[1],
-): Promise<Awaited<ReturnType<PlayClient[K]>>> {
-	const fn = clients.play[method] as (
-		req: Parameters<PlayClient[K]>[0],
-		opts?: Parameters<PlayClient[K]>[1],
-	) => ReturnType<PlayClient[K]>;
-
+): Promise<T> {
 	try {
-		return await fn(request, options);
+		return await method();
 	} catch (error) {
 		if (error instanceof Error && error.message === "[unauthenticated]") {
 			printToConsole("🔄 Session expired. Re-authenticating…");
 			const success = await authenticate(sessionId);
 			if (!success) throw error;
-			return await fn(request, options);
+      return await method();
 		}
 		throw error;
 	}
