@@ -170,7 +170,6 @@ export default defineBf6Config({
             ModBuilder_GameMode: 2,
             AimAssistSnapCapsuleRadiusMultiplier: 1,
             FriendlyFireDamageReflectionMaxTeamKills: 2,
-            Portal_GenerateNavMesh: false,
             SpawnBalancing_GamemodeStartTimer: 0,
             ExitVehiclesAllowed_PerTeam: [
                 [
