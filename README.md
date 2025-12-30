@@ -43,6 +43,7 @@ Important note on this. The [portal.battlefield.com](https://portal.battlefield.
 - Extended standard library (still in progress)
 - Hot reload
 - Automatic string injection
+- **Automatic thumbnail resizing** - Add any image to your project and it will be automatically resized and optimized to meet BF6 Portal requirements (352x248, max 78KB)
 - Logging from BF6! (Only when in hosting locally)
 
 ## Structure
@@ -71,6 +72,7 @@ export default defineBf6Config({
 	description: "A fast-paced race mod",
 	outDir: "dist",
 	entrypoint: "src/index.ts",
+	thumbnail: "src/thumbnail.png",
 	scenes: [[MapId.LiberationPeak, "src/scenes/AcePursuit.spatial.json"]],
 	game: {
 		mutators: {

@@ -232,4 +232,63 @@ describe.concurrent("@bf6mods/cli", async () => {
             expect(typeExit, "TypeScript type check failed!").toBe(0);
         },
     );
+
+    createModTest(cliTarPath, sdkTarPath, portalTarPath, {
+        template: "Basic",
+        installDependencies: true,
+    }).concurrent(
+        "build with thumbnail integration",
+        {
+            timeout: 100_000,
+        },
+        async ({ mod }) => {
+            // Add thumbnail to config
+            const configPath = path.resolve(mod.fullPath, "bf6.config.ts");
+            let config = await fs.promises.readFile(configPath, "utf8");
+
+            // Copy placeholder image if it exists
+            const placeholderPath = path.resolve(
+                __dirname,
+                "..",
+                "packages",
+                "cli",
+                "src",
+                "resources",
+                "templates",
+                "All",
+                "placeholder.jpg",
+            );
+
+            if (fs.existsSync(placeholderPath)) {
+                const srcDir = path.resolve(mod.fullPath, "src");
+                await fs.promises.mkdir(srcDir, { recursive: true });
+                await fs.promises.copyFile(
+                    placeholderPath,
+                    path.resolve(srcDir, "thumbnail.jpg"),
+                );
+
+                config = config.replace(
+                    /entrypoint: 'src\/index\.ts',/,
+                    'entrypoint: \'src/index.ts\',\n\tthumbnail: \'src/thumbnail.jpg\',',
+                );
+                await fs.promises.writeFile(configPath, config);
+            }
+
+            const { exitCode } = await build(mod.fullPath);
+            expect(exitCode, "Exit code is not 0!").toBe(0);
+
+            // Verify thumbnail file in dist if it was added
+            if (fs.existsSync(placeholderPath)) {
+                const thumbnailOutputPath = path.resolve(mod.fullPath, "dist", "thumbnail.jpg");
+                expect(fs.existsSync(thumbnailOutputPath)).toBe(true);
+
+                // Verify mod.json does NOT contain thumbnail field
+                const modJsonPath = path.resolve(mod.fullPath, "dist", "mod.json");
+                const modJson = JSON.parse(
+                    await fs.promises.readFile(modJsonPath, "utf8"),
+                );
+                expect(modJson.thumbnail).toBeUndefined();
+            }
+        },
+    );
 });

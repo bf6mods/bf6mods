@@ -16,6 +16,7 @@ import {
 } from "../../resources/prepare/types/config.ts";
 import { printToConsole } from "../utils.ts";
 import { extractBf6Strings } from "./generated-strings.ts";
+import { processThumbnail } from "./thumbnail.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -78,6 +79,11 @@ export async function build() {
 		generatedStrings,
 	);
 
+	// Process thumbnail if provided (saves to outDir)
+	if (config.thumbnail) {
+		await processThumbnail(config.thumbnail, workingDir, outDir);
+	}
+
 	await writeModJson(config, outDir, attachments, mapRotation, minifyJson);
 	printToConsole(`${colors.green.bold("✓")} Built mod: ${config.name}`);
 }
@@ -105,8 +111,7 @@ export async function buildEntrypoint(
 		inlineDynamicImports: true,
 	});
 
-	const code = result.output[0].code;
-	return code;
+	return result.output[0].code;
 }
 
 const __filename = fileURLToPath(import.meta.url);

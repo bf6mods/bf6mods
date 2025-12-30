@@ -93,6 +93,23 @@ export type Bf6Config = {
 	generateStrings?: boolean;
 
 	/**
+	 * Path to a thumbnail image for the mod.
+	 *
+	 * The image must meet BF6 Portal requirements:
+	 * - Max file size: 78KB
+	 * - Dimensions: 352x248 pixels
+	 * - Format: JPEG or PNG
+	 *
+	 * @example
+	 * ```ts
+	 * thumbnail: "assets/thumbnail.png"
+	 * // or
+	 * thumbnail: "thumbnail.jpg"
+	 * ```
+	 */
+	thumbnail?: string;
+
+	/**
 	 * Controls whether build output should be minified.
 	 *
 	 * Can be a boolean (to toggle all minification),
