@@ -8,11 +8,11 @@ hero:
   tagline: Multi-file support, hot reloading, and automated deployment for BF6 Portal.
   actions:
     - theme: brand
-      text: Get Started
-      link: /getting-started
+      text: Getting Started
+      link: /guide/getting-started
     - theme: alt
       text: Configuration
-      link: /config
+      link: /guide/config
   image:
       src: images/terminal.gif
       alt: VitePress
