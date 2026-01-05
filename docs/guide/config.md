@@ -23,7 +23,7 @@ export default defineBf6Config({
 })
 ```
 
-A complete list of mutators can be found [here](https://github.com/bf6mods/bf6mods/blob/main/packages/sdk/src/config/mutators/index.ts). However, it's generally recommend to import an existing project with your prefered settings from [portal.battlefield.com](portal.battlefield.com).
+A complete list of mutators can be found [here](https://github.com/bf6mods/bf6mods/blob/main/packages/sdk/src/config/mutators/index.ts). However, it's generally recommend to import an existing project with your prefered settings from [portal.battlefield.com](https://portal.battlefield.com).
 
 Here is the documentation for the config.
 
