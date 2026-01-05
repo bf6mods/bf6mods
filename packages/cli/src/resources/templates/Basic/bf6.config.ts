@@ -3,6 +3,7 @@ export default defineBf6Config({
     entrypoint: 'src/index.ts',
     name: '{bf6ConfigName}',
     description: 'A basic example',
+    thumbnail: "placeholder.png",
     scenes: [MapId.EmpireState],
     game: {},
 })
