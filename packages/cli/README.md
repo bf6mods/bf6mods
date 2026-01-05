@@ -20,20 +20,9 @@ Already have a project? Just export your currently existing project in [portal.b
 npx @bf6mods/cli import <export file> <output directory>
 ```
 
-## Deploying Project to Portal
+## Full Documentation
 
-There are two different ways of deploying a project to portal.
-
-### Manually Import
-
-Just run `npm run build` in your project dir, open [portal.battlefield.com](https://portal.battlefield.com), click import, and select the `dist/mod.json` file.
-
-### `npx @bf6mods/cli deploy`
-
-To use this, you must first install puppeteer via `npm -g i puppeteer`, but after doing so you can just run this command, and you will
-have your project deploy automatically for you.
-
-Important note on this. The [portal.battlefield.com](https://portal.battlefield.com) will not update showing the changes from the deployed code. This is due to the browsers cache.
+The full documentation can be found [here](https://bf6mods.github.io/bf6mods/guide/getting-started.html)!
 
 ## Features
 
@@ -46,49 +35,13 @@ Important note on this. The [portal.battlefield.com](https://portal.battlefield.
 - **Automatic thumbnail resizing** - Add any image to your project and it will be automatically resized and optimized to meet BF6 Portal requirements (352x248, max 78KB)
 - Logging from BF6! (Only when in hosting locally)
 
-## Structure
-
-`bf6mods` is very configurable, but the following structure is what can be expected from any mod.
-
-```
-my-mod/
-├─ src/
-│  ├─ index.ts
-│  ├─ scenes/
-│  │  └─ MyMap.spatial.json
-├─ bf6.config.ts
-├─ package.json
-└─ dist/
-   └─ mod.json
-```
-
-## `bf6.config.ts`
-
-Here is a short example of a `bf6.config.ts`.
-
-```ts
-export default defineBf6Config({
-	name: "AcePursuit",
-	description: "A fast-paced race mod",
-	outDir: "dist",
-	entrypoint: "src/index.ts",
-	thumbnail: "src/thumbnail.png",
-	scenes: [[MapId.LiberationPeak, "src/scenes/AcePursuit.spatial.json"]],
-	game: {
-		mutators: {
-			// ...
-		},
-	},
-});
-````
-
 ## @bf6mods/sdk
 
 This is a seperate library that exports the `PortalSdk`'s `mod` and `modlib`. Additionally it exports some stdlib helper functions and classes to help accelerate development.
 
 ## Links
 
-- [Dev Guide](docs/DEV.md)
 - [Documentation](https://bf6mods.github.io/bf6mods/)
+- [Contributing Guide](https://bf6mods.github.io/bf6mods/contributing/how-to-contribute.html)
 - [Discord](https://discord.gg/2gJ9fheYYK)
 - [Portal](https://portal.battlefield.com/bf6/en-gb/)

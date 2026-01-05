@@ -4,6 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "BF6 Mods",
   description: "Tools to develop mods effectively for Battlefield 6",
+  base: "/bf6mods/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
