@@ -14,7 +14,7 @@ hero:
       text: Configuration
       link: /guide/config
   image:
-      src: ./images/terminal.gif
+      src: images/terminal.gif
       alt: VitePress
 
 features:
