@@ -86,6 +86,9 @@ export default defineBf6Config({
 
 This is a seperate library that exports the `PortalSdk`'s `mod` and `modlib`. Additionally it exports some stdlib helper functions and classes to help accelerate development.
 
-## Join the discord with fellow modders!
+## Links
 
-You can join the discord by clicking this [link](https://discord.gg/2gJ9fheYYK)!
+- [Dev Guide](docs/DEV.md)
+- [Documentation](https://bf6mods.github.io/bf6mods/)
+- [Discord](https://discord.gg/2gJ9fheYYK)
+- [Portal](https://portal.battlefield.com/bf6/en-gb/)
