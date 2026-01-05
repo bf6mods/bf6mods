@@ -111,6 +111,54 @@ export async function deploy({
 
 	console.log("playElementResponse:", playElementResponse);
 
+	const thumbnailExtensions = [".jpg", ".jpeg", ".png"];
+	let thumbnailPath: string | undefined;
+	let thumbnailExt: string | undefined;
+
+	for (const ext of thumbnailExtensions) {
+		const testPath = path.resolve(rootDir, "dist", `thumbnail${ext}`);
+		if (fs.existsSync(testPath)) {
+			thumbnailPath = testPath;
+			thumbnailExt = ext;
+			break;
+		}
+	}
+
+	if (thumbnailPath && thumbnailExt) {
+		try {
+			printToConsole(colors.blue("📸 Uploading thumbnail..."));
+			const thumbnailBuffer = await fs.promises.readFile(thumbnailPath);
+
+			const mimeType = thumbnailExt === ".png" ? "image/png" : "image/jpeg";
+
+			const uploadResponse = await alwaysAuthenticatedRequest(
+				() =>
+					clients.play.uploadExperienceThumbnail({
+						image: thumbnailBuffer,
+						mimeType,
+					}),
+				sessionIdParam,
+			);
+			printToConsole(
+				colors.green(
+					`✓ Thumbnail uploaded successfully: ${uploadResponse.assetId}`,
+				),
+			);
+			printToConsole(colors.dim(`  URL: ${uploadResponse.url}`));
+		} catch (error) {
+			printToConsole(
+				colors.yellow(
+					`⚠ Failed to upload thumbnail: ${error instanceof Error ? error.message : "Unknown error"}`,
+				),
+			);
+			printToConsole(colors.dim("  Continuing deployment without thumbnail"));
+		}
+	} else {
+		printToConsole(
+			colors.dim("  No thumbnail found in dist folder, skipping upload"),
+		);
+	}
+
 	// buildSaveExperiencePayload(mod, blueprint.blueprints[0], playElementResponse as Required<typeof playElementResponse>)
 
 	// console.log('tags', blueprint.blueprints[0].availableProgressionModeTags?.tags)
