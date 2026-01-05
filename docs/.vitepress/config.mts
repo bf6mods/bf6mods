@@ -39,4 +39,30 @@ export default defineConfig({
       { icon: "github", link: "https://github.com/bf6mods/bf6mods" },
     ],
   },
+
+  head: [
+    [
+      "link",
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/bf6mods/favicon-96x96.png",
+        sizes: "96x96",
+      },
+    ],
+    [
+      "link",
+      { rel: "icon", type: "image/svg+xml", href: "/bf6mods/favicon.svg" },
+    ],
+    ["link", { rel: "shortcut icon", href: "/bf6mods/favicon.ico" }],
+    [
+      "link",
+      {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/bf6mods/apple-touch-icon.png",
+      },
+    ],
+    ["link", { rel: "manifest", href: "/bf6mods/site.webmanifest" }],
+  ],
 });
