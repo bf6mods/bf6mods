@@ -151,6 +151,10 @@ let teamConditions: Conditions[] = [];
 let capturePointConditions: Conditions[] = [];
 let mcomConditions: Conditions[] = [];
 let vehicleConditions: Conditions[] = [];
+let hqConditions: Conditions[] = [];
+let sectorConditions: Conditions[] = [];
+let vehicleSpawnerConditions: Conditions[] = [];
+
 let globalConditions: Conditions = new Conditions();
 
 function getObjectCondition(id: number, objectConditions: Conditions[], n: number) {
@@ -192,6 +196,21 @@ export function getMCOMCondition(obj: mod.MCOM, n: number) {
 export function getVehicleCondition(obj: mod.Vehicle, n: number) {
     let id = mod.GetObjId(obj);
     return getObjectCondition(id, vehicleConditions, n);
+}
+
+export function getHQCondition(obj: mod.HQ, n: number) {
+    let id = mod.GetObjId(obj);
+    return getObjectCondition(id, hqConditions, n);
+}
+
+export function getSectorCondition(obj: mod.Sector, n: number) {
+    let id = mod.GetObjId(obj);
+    return getObjectCondition(id, sectorConditions, n);
+}
+
+export function getVehicleSpawnerCondition(obj: mod.VehicleSpawner, n: number) {
+    let id = mod.GetObjId(obj);
+    return getObjectCondition(id, vehicleSpawnerConditions, n);
 }
 
 export function getGlobalCondition(n: number) {
