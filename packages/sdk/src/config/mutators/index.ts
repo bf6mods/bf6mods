@@ -100,7 +100,7 @@ export type Mutators = {
 
 	/**
 	 * AI TYPE
-	 * Controls which type of AI to spawn. PvP AI will automatically spawn and can be replaced by human players. PvE AI is a fixed number that cannot be replaced, for Solo or Co-op experiences.
+	 * Controls which type of AI to spawn. Backfill AI will automatically spawn and can be replaced by human players. Static AI is a fixed number that cannot be replaced, for Solo or Co-op experiences.
 	 *
 	 * @id 1666992788
 	 * @constraints Allowed Values: 0, 1, 2
@@ -115,16 +115,6 @@ export type Mutators = {
 	 * @id 836139493
 	 */
 	FriendlyFireAllowed_PerTeam: PerTeam<boolean>;
-
-	/**
-	 * FALL DAMAGE MULTIPLIER
-	 * Multiplies damage taken from falling. Values lower than 1.0 reduce damage, while values greater than 1.0 increase damage.
-	 *
-	 * @id 2759418217
-	 * @constraints Range: [0 to 2]
-	 * @default 1
-	 */
-	FallDamageHeightMultiplier_PerTeam: PerTeam<number>;
 
 	/**
 	 * SQUAD SPAWN TYPE
@@ -414,6 +404,16 @@ export type Mutators = {
 	HeadshotMultiplier_PerTeam: PerTeam<number>;
 
 	/**
+	 * FALL DAMAGE MULTIPLIER
+	 * Multiplies damage taken from falling. Values lower than 1.0 reduce damage, while values greater than 1.0 increase damage.
+	 *
+	 * @id 2759418217
+	 * @constraints Range: [0 to 2]
+	 * @default 1
+	 */
+	FallDamageHeightMultiplier_PerTeam: PerTeam<number>;
+
+	/**
 	 * VEHICLE DAMAGE MULTIPLIER
 	 * Multiplies the damage output of vehicles. Note that this modifier combines with other damage modifiers.
 	 *
@@ -554,6 +554,14 @@ export type Mutators = {
 	AimAssistSlowdownEnabled: boolean;
 
 	/**
+	 * EXITING VEHICLES
+	 *	Controls whether players inside a vehicle can exit the vehicle. When this is set to OFF, players in a vehicle must remain in the vehicle.
+	 *
+	 * @id 4072888461
+	 */
+	ExitVehiclesAllowed_PerTeam: PerTeam<boolean>;
+
+	/**
 	 * SOLDIER MOVE SPEED MULTIPLIER
 	 * Controls the default speed of Soldier movement, which can then be multiplied by other movement types. Values less than 1.0 slow down soldier movement, while values greater than 1.0 increase movement speed.
 	 *
@@ -570,14 +578,6 @@ export type Mutators = {
 	 * @id 289584529
 	 */
 	CrosshairsAllowed_PerTeam: PerTeam<boolean>;
-
-	/**
-	 * EXITING VEHICLES
-	 *  Controls whether players inside a vehicle can exit the vehicle. When this is set to OFF, players in a vehicle must remain in the vehicle.
-	 *
-	 * @id 4072888461
-	 */
-	ExitVehiclesAllowed_PerTeam: PerTeam<boolean>;
 
 	/**
 	 * ON-FOOT DEPLOYMENT
@@ -702,7 +702,7 @@ export type Mutators = {
 
 	/**
 	 * CLASS LOCK WEAPONS
-	 * If enabled, all soldier kits will use their class locked  weapon loadout variants instead of the normal open weapon pool loadouts.
+	 * If enabled, all soldier kits will use their class locked weapon loadout variants instead of the normal open weapon pool loadouts.
 	 *
 	 * @id 3428887440
 	 */
@@ -1054,7 +1054,7 @@ export type Mutators = {
 
 	/**
 	 * @id 510030070
-	 * @constraints Range: [0 to 2]
+	 * @constraints Range: [0 to 3]
 	 * @default 0
 	 */
 	CrosshairType_PerTeam: PerTeam<number>;
@@ -1083,22 +1083,22 @@ export type Mutators = {
 
 	/**
 	 * @id 2978413856
-	 * @constraints Range: [20 to 48]
-	 * @default 20
+	 * @constraints Range: [4 to 48]
+	 * @default 4
 	 */
 	CQ_iLobbyPlayerCountStartTimer: number;
 
 	/**
 	 * @id 1962565
-	 * @constraints Range: [20 to 48]
-	 * @default 20
+	 * @constraints Range: [4 to 48]
+	 * @default 4
 	 */
 	BT_iLobbyPlayerCountStartTimer: number;
 
 	/**
 	 * @id 1463281593
-	 * @constraints Range: [20 to 48]
-	 * @default 20
+	 * @constraints Range: [4 to 48]
+	 * @default 4
 	 */
 	Rush_iLobbyPlayerCountStartTimer: number;
 
@@ -1236,15 +1236,15 @@ export type Mutators = {
 
 	/**
 	 * @id 2699056885
-	 * @constraints Range: [12 to 12]
-	 * @default 12
+	 * @constraints Range: [28 to 28]
+	 * @default 28
 	 */
 	SpawnBalancing_MaxBackfillAICount_Conquest: number;
 
 	/**
 	 * @id 1478766565
-	 * @constraints Range: [12 to 12]
-	 * @default 12
+	 * @constraints Range: [20 to 20]
+	 * @default 20
 	 */
 	SpawnBalancing_MaxBackfillAICount_Breakthrough: number;
 
@@ -1257,7 +1257,7 @@ export type Mutators = {
 
 	/**
 	 * Winter Mode
-	 * Enables Freeze for the Empire State map.
+	 * Enables Freeze Mechanic.
 	 *
 	 * @id 3245498713
 	 */
@@ -1284,4 +1284,151 @@ export type Mutators = {
 	 * @default 32
 	 */
 	Gauntlet_LobbyPlayerCountToSpeedUpTimer: number;
+
+	/**
+	 * @id 1185270375
+	 * @constraints Range: [0 to 99]
+	 * @default 0
+	 */
+	Portal_GauntletMissionPool_Large: PerTeam<number>;
+
+	/**
+	 * @id 1270957592
+	 * @constraints Range: [0 to 99]
+	 * @default 0
+	 */
+	Portal_GauntletMissionPool_Medium: PerTeam<number>;
+
+	/**
+	 * @id 142353163
+	 * @constraints Range: [0 to 99]
+	 * @default 0
+	 */
+	Portal_GauntletMissionPool_Small: PerTeam<number>;
+
+	/**
+	 * @id 3963219136
+	 * @constraints Range: [0 to 99]
+	 * @default 0
+	 */
+	Portal_GauntletMissionPool_Duel: PerTeam<number>;
+
+	/**
+	 * SUPPORT AI NAVIGATION
+	 * Controls whether AI can navigate the map, turning it off will decrease loading times.
+	 *
+	 * @id 1629366163
+	 */
+	Portal_GenerateNavMesh: boolean;
+
+	/**
+	 * Freeze Max Amount
+	 * Sets maximum amount of time required to fully build freeze status.
+	 *
+	 * @id 4250685829
+	 * @constraints Range: [0 to 5000]
+	 * @default 100
+	 */
+	FreezeMaxAmount: number;
+
+	/**
+	 * Freeze Spawn Protection Time
+	 * Freeze build up immunity window after deploying.
+	 *
+	 * @id 3537159765
+	 * @constraints Range: [0 to 10]
+	 * @default 5
+	 */
+	Freeze_SpawnProtectionTime: number;
+
+	/**
+	 * Freeze Damage Interval
+	 * Freeze damage tick interval.
+	 *
+	 * @id 1427692226
+	 * @constraints Range: [0 to 30]
+	 * @default 4
+	 */
+	FreezeDamageInterval: number;
+
+	/**
+	 * Freeze Build-Up In Water
+	 * Freeze build-up amount while in water.
+	 *
+	 * @id 3717641496
+	 * @constraints Range: [0 to 10]
+	 * @default 5
+	 */
+	FreezeInWaterModifyer: number;
+
+	/**
+	 * Freeze Build-Up While Moving
+	 * Freeze build-up amount while moving.
+	 *
+	 * @id 3550460112
+	 * @constraints Range: [0 to 10]
+	 * @default 1.7000000476837158
+	 */
+	FreezeModifyer: number;
+
+	/**
+	 * Freeze Build-Up While Stationary
+	 * Freeze build-up amount while not moving.
+	 *
+	 * @id 3503392189
+	 * @constraints Range: [0 to 10]
+	 * @default 2.5
+	 */
+	FreezeNotMovingModifyer: number;
+
+	/**
+	 * Freeze Build-Up While Sprinting
+	 * Freeze build up amount while sprinting.
+	 *
+	 * @id 2596530532
+	 * @constraints Range: [0 to 10]
+	 * @default 1.2000000476837158
+	 */
+	FreezeSprintingModifyer: number;
+
+	/**
+	 * Large Heat Source Modifier
+	 * Heat build-up for large heat sources (Heat barrel, incendiary grenades, etc).
+	 *
+	 * @id 968858745
+	 * @constraints Range: [0 to 100]
+	 * @default 19
+	 */
+	Heat_LargeModifier: number;
+
+	/**
+	 * Small Heat Source Modifier
+	 * Heat build-up amount for small heat source (blow torch).
+	 *
+	 * @id 4103656462
+	 * @constraints Range: [0 to 20]
+	 * @default 2
+	 */
+	Heat_SmallModifier: number;
+
+	/**
+	 * @id 1615439116
+	 */
+	CQ_Gas: boolean;
+
+	/**
+	 * @id 2654255402
+	 */
+	BT_Gas: boolean;
+
+	/**
+	 * @id 3311203649
+	 */
+	ESC_Gas: boolean;
+
+	/**
+	 * @id 32390539
+	 */
+	ExcludeAiFromLobbyPlayerCount: boolean;
+
 };
