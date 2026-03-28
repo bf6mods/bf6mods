@@ -1430,5 +1430,4 @@ export type Mutators = {
 	 * @id 32390539
 	 */
 	ExcludeAiFromLobbyPlayerCount: boolean;
-
 };
