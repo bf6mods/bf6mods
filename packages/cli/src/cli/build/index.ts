@@ -14,8 +14,8 @@ import {
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
 import { printToConsole } from "../utils.ts";
-import { mergeTypeScriptFiles } from "./ts-merge.ts";
 import { processThumbnail } from "./thumbnail.ts";
+import { mergeTypeScriptFiles } from "./ts-merge.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -93,8 +93,8 @@ export async function build() {
  */
 export function buildEntrypoint(
 	entry: string,
-	bf6Strings: Record<string, string>,
-	generateStringsFromLiterals: boolean,
+	_bf6Strings: Record<string, string>,
+	_generateStringsFromLiterals: boolean,
 ): string {
 	return mergeTypeScriptFiles(entry);
 }
