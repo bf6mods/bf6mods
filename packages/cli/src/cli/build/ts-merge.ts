@@ -77,7 +77,9 @@ export function mergeTypeScriptFiles(entrypointPath: string): string {
 
 	// Generate bundle header
 	const timestamp = new Date().toISOString();
-	const entryRelative = path.relative(baseDir, entrypointAbs).replace(/\\/g, "/");
+	const entryRelative = path
+		.relative(baseDir, entrypointAbs)
+		.replace(/\\/g, "/");
 	const parts: string[] = [
 		`/**`,
 		` * Bundle generated: ${timestamp}`,
@@ -123,7 +125,12 @@ export function mergeTypeScriptFiles(entrypointPath: string): string {
 			// Remove export keyword from exported declarations
 			for (const stmt of source.getStatements()) {
 				if ("isExported" in stmt && typeof stmt.isExported === "function") {
-					const exportable = stmt as { isExported: () => boolean; setIsExported: (v: boolean) => void; isDefaultExport: () => boolean; setIsDefaultExport: (v: boolean) => void };
+					const exportable = stmt as {
+						isExported: () => boolean;
+						setIsExported: (v: boolean) => void;
+						isDefaultExport: () => boolean;
+						setIsDefaultExport: (v: boolean) => void;
+					};
 					if (exportable.isExported()) {
 						if (exportable.isDefaultExport()) {
 							exportable.setIsDefaultExport(false);
@@ -134,7 +141,7 @@ export function mergeTypeScriptFiles(entrypointPath: string): string {
 			}
 		}
 
-		let text = source.getFullText().trim();
+		const text = source.getFullText().trim();
 
 		if (text.length > 0) {
 			parts.push(`//#region ${relativePath}`);
@@ -144,7 +151,7 @@ export function mergeTypeScriptFiles(entrypointPath: string): string {
 		}
 	}
 
-	return parts.join("\n") + "\n";
+	return `${parts.join("\n")}\n`;
 }
 
 /**
@@ -158,21 +165,24 @@ export function splitTypeScriptFile(
 	const regionRegex = /^\/\/#region\s+(.+)$/gm;
 	const endRegionRegex = /^\/\/#endregion$/gm;
 
-	let match: RegExpExecArray | null;
 	const regions: Array<{ path: string; startIdx: number }> = [];
 
 	// Find all region start markers
-	while ((match = regionRegex.exec(mergedContent)) !== null) {
+	let match = regionRegex.exec(mergedContent);
+	while (match !== null) {
 		regions.push({
 			path: match[1].trim(),
 			startIdx: match.index + match[0].length + 1, // +1 for newline
 		});
+		match = regionRegex.exec(mergedContent);
 	}
 
 	// Find all endregion markers
 	const endPositions: number[] = [];
-	while ((match = endRegionRegex.exec(mergedContent)) !== null) {
-		endPositions.push(match.index);
+	let endMatch = endRegionRegex.exec(mergedContent);
+	while (endMatch !== null) {
+		endPositions.push(endMatch.index);
+		endMatch = endRegionRegex.exec(mergedContent);
 	}
 
 	// Pair them up
@@ -181,7 +191,7 @@ export function splitTypeScriptFile(
 		const endPos = endPositions[i];
 		if (endPos !== undefined) {
 			const content = mergedContent.slice(region.startIdx, endPos).trim();
-			files.set(region.path, content + "\n");
+			files.set(region.path, `${content}\n`);
 		}
 	}
 
