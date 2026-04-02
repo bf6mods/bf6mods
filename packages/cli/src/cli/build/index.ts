@@ -9,13 +9,12 @@ import {
 } from "@bf6mods/sdk";
 import colors from "colors";
 import { createJiti } from "jiti";
-import { rolldown } from "rolldown";
 import {
 	type Bf6Config,
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
 import { printToConsole } from "../utils.ts";
-import { extractBf6Strings } from "./generated-strings.ts";
+import { mergeTypeScriptFiles } from "./ts-merge.ts";
 import { processThumbnail } from "./thumbnail.ts";
 
 declare global {
@@ -64,7 +63,7 @@ export async function build() {
 	let tsAttachment: Attachment | undefined;
 	if (config.entrypoint) {
 		const entryAbs = path.resolve(workingDir, config.entrypoint);
-		const compiled = await buildEntrypoint(
+		const compiled = buildEntrypoint(
 			entryAbs,
 			generatedStrings,
 			config.generateStrings ?? true,
@@ -89,29 +88,15 @@ export async function build() {
 }
 
 /**
- * Compiles the TypeScript entrypoint using rolldown and returns the compiled code.
+ * Merges TypeScript source files into a single .ts file, preserving all type annotations.
+ * Uses ts-morph to resolve imports and inline dependencies with //#region markers.
  */
-export async function buildEntrypoint(
+export function buildEntrypoint(
 	entry: string,
 	bf6Strings: Record<string, string>,
 	generateStringsFromLiterals: boolean,
-): Promise<string> {
-	const bundle = await rolldown({
-		input: entry,
-		plugins: [extractBf6Strings(bf6Strings, generateStringsFromLiterals)],
-		logLevel: "debug",
-		resolve: {
-			alias: {
-				modlib: "@bf6mods/sdk",
-			},
-		},
-	});
-	const result = await bundle.generate({
-		format: "esm",
-		inlineDynamicImports: true,
-	});
-
-	return result.output[0].code;
+): string {
+	return mergeTypeScriptFiles(entry);
 }
 
 const __filename = fileURLToPath(import.meta.url);
@@ -225,7 +210,7 @@ export function createTsAttachment(
 	return {
 		id: crypto.randomUUID(),
 		version: "1.0",
-		filename: `${path.parse(filePath).name}.js`,
+		filename: `${path.parse(filePath).name}.ts`,
 		isProcessable: true,
 		processingStatus: 2,
 		attachmentType: AttachmentType.TypeScript,

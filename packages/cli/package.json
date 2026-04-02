@@ -37,10 +37,10 @@
 		"jiti": "^2.6.1",
 		"keytar": "^7.9.0",
 		"knitwork": "^1.2.0",
-		"rolldown": "^1.0.0-beta.44",
 		"sharp": "^0.34.5",
 		"stringify-object": "^6.0.0",
-		"strip-ansi": "^7.1.2"
+		"strip-ansi": "^7.1.2",
+		"ts-morph": "^27.0.2"
 	},
 	"publishConfig": {
 		"access": "public"
