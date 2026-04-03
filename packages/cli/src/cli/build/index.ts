@@ -15,9 +15,9 @@ import {
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
 import { printToConsole } from "../utils.ts";
+import { addAnyToParams } from "./any-params.ts";
 import { extractBf6Strings } from "./generated-strings.ts";
 import { processThumbnail } from "./thumbnail.ts";
-import { addAnyToParams } from "./any-params.ts";
 
 declare global {
 	var defineBf6Config: ((config: Bf6Config) => Bf6Config) | undefined;
@@ -99,7 +99,10 @@ export async function buildEntrypoint(
 ): Promise<string> {
 	const bundle = await rolldown({
 		input: entry,
-		plugins: [extractBf6Strings(bf6Strings, generateStringsFromLiterals), addAnyToParams()],
+		plugins: [
+			extractBf6Strings(bf6Strings, generateStringsFromLiterals),
+			addAnyToParams(),
+		],
 		logLevel: "debug",
 		resolve: {
 			alias: {
