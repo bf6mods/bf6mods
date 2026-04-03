@@ -134,24 +134,6 @@ describe.concurrent("@bf6mods/cli", async () => {
     );
 
     createModTest(cliTarPath, sdkTarPath, portalTarPath, {
-        template: "BombSquad",
-        installDependencies: true,
-    }).concurrent(
-        "build & verify BombSquad template",
-        {
-            timeout: 100_000,
-        },
-        async ({ mod, tmpdir }) => {
-            console.log("tmpdir:", tmpdir);
-            const { exitCode } = await build(mod.fullPath);
-            expect(exitCode, "Exit code is not 0!").toBe(0);
-
-            const { exitCode: typeExit } = await checkTypes(mod.fullPath);
-            expect(typeExit, "TypeScript type check failed!").toBe(0);
-        },
-    );
-
-    createModTest(cliTarPath, sdkTarPath, portalTarPath, {
         template: "Vertigo",
         installDependencies: true,
     }).concurrent(
@@ -269,7 +251,7 @@ describe.concurrent("@bf6mods/cli", async () => {
 
                 config = config.replace(
                     /entrypoint: 'src\/index\.ts',/,
-                    'entrypoint: \'src/index.ts\',\n\tthumbnail: \'src/thumbnail.jpg\',',
+                    "entrypoint: 'src/index.ts',\n\tthumbnail: 'src/thumbnail.jpg',",
                 );
                 await fs.promises.writeFile(configPath, config);
             }
@@ -279,11 +261,19 @@ describe.concurrent("@bf6mods/cli", async () => {
 
             // Verify thumbnail file in dist if it was added
             if (fs.existsSync(placeholderPath)) {
-                const thumbnailOutputPath = path.resolve(mod.fullPath, "dist", "thumbnail.jpg");
+                const thumbnailOutputPath = path.resolve(
+                    mod.fullPath,
+                    "dist",
+                    "thumbnail.jpg",
+                );
                 expect(fs.existsSync(thumbnailOutputPath)).toBe(true);
 
                 // Verify mod.json does NOT contain thumbnail field
-                const modJsonPath = path.resolve(mod.fullPath, "dist", "mod.json");
+                const modJsonPath = path.resolve(
+                    mod.fullPath,
+                    "dist",
+                    "mod.json",
+                );
                 const modJson = JSON.parse(
                     await fs.promises.readFile(modJsonPath, "utf8"),
                 );

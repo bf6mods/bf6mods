@@ -53,7 +53,6 @@ export const templates = [
 	"Basic",
 	"Complete",
 	"AcePursuit",
-	"BombSquad",
 	"Exfil",
 	"Vertigo",
 ] as const;
@@ -63,7 +62,7 @@ export async function startProject(
 	template: (typeof templates)[number] | "None",
 	name?: string,
 ) {
-	if (["AcePursuit", "BombSquad", "Exfil", "Vertigo"].includes(template)) {
+	if (["AcePursuit", "Exfil", "Vertigo"].includes(template)) {
 		const importPath = path.resolve(templatesDir, `${template}.json`);
 		await importFile(importPath, destination, name);
 	} else if (template === "None") {
