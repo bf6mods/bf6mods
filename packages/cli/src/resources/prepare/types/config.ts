@@ -19,6 +19,7 @@ export enum MapId {
 	Downtown = "MP_Granite_MainStreet_Portal-ModBuilderCustom0",
 	Area22B = "MP_Granite_MilitaryRnD_Portal-ModBuilderCustom0",
 	RedlineStorage = "MP_Granite_MilitaryStorage_Portal-ModBuilderCustom0",
+	Contaminated = "MP_Contaminated-ModBuilderCustom0",
 }
 
 /**
