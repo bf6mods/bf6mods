@@ -1231,7 +1231,7 @@ function generateSpawnLine(
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
     const forward = { x: dx / len, y: dy / len, z: dz / len };
 
-    // Compute left = up Ã forward (always "left", never flipped)
+    // Compute left = up × forward (always "left", never flipped)
     const left = {
         x: up.y * forward.z - up.z * forward.y,
         y: up.z * forward.x - up.x * forward.z,
