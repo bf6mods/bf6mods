@@ -86,7 +86,7 @@ export async function importFile(
 			promises.push(
 				writeFileSafe(
 					path.resolve(outDir, "src", filename),
-					atob(attachment.attachmentData.original),
+					Buffer.from(attachment.attachmentData.original, "base64"),
 				),
 			);
 
@@ -103,7 +103,7 @@ export async function importFile(
 			promises.push(
 				writeFileSafe(
 					path.resolve(outDir, "src", "scenes", map.spatialAttachment.filename),
-					atob(map.spatialAttachment.attachmentData.original),
+					Buffer.from(map.spatialAttachment.attachmentData.original, "base64"),
 				),
 			);
 

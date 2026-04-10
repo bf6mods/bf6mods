@@ -216,7 +216,7 @@ export async function writeModJson(
 				});
 			await fs.promises.writeFile(
 				path.resolve(outDir, "attachments", attachment.filename),
-				atob(attachment.attachmentData.original),
+				Buffer.from(attachment.attachmentData.original, "base64"),
 			);
 		}
 	}
@@ -243,17 +243,9 @@ export function createStringsAttachment(
 	raw: string,
 	generatedStrings?: Record<string, number | string> | undefined,
 ): Attachment {
-	let result = raw;
-	if (generatedStrings) {
-		result = JSON.stringify(
-			{
-				...generatedStrings,
-				...JSON.parse(raw),
-			},
-			null,
-			4,
-		);
-	}
+	const parsed = JSON.parse(raw);
+	const merged = generatedStrings ? { ...generatedStrings, ...parsed } : parsed;
+	const result = asciiSafeJsonStringify(merged);
 
 	return {
 		id: crypto.randomUUID(),
@@ -265,6 +257,19 @@ export function createStringsAttachment(
 		attachmentData: { original: toBase64(result), compiled: "" },
 		errors: [],
 	};
+}
+
+/**
+ * JSON.stringify that escapes all non-ASCII characters to \uXXXX sequences,
+ * ensuring the output is pure ASCII. This is necessary because the BF6 Portal
+ * decodes base64 attachment data using atob(), which only handles Latin1 and
+ * corrupts multi-byte UTF-8 characters (e.g. Chinese, Japanese, Korean).
+ */
+export function asciiSafeJsonStringify(value: unknown): string {
+	return JSON.stringify(value, null, 4).replace(
+		/[\u0080-\uffff]/g,
+		(ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, "0")}`,
+	);
 }
 
 export function createSpatialAttachment(
