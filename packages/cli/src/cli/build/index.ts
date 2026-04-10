@@ -244,9 +244,7 @@ export function createStringsAttachment(
 	generatedStrings?: Record<string, number | string> | undefined,
 ): Attachment {
 	const parsed = JSON.parse(raw);
-	const merged = generatedStrings
-		? { ...generatedStrings, ...parsed }
-		: parsed;
+	const merged = generatedStrings ? { ...generatedStrings, ...parsed } : parsed;
 	const result = asciiSafeJsonStringify(merged);
 
 	return {
@@ -270,7 +268,7 @@ export function createStringsAttachment(
 function asciiSafeJsonStringify(value: unknown): string {
 	return JSON.stringify(value, null, 4).replace(
 		/[\u0080-\uffff]/g,
-		(ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"),
+		(ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, "0")}`,
 	);
 }
 
