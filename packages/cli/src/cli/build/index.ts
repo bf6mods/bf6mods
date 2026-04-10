@@ -265,7 +265,7 @@ export function createStringsAttachment(
  * decodes base64 attachment data using atob(), which only handles Latin1 and
  * corrupts multi-byte UTF-8 characters (e.g. Chinese, Japanese, Korean).
  */
-function asciiSafeJsonStringify(value: unknown): string {
+export function asciiSafeJsonStringify(value: unknown): string {
 	return JSON.stringify(value, null, 4).replace(
 		/[\u0080-\uffff]/g,
 		(ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, "0")}`,
