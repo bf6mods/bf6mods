@@ -145,7 +145,6 @@ const vfxtest = [
     mod.RuntimeSpawn_Common.FX_BASE_Fire_Oil_Medium,
     mod.RuntimeSpawn_Common.FX_BASE_Fire_S,
     mod.RuntimeSpawn_Common.FX_BASE_Fire_S_NoSmoke,
-    mod.RuntimeSpawn_Common.FX_BASE_Fire_XL,
 ]
 
 export function OngoingGlobal() {
@@ -363,6 +362,7 @@ class CaptureManager {
             mod.PlaySound(StartSFX, 80, mod.GetTeam(3));
             mod.PlaySound(StartSFX, 80, mod.GetTeam(4));
         } else {
+            mod.StopSound(StartSFX);
         }
 
     }

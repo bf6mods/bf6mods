@@ -131,6 +131,13 @@ export class ConditionState {
     }
 }
 
+export class SimpleConditionState {
+    update(newState: boolean): boolean {
+        // no edge detection
+        return newState;
+    }
+}
+
 class Conditions {
     constructor() {
         this.conditionStates = [];
@@ -156,6 +163,7 @@ let sectorConditions: Conditions[] = [];
 let vehicleSpawnerConditions: Conditions[] = [];
 
 let globalConditions: Conditions = new Conditions();
+let simpleCondition: SimpleConditionState = new SimpleConditionState();
 
 function getObjectCondition(id: number, objectConditions: Conditions[], n: number) {
     while (id >= objectConditions.length) {
@@ -215,6 +223,10 @@ export function getVehicleSpawnerCondition(obj: mod.VehicleSpawner, n: number) {
 
 export function getGlobalCondition(n: number) {
     return globalConditions.getConditionState(n);
+}
+
+export function getSimpleCondition() {
+    return simpleCondition;
 }
 
 export function getPlayersInTeam(teamObj: mod.Team) {

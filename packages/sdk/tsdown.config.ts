@@ -19,15 +19,18 @@ export default defineConfig([
 		entry: ["src/index.ts"],
 		sourcemap: true,
 		clean: true,
-		dts: {
-			banner: `declare global {\n${modFileWithoutDeclare}\n${additionalModFileWithoutDeclare}\n}`,
+		dts: true,
+		banner: {
+			dts: `declare global {\n${modFileWithoutDeclare}\n${additionalModFileWithoutDeclare}\n}`,
 		},
 		format: "esm",
+		fixedExtension: false,
 	},
 	{
 		entry: ["src/std/index.ts"],
 		outDir: "dist/std",
 		format: "esm",
+		fixedExtension: false,
 		sourcemap: true,
 		dts: true,
 	},

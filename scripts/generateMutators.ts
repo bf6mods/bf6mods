@@ -2,17 +2,25 @@ import { Clients, Generated_pb } from "@bf6mods/portal";
 
 // You can get the token by going to portal.battlefield.com and opening inspect element
 // and searching for any request like getPlayElement or getOwnedPlayElements
-// then copying it from the request header
-const clients = await new Clients().authenticate({
-    sessionId: "web-89b6139d-95e1-4cbb-bb88-f49ccfb9e0ca",
-});
+// then copying it from the request header (x-gateway-session-id) into BF6_SESSION_ID
+const sessionId = process.env.BF6_SESSION_ID;
+if (!sessionId) throw new Error("Set BF6_SESSION_ID to a portal session id");
+const clients = await new Clients().authenticate({ sessionId });
 const blueprints = await clients.play.getScheduledBlueprints({});
 const blueprint = await clients.play.getBlueprintsById({
     blueprintIds: blueprints.blueprintIds,
 });
 
-const mutators = blueprint.blueprints[0].availableGameData?.mutators;
-if (!mutators) throw new Error("No mutators found in game data");
+const allMutators = blueprint.blueprints[0].availableGameData?.mutators;
+if (!allMutators) throw new Error("No mutators found in game data");
+
+// The API returns some mutators more than once
+const seenNames = new Set<string>();
+const mutators = allMutators.filter((mutator) => {
+    if (seenNames.has(mutator.name)) return false;
+    seenNames.add(mutator.name);
+    return true;
+});
 
 const allSids = mutators.flatMap(
     (mutator) =>
@@ -129,6 +137,15 @@ for (const mutator of mutators) {
         docLines.push(
             `@constraints Allowed Values: ${available.sparseValues.values.join(", ")}`,
         );
+
+        // Kind "Value N" holds the label shown in the editor for value N
+        for (const value of available.sparseValues.values) {
+            const valueRef = transMeta.find((t) => t.kind === `Value ${value}`);
+            const label = valueRef
+                ? translationMap.get(valueRef.translationId)
+                : null;
+            if (label) docLines.push(`@value ${value} ${label}`);
+        }
     }
 
     // Check for Defaults (if present in the specific kind data)

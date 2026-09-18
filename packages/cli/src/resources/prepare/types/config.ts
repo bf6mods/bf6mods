@@ -20,6 +20,14 @@ export enum MapId {
 	Area22B = "MP_Granite_MilitaryRnD_Portal-ModBuilderCustom0",
 	RedlineStorage = "MP_Granite_MilitaryStorage_Portal-ModBuilderCustom0",
 	Contaminated = "MP_Contaminated-ModBuilderCustom0",
+	HagentalBase = "MP_Subsurface-ModBuilderCustom0",
+	Complex3 = "MP_Granite_Underground_Portal-ModBuilderCustom0",
+	RailwayToGolmud = "MP_GolmudRailway-ModBuilderCustom0",
+	CairoBazaar = "MP_Plaza-ModBuilderCustom0",
+	TsuruReef = "MP_Isolated-ModBuilderCustom0",
+	WakeIsland = "MP_Atoll-ModBuilderCustom0",
+	OperationMetro = "MP_Aftermath_Portal-ModBuilderCustom0",
+	PortalOcean = "MP_Portal_Ocean-ModBuilderCustom0",
 }
 
 /**

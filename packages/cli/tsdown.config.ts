@@ -14,6 +14,8 @@ export default defineConfig({
 	clean: true,
 	dts: true,
 	format: "esm",
+	// keep .js output to match the paths in package.json
+	fixedExtension: false,
 	// can't use this instead of process.on, because of https://github.com/egoist/tsup/issues/700
 	// onSuccess: async () => {
 	// },

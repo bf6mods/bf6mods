@@ -104,6 +104,9 @@ export async function buildEntrypoint(
 			addAnyToParams(),
 		],
 		logLevel: "debug",
+		// the mod's tsconfig maps modlib to the sdk .d.ts for the type checker,
+		// which would otherwise override the alias below
+		tsconfig: false,
 		resolve: {
 			alias: {
 				modlib: "@bf6mods/sdk",

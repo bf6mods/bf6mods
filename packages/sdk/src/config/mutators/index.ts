@@ -25,9 +25,7 @@ export enum SquadSpawnType {
 	All = 0,
 	SquadmatesOnLeader_LeaderNone = 1,
 	SquadmatesOnLeader_LeaderAll = 2,
-	Disabled = 2,
-	// If you know what this is, please create an issue
-	Undocumented = 3,
+	Disabled = 3,
 }
 
 /**
@@ -46,7 +44,7 @@ export enum ScoreboardType {
  */
 export enum PingBehavior {
 	PingTargets = 0,
-	Disabled = 1,
+	Disabled = 2,
 }
 
 export enum ModBuilderGameMode {
@@ -60,6 +58,25 @@ export enum FactionID {
 	Pax = -1865993703,
 	MapDefault = 0,
 	NATO = 607944106,
+}
+
+/**
+ * Sets which train variant will appear in the Railway to Golmud map.
+ */
+export enum GolmudTrainVariant {
+	None = 0,
+	MovingTrain = 1,
+	StaticTrainBreakthrough = 2,
+	StaticTrainRush = 3,
+}
+
+/**
+ * Sets the Aircraft Carrier variation for the map Tsuru Reef.
+ */
+export enum AircraftCarrierType {
+	None = 0,
+	Conquest = 1,
+	CarrierStrike = 2,
 }
 
 export type Mutators = {
@@ -104,6 +121,9 @@ export type Mutators = {
 	 *
 	 * @id 1666992788
 	 * @constraints Allowed Values: 0, 1, 2
+	 * @value 0 No AI
+	 * @value 1 PvE AI
+	 * @value 2 PvP AI
 	 * @default 0
 	 */
 	AiSpawnType: AiSpawnType;
@@ -117,11 +137,25 @@ export type Mutators = {
 	FriendlyFireAllowed_PerTeam: PerTeam<boolean>;
 
 	/**
+	 * FALL DAMAGE MULTIPLIER
+	 * Multiplies damage taken from falling. Values lower than 100% reduce damage, while values greater than 100% increase damage.
+	 *
+	 * @id 2759418217
+	 * @constraints Range: [0 to 2]
+	 * @default 1
+	 */
+	FallDamageHeightMultiplier_PerTeam: PerTeam<number>;
+
+	/**
 	 * SQUAD SPAWN TYPE
 	 * Controls the rules for Squad Spawning, for squad members and squad leaders.
 	 *
 	 * @id 1476270551
 	 * @constraints Allowed Values: 0, 1, 2, 3
+	 * @value 0 All
+	 * @value 1 Squadmates on Leader; Leader None
+	 * @value 2 Squadmates on Leader; Leader All
+	 * @value 3 Disabled
 	 * @default 0
 	 */
 	SquadSpawnMode_PerTeam: PerTeam<SquadSpawnType>;
@@ -132,6 +166,9 @@ export type Mutators = {
 	 *
 	 * @id 1722734603
 	 * @constraints Allowed Values: 0, 1, 2
+	 * @value 0 Crawl
+	 * @value 1 Downed
+	 * @value 2 Instant Death
 	 * @default 1
 	 */
 	ManDownExperienceType_PerTeam: PerTeam<ManDownExperienceType>;
@@ -150,6 +187,9 @@ export type Mutators = {
 	 *
 	 * @id 548273204
 	 * @constraints Allowed Values: -1865993703, 0, 607944106
+	 * @value -1865993703 PAX
+	 * @value 0 Map Default
+	 * @value 607944106 NATO
 	 * @default 0
 	 */
 	FactionID_PerTeam: PerTeam<FactionID>;
@@ -311,6 +351,8 @@ export type Mutators = {
 	 *
 	 * @id 1017389623
 	 * @constraints Allowed Values: 0, 2
+	 * @value 0 Ping Targets
+	 * @value 2 Disabled
 	 * @default 0
 	 */
 	PingBehavior_PerTeam: PerTeam<PingBehavior>;
@@ -325,7 +367,7 @@ export type Mutators = {
 
 	/**
 	 * SOLDIER MAXIMUM HEALTH MULTIPLIER
-	 * Multiplies soldier maximum health. Values less than 1.0 reduce health, while values greater than 1.0 increase it.
+	 * Multiplies soldier maximum health. Values less than 100% reduce health, while values greater than 100% increase it.
 	 *
 	 * @id 1899412422
 	 * @constraints Range: [0.10000000149011612 to 5]
@@ -335,7 +377,7 @@ export type Mutators = {
 
 	/**
 	 * SOLDIER REDEPLOY DELAY MULTIPLIER
-	 * Multiplies the time it takes for soldiers to redeploy. Values less than 1.0 allow soldiers to redeploy more quickly, while values greater than 1.0 force soldiers to wait longer before redeploying.
+	 * Multiplies the time it takes for soldiers to redeploy. Values less than 100% allow soldiers to redeploy more quickly, while values greater than 100% force soldiers to wait longer before redeploying.
 	 *
 	 * @id 2390282071
 	 * @constraints Range: [0 to 18]
@@ -355,7 +397,7 @@ export type Mutators = {
 
 	/**
 	 * VEHICLE MAXIMUM HEALTH MULTIPLIER
-	 * Multiplies the maximum health of all vehicles. Values less than 1.0 reduces the health of all vehicles, while values greater than 1.0 increases it.
+	 * Multiplies the maximum health of all vehicles. Values less than 100% reduces the health of all vehicles, while values greater than 100% increases it.
 	 *
 	 * @id 3752128436
 	 * @constraints Range: [0.10000000149011612 to 3.5]
@@ -365,7 +407,7 @@ export type Mutators = {
 
 	/**
 	 * VEHICLE SPAWN DELAY MULTIPLIER
-	 * Multiplies the default timer that spawns or respawns vehicles. Values below 1.0 make spawns faster, values above 1.0 delay spawns for longer.
+	 * Multiplies the default timer that spawns or respawns vehicles. Values below 100% make spawns faster, values above 100% delay spawns for longer.
 	 *
 	 * @id 2145356810
 	 * @constraints Range: [0.20000000298023224 to 5]
@@ -375,7 +417,7 @@ export type Mutators = {
 
 	/**
 	 * PROJECTILE SPEED MULTIPLIER
-	 * Multiplies the speed of all projectiles. Values smaller than 1.0 will slow projectiles, values larger than 1.0 will increase the speed.
+	 * Multiplies the speed of all projectiles. Values smaller than 100% will slow projectiles, values larger than 100% will increase the speed.
 	 *
 	 * @id 900970640
 	 * @constraints Range: [0.5 to 5]
@@ -404,16 +446,6 @@ export type Mutators = {
 	HeadshotMultiplier_PerTeam: PerTeam<number>;
 
 	/**
-	 * FALL DAMAGE MULTIPLIER
-	 * Multiplies damage taken from falling. Values lower than 1.0 reduce damage, while values greater than 1.0 increase damage.
-	 *
-	 * @id 2759418217
-	 * @constraints Range: [0 to 2]
-	 * @default 1
-	 */
-	FallDamageHeightMultiplier_PerTeam: PerTeam<number>;
-
-	/**
 	 * VEHICLE DAMAGE MULTIPLIER
 	 * Multiplies the damage output of vehicles. Note that this modifier combines with other damage modifiers.
 	 *
@@ -425,7 +457,7 @@ export type Mutators = {
 
 	/**
 	 * VEHICLE HEALTH REGENERATION RATE
-	 * Controls the timing for vehicle health regeneration. Values less than 1.0 slow the time it takes to regenerate to full health, while values greater than 1.0 regenerate health more quickly for all vehicles.
+	 * Controls the timing for vehicle health regeneration. Values less than 100% slow the time it takes to regenerate to full health, while values greater than 100% regenerate health more quickly for all vehicles.
 	 *
 	 * @id 896388464
 	 * @constraints Range: [0.10000000149011612 to 10]
@@ -435,7 +467,7 @@ export type Mutators = {
 
 	/**
 	 * SOLDIER HEALTH REGENERATION RATE
-	 * Controls the timing for soldier health regeneration. Values less than 1.0 slow the time it takes to regenerate to full health, while values greater than 1.0 regenerate health more quickly.
+	 * Controls the timing for soldier health regeneration. Values less than 100% slow the time it takes to regenerate to full health, while values greater than 100% regenerate health more quickly.
 	 *
 	 * @id 2317849662
 	 * @constraints Range: [0.10000000149011612 to 10]
@@ -449,6 +481,11 @@ export type Mutators = {
 	 *
 	 * @id 2749696498
 	 * @constraints Allowed Values: 0, 1, 2, 3, 4
+	 * @value 0 Not Set
+	 * @value 1 Default FFA
+	 * @value 2 Off
+	 * @value 3 Custom Two Teams
+	 * @value 4 Custom FFA
 	 * @default 1
 	 */
 	ScoreboardType: ScoreboardType;
@@ -459,13 +496,16 @@ export type Mutators = {
 	 *
 	 * @id 4119966672
 	 * @constraints Allowed Values: 0, 1, 2
+	 * @value 0 Crawl
+	 * @value 1 Downed
+	 * @value 2 Instant Death
 	 * @default 1
 	 */
-	AI_ManDownExperienceType_PerTeam: PerTeam<number>;
+	AI_ManDownExperienceType_PerTeam: PerTeam<ManDownExperienceType>;
 
 	/**
 	 * AI SOLDIER MOVEMENT SPEED
-	 * Controls the default speed of AI Soldier movement, which can then be multiplied by other movement types. Values less than 1.0 slow down AI soldier movement, while values greater than 1.0 increase movement speed.
+	 * Controls the default speed of AI Soldier movement, which can then be multiplied by other movement types. Values less than 100% slow down AI soldier movement, while values greater than 100% increase movement speed.
 	 *
 	 * @id 918657157
 	 * @constraints Range: [0.800000011920929 to 1.2000000476837158]
@@ -517,7 +557,7 @@ export type Mutators = {
 
 	/**
 	 * AI SOLDIER MAXIMUM HEALTH MULTIPLIER
-	 * Multiplies AI soldier maximum health. Values less than 1.0 reduce AI health, while values greater than 1.0 increase it.
+	 * Multiplies AI soldier maximum health. Values less than 100% reduce AI health, while values greater than 100% increase it.
 	 *
 	 * @id 4092794051
 	 * @constraints Range: [0.10000000149011612 to 10]
@@ -527,7 +567,7 @@ export type Mutators = {
 
 	/**
 	 * AI HEALTH REGENERATION RATE
-	 * Controls the timing for AI soldier health regeneration. Values less than 1.0 slow the time it takes to regenerate AI soldiers to full health, while values greater than 1.0 regenerate health more quickly.
+	 * Controls the timing for AI soldier health regeneration. Values less than 100% slow the time it takes to regenerate AI soldiers to full health, while values greater than 100% regenerate health more quickly.
 	 *
 	 * @id 987645454
 	 * @constraints Range: [0.10000000149011612 to 10]
@@ -555,7 +595,7 @@ export type Mutators = {
 
 	/**
 	 * EXITING VEHICLES
-	 *	Controls whether players inside a vehicle can exit the vehicle. When this is set to OFF, players in a vehicle must remain in the vehicle.
+	 *  Controls whether players inside a vehicle can exit the vehicle. When this is set to OFF, players in a vehicle must remain in the vehicle.
 	 *
 	 * @id 4072888461
 	 */
@@ -563,7 +603,7 @@ export type Mutators = {
 
 	/**
 	 * SOLDIER MOVE SPEED MULTIPLIER
-	 * Controls the default speed of Soldier movement, which can then be multiplied by other movement types. Values less than 1.0 slow down soldier movement, while values greater than 1.0 increase movement speed.
+	 * Controls the default speed of Soldier movement, which can then be multiplied by other movement types. Values less than 100% slow down soldier movement, while values greater than 100% increase movement speed.
 	 *
 	 * @id 1955023128
 	 * @constraints Range: [0.800000011920929 to 1.2000000476837158]
@@ -611,13 +651,17 @@ export type Mutators = {
 	 *
 	 * @id 310492599
 	 * @constraints Allowed Values: 0, 1, 2, 3
+	 * @value 0 All
+	 * @value 1 Squadmates on Leader; Leader None
+	 * @value 2 Squadmates on Leader; Leader All
+	 * @value 3 Disabled
 	 * @default 0
 	 */
 	AI_SquadSpawnMode_PerTeam: PerTeam<SquadSpawnType>;
 
 	/**
 	 * AI REDEPLOY DELAY MULTIPLIER
-	 * Multiplies the time it takes for AI soldiers to redeploy. Values less than 1.0 allow AI soldiers to redeploy more quickly, while values greater than 1.0 force AI soldiers to wait longer before redeploying.
+	 * Multiplies the time it takes for AI soldiers to redeploy. Values less than 100% allow AI soldiers to redeploy more quickly, while values greater than 100% force AI soldiers to wait longer before redeploying.
 	 *
 	 * @id 830816070
 	 * @constraints Range: [0 to 18]
@@ -636,6 +680,7 @@ export type Mutators = {
 	/**
 	 * @id 2047132398
 	 * @constraints Allowed Values: 2
+	 * @value 2 Free-For-All
 	 * @default 2
 	 */
 	ModBuilder_GameMode: ModBuilderGameMode;
@@ -702,7 +747,7 @@ export type Mutators = {
 
 	/**
 	 * CLASS LOCK WEAPONS
-	 * If enabled, all soldier kits will use their class locked weapon loadout variants instead of the normal open weapon pool loadouts.
+	 * If enabled, all soldier kits will use their class locked  weapon loadout variants instead of the normal open weapon pool loadouts.
 	 *
 	 * @id 3428887440
 	 */
@@ -1032,9 +1077,12 @@ export type Mutators = {
 	BR_LobbyPlayerCountStartTimer: number;
 
 	/**
+	 * Players Required To Start Quick Lobby Timer
+	 * The minimum amount of players required to start the quick lobby countdown timer, this is started when the higher player threshold is reached.
+	 *
 	 * @id 1896590494
-	 * @constraints Range: [100 to 100]
-	 * @default 100
+	 * @constraints Range: [50 to 100]
+	 * @default 96
 	 */
 	BR_LobbyPlayerCountToSpeedUpTimer: number;
 
@@ -1412,22 +1460,513 @@ export type Mutators = {
 	Heat_SmallModifier: number;
 
 	/**
-	 * @id 1615439116
+	 * Stalemate Initial Phase Delay
+	 * Sets the amount of time required in the initial phase of the game to trigger a stalemate.
+	 *
+	 * @id 1292210144
+	 * @constraints Range: [100 to 200]
+	 * @default 180
 	 */
-	CQ_Gas: boolean;
+	ESC_fStalematePredelay_PhaseStart_Round0: number;
 
 	/**
-	 * @id 2654255402
+	 * Stalemate Subsequent Phases Delay
+	 * Sets the requirement amount of time in the later phases to trigger a stalemate.
+	 *
+	 * @id 1028028128
+	 * @constraints Range: [100 to 200]
+	 * @default 120
 	 */
-	BT_Gas: boolean;
+	ESC_fStalematePredelay_PhaseStart: number;
 
 	/**
-	 * @id 3311203649
+	 * Stalemate Mid-Phase Delay
+	 * Sets the requirement amount of time in all phases to trigger a stalemate if either team has started to gain progress.
+	 *
+	 * @id 1497782118
+	 * @constraints Range: [30 to 90]
+	 * @default 60
 	 */
-	ESC_Gas: boolean;
+	ESC_fStalematePredelay: number;
+
+	/**
+	 * Stalemate Lower Threshold
+	 * Sets the lower threshold of time to trigger a stalemate.
+	 *
+	 * @id 77067359
+	 * @constraints Range: [15 to 45]
+	 * @default 30
+	 */
+	ESC_fStalemateLowerThreshold: number;
+
+	/**
+	 * Stalemate Delay Decrement
+	 * Sets the amount of time the Mid-Phase delay is reduced by each time a stalemate happens.
+	 *
+	 * @id 3771433474
+	 * @constraints Range: [5 to 15]
+	 * @default 10
+	 */
+	ESC_fStaleMateDelayDecrement: number;
 
 	/**
 	 * @id 32390539
 	 */
 	ExcludeAiFromLobbyPlayerCount: boolean;
+
+	/**
+	 * @id 2526193892
+	 * @constraints Range: [4 to 64]
+	 * @default 4
+	 */
+	OBL_MinPlayerCount: number;
+
+	/**
+	 * @id 831821514
+	 * @constraints Range: [4 to 64]
+	 * @default 64
+	 */
+	OBL_TargetPlayerCount: number;
+
+	/**
+	 * GAME TIME
+	 * Sets the maximum time (in minutes) for the round
+	 *
+	 * @id 4017546121
+	 * @constraints Range: [25 to 40]
+	 * @default 25
+	 */
+	OBL_MaxMatchDurationMins: number;
+
+	/**
+	 * Bomb Carrier Allowed in HQ Sector
+	 * If enabled the player carrying the bomb will be considered Out of Bounds when they enter the friendly HQ Sector.
+	 *
+	 * @id 3370499063
+	 */
+	OBL_IsFriendlyHQOOBForCarrier: boolean;
+
+	/**
+	 * Mid-Match Delay
+	 * Sets the amount of time to switch from the start of match bomb count to middle of the match bomb count.
+	 *
+	 * @id 2242805129
+	 * @constraints Range: [360 to 2400]
+	 * @default 1050
+	 */
+	OBL_DelayBeforeMidMatchBombs: number;
+
+	/**
+	 * Bomb Mid-Match Amount
+	 * Sets the amount of bombs that can be active later in the match.
+	 *
+	 * @id 911973520
+	 * @constraints Range: [1 to 5]
+	 * @default 2
+	 */
+	OBL_MidMatchBombCount: number;
+
+	/**
+	 * Bombs Start Amount
+	 * Sets the number of bombs that can be active at the same time at the beginning of the match.
+	 *
+	 * @id 622704227
+	 * @constraints Range: [1 to 5]
+	 * @default 1
+	 */
+	OBL_BombCountAtStart: number;
+
+	/**
+	 * @id 3173895056
+	 * @constraints Range: [4 to 48]
+	 * @default 4
+	 */
+	ESC_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * Sprays
+	 * Enables or disables the use of sprays.
+	 *
+	 * @id 2070170860
+	 */
+	Portal_AllowSprays: boolean;
+
+	/**
+	 * GOLMUD TRAIN VARIANT
+	 * Sets which train variant will appear in the Railway to Golmud map.
+	 *
+	 * @id 2479102022
+	 * @constraints Allowed Values: 0, 1, 2, 3
+	 * @value 0 None
+	 * @value 1 Moving Train
+	 * @value 2 Static Train (Breakthrough)
+	 * @value 3 Static Train (Rush)
+	 * @default 0
+	 */
+	Portal_GolmudRailway_Variant: GolmudTrainVariant;
+
+	/**
+	 * @id 1276582718
+	 * @constraints Range: [0 to 48]
+	 * @default 48
+	 */
+	SpawnBalancing_MaxBackfillAICount_ModbuilderCustom: number;
+
+	/**
+	 * @id 3624680003
+	 * @constraints Range: [4 to 16]
+	 * @default 4
+	 */
+	SDM_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * GAME TIME
+	 * Sets the maximum time (in minutes) for the round.
+	 *
+	 * @id 1283337146
+	 * @constraints Range: [10 to 45]
+	 * @default 15
+	 */
+	SDM_fRoundTime: number;
+
+	/**
+	 * TARGET SCORE
+	 * Sets the maximum score for the round.
+	 *
+	 * @id 371267867
+	 * @constraints Range: [40 to 250]
+	 * @default 50
+	 */
+	SDM_iTargetScore: number;
+
+	/**
+	 * @id 3706590196
+	 * @constraints Range: [4 to 16]
+	 * @default 4
+	 */
+	TDM_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * GAME TIME
+	 * Sets the maximum time (in minutes) for the round
+	 *
+	 * @id 3661144175
+	 * @constraints Range: [10 to 45]
+	 * @default 15
+	 */
+	TDM_fRoundTime: number;
+
+	/**
+	 * TARGET SCORE
+	 * Sets the maximum score for the round
+	 *
+	 * @id 1791834452
+	 * @constraints Range: [80 to 500]
+	 * @default 100
+	 */
+	TDM_iTargetScore: number;
+
+	/**
+	 * @id 1464363688
+	 * @constraints Range: [4 to 16]
+	 * @default 4
+	 */
+	SQOBL_MinPlayerCount: number;
+
+	/**
+	 * @id 1054150059
+	 * @constraints Range: [4 to 16]
+	 * @default 16
+	 */
+	SQOBL_TargetPlayerCount: number;
+
+	/**
+	 * GAME TIME
+	 * Sets the maximum time (in minutes) for the round
+	 *
+	 * @id 2838568645
+	 * @constraints Range: [15 to 40]
+	 * @default 15
+	 */
+	SQOBL_MaxMatchDurationMins: number;
+
+	/**
+	 * Bomb Carrier Allowed in HQ Sector
+	 * If enabled the player carrying the bomb will be considered Out of Bounds when they enter the friendly HQ Sector.
+	 *
+	 * @id 2634624451
+	 */
+	SQOBL_IsFriendlyHQOOBForCarrier: boolean;
+
+	/**
+	 * Water Level Multiplier
+	 * Sets the multiplier for the water height in the level, by default the water is at height 100.
+	 *
+	 * @id 2137090158
+	 * @constraints Range: [0 to 2]
+	 * @default 1
+	 */
+	Portal_WaterLevelMultiplier: number;
+
+	/**
+	 * Beaufort Scale Multiplier
+	 * Sets the water beaufort scale, higher values map to storm weather.
+	 *
+	 * @id 3503231021
+	 * @constraints Range: [0 to 12]
+	 * @default 1
+	 */
+	Portal_WaterBeaufortScaleMultiplier: number;
+
+	/**
+	 * Wave Amplitude Multiplier
+	 * Controls the amplitude of the waves, higher values map to bigger waves.
+	 *
+	 * @id 860826065
+	 * @constraints Range: [0 to 4]
+	 * @default 1
+	 */
+	Portal_WaterWaveAmplitudeMultiplier: number;
+
+	/**
+	 * Aircraft Carrier Variation
+	 * Sets the Aircraft Carrier variation for the map Tsuru Reef.
+	 *
+	 * @id 3778597997
+	 * @constraints Allowed Values: 0, 1, 2
+	 * @value 0 None
+	 * @value 1 Conquest
+	 * @value 2 Carrier Strike
+	 * @default 0
+	 */
+	Portal_Isolated_AircraftCarrierType: AircraftCarrierType;
+
+	/**
+	 * Tank Key Reward
+	 * Sets if vehicle keys can be given out as mission rewards.
+	 *
+	 * @id 2137373306
+	 */
+	Reward_TankKey_Mutator: boolean;
+
+	/**
+	 * Disable Vehicle Keycards
+	 * Controls if missions can reward players with vehicle keycards and from appearing in loot.
+	 *
+	 * @id 2760789921
+	 */
+	Resource_Vehicle_Keycard_Loot: boolean;
+
+	/**
+	 * Vehicle Trailers
+	 * Sets if vehicle trailers spawn on the map, when disabled they won't appear.
+	 *
+	 * @id 4131197692
+	 */
+	Granite_BR_VehicleTrailersEnabled: boolean;
+
+	/**
+	 * Lower Threshold Startup Timer
+	 * Sets the time delay for the match to start once the lower player threshold is reached, a grace timer of two seconds will be added to this value.
+	 *
+	 * @id 3865840349
+	 * @constraints Range: [0 to 120]
+	 * @default 60
+	 */
+	Granite_FillServer_LongTime: number;
+
+	/**
+	 * Higher Threshold Startup Timer
+	 * Sets the time delay for the match to start once the higher player threshold is reached, a grace timer of two seconds will be added to this value.
+	 *
+	 * @id 385425395
+	 * @constraints Range: [0 to 20]
+	 * @default 10
+	 */
+	Granite_FillServer_ShortTime: number;
+
+	/**
+	 * Unlimited Underwater Breathing
+	 * Toggles if the soldier can get killed by drowning.
+	 *
+	 * @id 2455687785
+	 */
+	Portal_EnableUnlimitedUnderwater: boolean;
+
+	/**
+	 * Underwater Breath Time
+	 * Sets the amount of time the soldier can breath underwater before they start drowning.
+	 *
+	 * @id 604359646
+	 * @constraints Range: [0 to 40]
+	 * @default 12
+	 */
+	Swimming_UnderwaterBreathTime: number;
+
+	/**
+	 * Disable MAS 148 Glaive
+	 * Sets if the MAS 148 Glaive is disabled from appearing in loot.
+	 *
+	 * @id 2543012355
+	 */
+	Gadget_Javelin: boolean;
+
+	/**
+	 * Objective Capture Time
+	 * The number of seconds it takes to capture an objective.
+	 *
+	 * @id 2149172584
+	 * @constraints Range: [5 to 30]
+	 * @default 10
+	 */
+	KOTH_fCaptureTime: number;
+
+	/**
+	 * Target Score
+	 * Sets the maximum score for the round.
+	 *
+	 * @id 1358416571
+	 * @constraints Range: [150 to 1000]
+	 * @default 250
+	 */
+	KOTH_iTargetScore: number;
+
+	/**
+	 * Game Time
+	 * Sets the maximum time (in minutes) for the round.
+	 *
+	 * @id 2652356176
+	 * @constraints Range: [8 to 60]
+	 * @default 10
+	 */
+	KOTH_fRoundTime: number;
+
+	/**
+	 * Players Required to Start Lobby Timer.
+	 * The minimum number of players required to start the lobby countdown timer.
+	 *
+	 * @id 2451013796
+	 * @constraints Range: [4 to 16]
+	 * @default 4
+	 */
+	KOTH_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 *
+	 *
+	 * @id 2881162613
+	 * @constraints Range: [12 to 12]
+	 * @default 12
+	 */
+	SpawnBalancing_MaxBackfillAICount_KOTH: number;
+
+	/**
+	 * Objective Capture Time
+	 * The number of seconds it takes to capture an objective.
+	 *
+	 * @id 3785210787
+	 * @constraints Range: [5 to 30]
+	 * @default 10
+	 */
+	DOM_fCaptureTime: number;
+
+	/**
+	 * Target Score
+	 * Sets the maximum score for the round.
+	 *
+	 * @id 4028138858
+	 * @constraints Range: [150 to 1000]
+	 * @default 200
+	 */
+	DOM_fScoreTarget: number;
+
+	/**
+	 * Game Time
+	 * Sets the maximum time (in minutes) for the round.
+	 *
+	 * @id 791506982
+	 * @constraints Range: [10 to 60]
+	 * @default 15
+	 */
+	DOM_fRoundtime: number;
+
+	/**
+	 * Players Required to Start Lobby Timer.
+	 * The minimum number of players required to start the lobby countdown timer.
+	 *
+	 * @id 3894574769
+	 * @constraints Range: [4 to 16]
+	 * @default 4
+	 */
+	DOM_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 *
+	 *
+	 * @id 1371524249
+	 * @constraints Range: [12 to 12]
+	 * @default 12
+	 */
+	SpawnBalancing_MaxBackfillAICount_Domination: number;
+
+	/**
+	 * Objective Capture Time
+	 * The number of seconds it takes to capture an objective.
+	 *
+	 * @id 16734930
+	 * @constraints Range: [5 to 30]
+	 * @default 10
+	 */
+	CS_fCaptureTime: number;
+
+	/**
+	 * Game Time
+	 * Sets the maximum time (in minutes) for the round.
+	 *
+	 * @id 4028066941
+	 * @constraints Range: [20 to 120]
+	 * @default 25
+	 */
+	CS_iModeTime: number;
+
+	/**
+	 * Players Required to Start Lobby Timer.
+	 * The minimum number of players required to start the lobby countdown timer.
+	 *
+	 * @id 41034410
+	 * @constraints Range: [4 to 64]
+	 * @default 4
+	 */
+	CS_iLobbyPlayerCountStartTimer: number;
+
+	/**
+	 * GraniteBR_DisableTimeSlicedWideCustomizationInitializations
+	 *
+	 * @id 564454852
+	 */
+	DisableTimeSlicedWideCustomizationInitializations: boolean;
+
+	/**
+	 * Enable Boundary Fog
+	 * Enable out-of-bounds fog, will hide the areas outside of the active play space on the map
+	 *
+	 * @id 1157466661
+	 */
+	bPortal_EnableOOBFog: boolean;
+
+	/**
+	 * Enable Hotzones
+	 * Controls if the map has high value areas, these areas contain improved loot.
+	 *
+	 * @id 3981709921
+	 */
+	GraniteBR_HotZonesEnabled: boolean;
+
+	/**
+	 * Loot Reveal
+	 * Controls if loot is revealed on initial landings and respawns.
+	 *
+	 * @id 3664824081
+	 */
+	GraniteBR_LootRevealOnSpawn_Enabled: boolean;
 };
