@@ -26,5 +26,11 @@
         "typescript": "^6.0.3",
         "vitepress": "^2.0.0-alpha.15",
         "vitest": "^5.0.1"
+    },
+    "allowScripts": {
+        "esbuild": true,
+        "keytar": true,
+        "puppeteer": true,
+        "@bufbuild/buf": true
     }
 }
