@@ -33,10 +33,7 @@
 				"z": 4.301382
 			},
 			"id": "TEAM_1_HQ",
-			"linked": [
-				"HQArea",
-				"InfantrySpawns"
-			]
+			"linked": ["HQArea", "InfantrySpawns"]
 		},
 		{
 			"name": "HQ_Team1",
@@ -200,10 +197,7 @@
 				"z": 25.169567
 			},
 			"id": "TEAM_2_HQ",
-			"linked": [
-				"HQArea",
-				"InfantrySpawns"
-			]
+			"linked": ["HQArea", "InfantrySpawns"]
 		},
 		{
 			"name": "HQ_Team2",
@@ -358,9 +352,7 @@
 				"z": 0
 			},
 			"id": "CombatArea",
-			"linked": [
-				"CombatVolume"
-			]
+			"linked": ["CombatVolume"]
 		},
 		{
 			"name": "CombatVolume",

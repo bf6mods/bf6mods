@@ -59,10 +59,7 @@
 				"z": 20.1038
 			},
 			"id": "TEAM_1_HQ",
-			"linked": [
-				"HQArea",
-				"InfantrySpawns"
-			]
+			"linked": ["HQArea", "InfantrySpawns"]
 		},
 		{
 			"name": "HQ_Team1",
@@ -226,10 +223,7 @@
 				"z": 1.94338
 			},
 			"id": "TEAM_2_HQ",
-			"linked": [
-				"HQArea",
-				"InfantrySpawns"
-			]
+			"linked": ["HQArea", "InfantrySpawns"]
 		},
 		{
 			"name": "HQ_Team2",
@@ -456,10 +450,7 @@
 				"z": -10.05922
 			},
 			"id": "Objectives/CapturePoint A/PlayerSpawner",
-			"linked": [
-				"Area",
-				"SpawnPoints"
-			]
+			"linked": ["Area", "SpawnPoints"]
 		},
 		{
 			"name": "SpawnPoint A1",
@@ -607,9 +598,7 @@
 				"z": 3.92546
 			},
 			"id": "Objectives/CapturePoint B/PlayerSpawner",
-			"linked": [
-				"SpawnPoints"
-			]
+			"linked": ["SpawnPoints"]
 		},
 		{
 			"name": "SpawnPoint B1",
@@ -759,9 +748,7 @@
 				"z": -1.71546
 			},
 			"id": "Objectives/CapturePoint C/PlayerSpawner",
-			"linked": [
-				"SpawnPoints"
-			]
+			"linked": ["SpawnPoints"]
 		},
 		{
 			"name": "SpawnPoint C1",
@@ -838,9 +825,7 @@
 				"z": 37.0506
 			},
 			"id": "PlayArea/CombatArea",
-			"linked": [
-				"CombatVolume"
-			]
+			"linked": ["CombatVolume"]
 		},
 		{
 			"name": "CombatVolume",
@@ -952,10 +937,7 @@
 				"z": -2.29178
 			},
 			"id": "PlayArea/Sector - This manages the CapturePoint Names",
-			"linked": [
-				"SectorArea",
-				"CapturePoints"
-			]
+			"linked": ["SectorArea", "CapturePoints"]
 		}
 	],
 	"Static": [
