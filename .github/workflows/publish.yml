@@ -26,6 +26,10 @@ jobs:
                   sudo apt-get update
                   sudo apt-get install -y libsecret-1-0
 
+            # Trusted publishing (OIDC) needs npm 11.5+, node 22 ships npm 10
+            - name: Update npm
+              run: npm install -g npm@latest
+
             - name: Install dependencies
               run: npm ci
 
