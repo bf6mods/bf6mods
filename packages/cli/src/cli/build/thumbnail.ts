@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import colors from "colors";
-import sharp from "sharp";
 import { printToConsole } from "../utils.ts";
 
 /**
@@ -189,6 +188,10 @@ export async function resizeThumbnail(
 ): Promise<Buffer> {
 	const ext = path.extname(originalPath).toLowerCase();
 	const isJpeg = ext === ".jpg" || ext === ".jpeg";
+
+	// Loaded on demand: sharp is a native module and may be unavailable when its
+	// install script was blocked (npm 12 does this outside a project by default)
+	const { default: sharp } = await import("sharp");
 
 	// Start with target dimensions
 	let result = await sharp(buffer)

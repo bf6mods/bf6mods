@@ -1,9 +1,13 @@
 import os from "node:os";
 import path from "node:path";
 import colors from "colors";
-import keytar from "keytar";
 import { printToConsole } from "../utils.ts";
 import { clients } from "./index.ts";
+import {
+	deleteStoredSessionId,
+	getStoredSessionId,
+	storeSessionId,
+} from "./session-store.ts";
 
 export type PuppeteerImport = typeof import("puppeteer");
 
@@ -75,7 +79,7 @@ export async function authenticate(sessionIdParam?: string) {
 
 	if (sessionIdParam) {
 		if (await tryAuthenticateWithSessionId(sessionIdParam)) {
-			await keytar.setPassword("bf6mods", "sessionId", sessionIdParam);
+			await storeSessionId(sessionIdParam);
 			return true;
 		}
 		printToConsole(
@@ -83,13 +87,13 @@ export async function authenticate(sessionIdParam?: string) {
 		);
 	}
 
-	const storedSessionId = await keytar.getPassword("bf6mods", "sessionId");
+	const storedSessionId = await getStoredSessionId();
 	if (storedSessionId) {
 		if (await tryAuthenticateWithSessionId(storedSessionId)) {
 			return true;
 		}
 		printToConsole(`${colors.yellow("⚠")} Stored sessionId expired, removing…`);
-		await keytar.deletePassword("bf6mods", "sessionId");
+		await deleteStoredSessionId();
 	}
 
 	printToConsole(`🌐 Launching browser to authenticate…`);
@@ -104,7 +108,7 @@ export async function authenticate(sessionIdParam?: string) {
 	}
 
 	if (await tryAuthenticateWithSessionId(cookieSessionId)) {
-		await keytar.setPassword("bf6mods", "sessionId", cookieSessionId);
+		await storeSessionId(cookieSessionId);
 		return true;
 	}
 
