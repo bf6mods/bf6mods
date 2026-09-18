@@ -240,7 +240,11 @@ export function createTsAttachment(
 		isProcessable: true,
 		processingStatus: 2,
 		attachmentType: AttachmentType.TypeScript,
-		attachmentData: { original: toBase64(compiled), compiled: "" },
+		// the Portal's web import decodes with atob(), which mangles UTF-8
+		attachmentData: {
+			original: toBase64(escapeNonAscii(compiled)),
+			compiled: "",
+		},
 		errors: [],
 	};
 }
@@ -273,7 +277,16 @@ export function createStringsAttachment(
  * corrupts multi-byte UTF-8 characters (e.g. Chinese, Japanese, Korean).
  */
 export function asciiSafeJsonStringify(value: unknown): string {
-	return JSON.stringify(value, null, 4).replace(
+	return escapeNonAscii(JSON.stringify(value, null, 4));
+}
+
+/**
+ * Replaces every non-ASCII character with a \uXXXX escape. Valid in JSON and
+ * in JavaScript strings, template literals, regexes and identifiers, so it can
+ * be applied to whole source files as well.
+ */
+export function escapeNonAscii(text: string): string {
+	return text.replace(
 		/[\u0080-\uffff]/g,
 		(ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, "0")}`,
 	);

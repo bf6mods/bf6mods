@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
 	asciiSafeJsonStringify,
 	createStringsAttachment,
+	createTsAttachment,
 	toBase64,
 } from "../packages/cli/src/cli/build/index";
 
@@ -133,6 +134,18 @@ describe("Non-ASCII strings encoding", () => {
 			expect(attachment.attachmentType).toBe(4); // AttachmentType.Strings
 			expect(attachment.isProcessable).toBe(true);
 			expect(attachment.processingStatus).toBe(2);
+		});
+	});
+
+	describe("createTsAttachment", () => {
+		test("script survives atob() round-trip and still evaluates to the original text", () => {
+			const compiled = 'const msg = "你好 × café";\n// comment with emoji 😀\n';
+			const attachment = createTsAttachment("index.ts", compiled);
+			const decoded = atob(attachment.attachmentData.original);
+			for (let i = 0; i < decoded.length; i++)
+				expect(decoded.charCodeAt(i)).toBeLessThan(128);
+			expect(decoded).toContain('"\\u4f60\\u597d \\u00d7 caf\\u00e9"');
+			expect(new Function(`${decoded}; return msg;`)()).toBe("你好 × café");
 		});
 	});
 
