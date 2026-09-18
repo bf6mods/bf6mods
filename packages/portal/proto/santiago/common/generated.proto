@@ -249,6 +249,13 @@ message CreatePlayElementRequest {
 	google.protobuf.StringValue mod_level_data_id = 11;
 	google.protobuf.StringValue thumbnail_url = 12;
 	repeated Attachment attachments = 13;
+	TeamAssignmentKind team_assignment = 14;
+}
+
+enum TeamAssignmentKind {
+    TEAM_ASSIGNMENT_KIND_UNSPECIFIED = 0;
+    TEAM_ASSIGNMENT_KIND_BLAZE_ASSIGNED_TEAMS = 1;
+    TEAM_ASSIGNMENT_KIND_FB_ASSIGNED_TEAMS = 2;
 }
 
 message Creator {
@@ -660,6 +667,7 @@ message PlayElementDesign {
 	repeated string group_licenses = 16;
 	int32 attachment_compile_status = 17;
 	repeated string server_host_license_requirements = 18;
+	TeamAssignmentKind team_assignment = 19;
 }
 
 message PlayElementResponse {
@@ -832,6 +840,7 @@ message UpdatePlayElementRequest {
 	google.protobuf.StringValue mod_level_data_id = 12;
 	google.protobuf.StringValue thumbnail_url = 13;
 	repeated Attachment attachments = 14;
+	TeamAssignmentKind team_assignment = 15;
 }
 
 message UploadExperienceThumbnailRequest {

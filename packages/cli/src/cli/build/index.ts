@@ -14,6 +14,7 @@ import {
 	type Bf6Config,
 	MapId as MapIdEnum,
 } from "../../resources/prepare/types/config.ts";
+import { prepare } from "../prepare.ts";
 import { printToConsole } from "../utils.ts";
 import { addAnyToParams } from "./any-params.ts";
 import { extractBf6Strings } from "./generated-strings.ts";
@@ -48,6 +49,9 @@ export async function getBf6Config(
  */
 export async function build() {
 	const workingDir = path.resolve(".");
+	// postinstall may not have run (e.g. --ignore-scripts), so generate the types on demand
+	if (!fs.existsSync(path.resolve(workingDir, ".bf6", "tsconfig.json")))
+		await prepare();
 	const config = await getBf6Config(workingDir);
 	if (!config) throw new Error("Cannot find bf6.config.ts!");
 

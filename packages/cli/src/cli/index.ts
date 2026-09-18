@@ -107,6 +107,7 @@ program
 	)
 	.option("--publish", `Whether to publish your mod`)
 	.option("--id <id>", `The id of your mod`)
+	.option("--dry-run", `Print the payload instead of sending it to the Portal`)
 	.description(
 		"deploys your mod for you, if unauthenticated, it requests reauthentication",
 	)
@@ -116,6 +117,7 @@ program
 			sessionIdParam: options?.sessionId,
 			publish: options?.publish,
 			modId: options?.id,
+			dryRun: options?.dryRun,
 		});
 	});
 

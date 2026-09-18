@@ -11,5 +11,9 @@
   "type": "module",
   "devDependencies": {
     "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "keytar": true,
+    "sharp": true
   }
 }
