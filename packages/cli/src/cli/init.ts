@@ -147,7 +147,7 @@ export async function init(
 				message: "What is the name of your mod?",
 				placeholder: "Ace Pursuit",
 				validate: (value) => {
-					if (!value.trim()) return "Please enter a name.";
+					if (!value?.trim()) return "Please enter a name.";
 				},
 			});
 	if (prompts.isCancel(name)) return cancel();
@@ -224,7 +224,7 @@ export async function init(
 		s.start("Installing via npm");
 		const installed = installDependencies(path);
 		if (installed) s.stop("Installed via npm");
-		else s.stop("Failed to install via npm", 1);
+		else s.error("Failed to install via npm");
 
 		const nextSteps = `cd ${path}\nnpm run build`;
 
