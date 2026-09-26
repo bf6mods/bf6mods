@@ -26,9 +26,9 @@ export async function getSessionIdFromCookies() {
 		console.error("	 npm i -g puppeteer");
 		console.error("\nIf you prefer not to install a browser automation tool,");
 		console.error(
-			"you can instead provide an auth code using the --auth-code option:",
+			"you can instead provide a session id using the --session-id option:",
 		);
-		console.error("	 bf6mods deploy <input> --auth-code=<code>\n");
+		console.error("	 bf6mods deploy <input> --session-id=web-xxxx\n");
 		process.exit(0);
 	}
 
@@ -39,6 +39,9 @@ export async function getSessionIdFromCookies() {
 		defaultViewport: null,
 		userDataDir: profileDir,
 	});
+	// The profile keeps cookies between runs, so an expired session cookie
+	// would satisfy the wait below before the user can log in (#14)
+	await browser.deleteMatchingCookies({ name: "bf6sessionId" });
 	const page = await browser.newPage();
 	await page.goto("https://portal.battlefield.com/bf6/experiences");
 	console.log("Please log in to Battlefield Portal if needed...");
